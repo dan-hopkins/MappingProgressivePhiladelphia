@@ -13,22 +13,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-public class MainActivity extends ListActivity {
-
-    private TextView selection;
-    private static final String[] myStrings={"Cold", "Mild", "Hot"};
-    private Activity myActivity = this;
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //ListView list = (ListView)findViewById(R.id.listView);
 
-        setListAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                myStrings));
-        selection=(TextView)findViewById(R.id.selection);
 
         Button mapButton = (Button)findViewById(R.id.mapbutton);
         mapButton.setOnClickListener(new View.OnClickListener() {
@@ -39,17 +30,7 @@ public class MainActivity extends ListActivity {
 
             }
         });
-
     }
-
-    @Override
-    public void onListItemClick(ListView parent, View v, int position,
-                                long id) {
-        selection.setText(myStrings[position]);
-    }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
