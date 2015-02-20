@@ -24,7 +24,6 @@ public class MapActivity extends FragmentActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         // Move the camera instantly to Philadelphia with a zoom of 10.
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 10)); //Town Center Philadelphia
 
@@ -72,6 +71,7 @@ public class MapActivity extends FragmentActivity {
      */
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(40.00786,-75.306238)).title("Haverford College"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901,-75.33735)).title("Villanova University"));
     }
 
     @Override

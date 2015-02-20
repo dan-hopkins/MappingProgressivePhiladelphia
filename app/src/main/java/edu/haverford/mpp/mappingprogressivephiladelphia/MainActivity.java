@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 
 public class MainActivity extends Activity {
@@ -20,14 +23,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Button mapButton = (Button)findViewById(R.id.mapbutton);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
-
             }
         });
     }
@@ -46,12 +47,12 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
-                return(true);
+                return (true);
             case R.id.about:
-                return(true);
+                return (true);
             case R.id.help:
-                return(true);
+                return (true);
         }
-        return(super.onOptionsItemSelected(item));
+        return (super.onOptionsItemSelected(item));
     }
 }

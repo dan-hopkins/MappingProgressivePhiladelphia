@@ -8,7 +8,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Map!"
+        android:text="Map"
         android:id="@+id/mapbutton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
@@ -35,13 +35,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Organizational Info"
         android:id="@+id/textView"
         android:layout_below="@+id/imageView"
         android:layout_alignRight="@+id/mapbutton"
         android:layout_alignEnd="@+id/mapbutton"
         android:layout_marginTop="53dp" />
-
-
 
 </RelativeLayout>
