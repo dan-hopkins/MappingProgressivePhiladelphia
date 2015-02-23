@@ -46,7 +46,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HEY PUT STUFF HERE"
+        android:hint="Put name of marker here"
         android:id="@+id/input" />
 
     <Button

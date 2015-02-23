@@ -72,11 +72,11 @@ public class MapActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
+        final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
+
         mMap.addMarker(new MarkerOptions().position(new LatLng(40.00786,-75.306238)).title("Haverford College"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901,-75.33735)).title("Villanova University"));
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034000, -75,32222)).title(mySharedPreferences.getString("Haverford")));
-        //^^^ this is not working, says it returns two strings, but it should only return one. I think it's because the context in mySharedPreferences is messed up
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901,-75.33735)).title("Villanova University"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901, -75.33735)).title(mySharedPreferences.getString("Haverford", "")));
     }
 
     @Override

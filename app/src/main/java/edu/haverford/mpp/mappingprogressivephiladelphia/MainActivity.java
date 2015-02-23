@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
             public void onClick(View s) {
                 editor.putString("Haverford", input.getText().toString());
                 editor.apply();
-                Toast toast = Toast.makeText(MainActivity.this, mySharedPreferences.getString("Haverford", "Nothing"), Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(MainActivity.this, mySharedPreferences.getString("Haverford", "Sorry, we couldn't find anything!"), Toast.LENGTH_LONG);
                 toast.show(); // save the input to an array
             }
         });
