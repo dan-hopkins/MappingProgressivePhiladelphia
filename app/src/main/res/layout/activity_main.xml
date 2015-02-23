@@ -21,6 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/mapbutton"
         android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"
         android:layout_alignParentTop="true" />
 
     <ImageView
@@ -43,6 +44,13 @@
         android:layout_alignEnd="@+id/mapbutton"
         android:layout_marginTop="53dp" />
 
+    <!-- The linear layout below is just in order to ensure that the EditText is not immediately focused -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,5 +63,13 @@
         android:text="Save"
         android:id="@+id/savebutton"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dismiss"
+        android:id="@+id/dismiss"
+        android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

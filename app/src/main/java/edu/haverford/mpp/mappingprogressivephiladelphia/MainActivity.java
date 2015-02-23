@@ -38,8 +38,8 @@ public class MainActivity extends Activity {
             public void onClick(View s) {
                 editor.putString("Haverford", input.getText().toString());
                 editor.apply();
-                Toast toast = Toast.makeText(MainActivity.this, mySharedPreferences.getString("Haverford", "Sorry, we couldn't find anything!"), Toast.LENGTH_LONG);
-                toast.show(); // save the input to an array
+                //Toast toast = Toast.makeText(MainActivity.this, mySharedPreferences.getString("Haverford", "Sorry, we couldn't find anything!"), Toast.LENGTH_SHORT);
+                //toast.show(); // THIS TOAST JUST READS BACK TO YOU THE VALUE YOU SAVE
             }
         });
 
@@ -49,6 +49,15 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        Button dismiss = (Button)findViewById(R.id.dismiss);
+        dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View d) {
+                Toast disToast = Toast.makeText(MainActivity.this, "Organization dismissed...", Toast.LENGTH_SHORT);
+                disToast.show();
             }
         });
     }
