@@ -17,10 +17,11 @@
         android:layout_width="700dp"
         android:layout_height="600dp"
         android:id="@+id/imageView2"
-        android:layout_alignTop="@+id/imageView"
         android:background="#9a8b8b8b"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/mapbutton" />
+        android:layout_above="@+id/mapbutton"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentTop="true" />
 
     <ImageView
         android:layout_width="250dip"
@@ -42,4 +43,17 @@
         android:layout_alignEnd="@+id/mapbutton"
         android:layout_marginTop="53dp" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HEY PUT STUFF HERE"
+        android:id="@+id/input" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/savebutton"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

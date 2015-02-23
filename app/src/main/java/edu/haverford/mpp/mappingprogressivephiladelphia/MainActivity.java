@@ -3,15 +3,19 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 
@@ -22,6 +26,22 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        final SharedPreferences.Editor editor = mySharedPreferences.edit(); //save name-value pairs
+
+        final EditText input = (EditText)findViewById(R.id.input);
+
+
+        Button saveButton = (Button)findViewById(R.id.savebutton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View s) {
+                editor.putString("Haverford", input.getText().toString());
+                editor.apply();
+                Toast toast = Toast.makeText(MainActivity.this, mySharedPreferences.getString("Haverford", "Nothing"), Toast.LENGTH_LONG);
+                toast.show(); // save the input to an array
+            }
+        });
 
         Button mapButton = (Button)findViewById(R.id.mapbutton);
         mapButton.setOnClickListener(new View.OnClickListener() {
