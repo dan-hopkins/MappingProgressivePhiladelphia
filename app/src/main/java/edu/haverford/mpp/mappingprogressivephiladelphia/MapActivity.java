@@ -26,8 +26,8 @@ public class MapActivity extends FragmentActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Move the camera instantly to Philadelphia with a zoom of 10.
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 10)); //Town Center Philadelphia
+        // Move the camera instantly to Philadelphia with a zoom of 11.
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 11)); //Town Center Philadelphia
 
     }
 

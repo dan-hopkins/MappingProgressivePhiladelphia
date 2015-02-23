@@ -55,21 +55,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Put name of marker here"
-        android:id="@+id/input" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:id="@+id/savebutton"
+        android:id="@+id/input"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/savebutton"
+        android:layout_alignParentRight="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Dismiss"
         android:id="@+id/dismiss"
-        android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true" />
 </RelativeLayout>

@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
 
         final EditText input = (EditText)findViewById(R.id.input);
 
-
         Button saveButton = (Button)findViewById(R.id.savebutton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
