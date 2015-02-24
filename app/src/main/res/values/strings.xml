@@ -8,5 +8,7 @@
     <string name="about">About</string>
     <string name="contact">Contact Us</string>
     <string name="orginfo">Organization Info</string>
+    <string name="title_activity_tinder">TinderActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

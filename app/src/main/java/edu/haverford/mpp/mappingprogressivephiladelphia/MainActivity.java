@@ -42,6 +42,15 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button swipesButton = (Button)findViewById(R.id.swipes_button);
+        swipesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TinderActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button mapButton = (Button)findViewById(R.id.mapbutton);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -11,7 +11,8 @@
         android:text="Map"
         android:id="@+id/mapbutton"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignRight="@+id/input"
+        android:layout_alignEnd="@+id/input" />
 
     <ImageView
         android:layout_width="700dp"
@@ -30,8 +31,7 @@
         android:id="@+id/imageView"
         android:scaleType="fitXY"
         android:src="@drawable/tinder"
-        android:layout_marginTop="53dp"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -72,4 +72,13 @@
         android:text="Dismiss"
         android:id="@+id/dismiss"
         android:layout_alignParentLeft="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Swipes"
+        android:id="@+id/swipes_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView" />
 </RelativeLayout>
