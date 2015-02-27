@@ -7,18 +7,22 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <Button
+    <ImageButton
         android:id="@+id/left"
         android:layout_margin="10dp"
+        android:src="@drawable/circleno"
         android:text="Left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:scaleType="centerInside"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/right"
         android:layout_margin="10dp"
+        android:src="@drawable/circleyes"
+        android:scaleType="fitCenter"
         android:text="Right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
 
 </LinearLayout>
