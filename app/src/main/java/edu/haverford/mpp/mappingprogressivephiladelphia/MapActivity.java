@@ -83,6 +83,7 @@ public class MapActivity extends FragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.options, menu);
+        menu.getItem(0).setVisible(false);
         return (super.onCreateOptionsMenu(menu));
     }
 

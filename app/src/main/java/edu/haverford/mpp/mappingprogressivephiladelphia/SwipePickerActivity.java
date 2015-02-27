@@ -3,8 +3,11 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -16,10 +19,9 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import edu.haverford.mpp.mappingprogressivephiladelphia.R;
 
 
-public class TinderActivity extends Activity {
+public class SwipePickerActivity extends Activity {
 
     private ArrayList<String> al;
     private ArrayAdapter<String> arrayAdapter;
@@ -63,12 +65,12 @@ public class TinderActivity extends Activity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                makeToast(TinderActivity.this, "Left!");
+                makeToast(SwipePickerActivity.this, "Left!");
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                makeToast(TinderActivity.this, "Right!");
+                makeToast(SwipePickerActivity.this, "Right!");
             }
 
             @Override
@@ -93,9 +95,35 @@ public class TinderActivity extends Activity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(TinderActivity.this, "Clicked!");
+                makeToast(SwipePickerActivity.this, "Clicked!");
             }
         });
+
+        //From original MainActivity
+      /*  final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        final SharedPreferences.Editor editor = mySharedPreferences.edit(); //save name-value pairs
+
+        final EditText input = (EditText)findViewById(R.id.input);
+
+        Button saveButton = (Button)findViewById(R.id.savebutton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View s) {
+                editor.putString("Haverford", input.getText().toString());
+                editor.apply();
+                //Toast toast = Toast.makeText(MainActivity.this, mySharedPreferences.getString("Haverford", "Sorry, we couldn't find anything!"), Toast.LENGTH_SHORT);
+                //toast.show(); // THIS TOAST JUST READS BACK TO YOU THE VALUE YOU SAVE
+            }
+        });
+
+        Button dismiss = (Button)findViewById(R.id.dismiss);
+        dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View d) {
+                Toast disToast = Toast.makeText(MainActivity.this, "Organization dismissed...", Toast.LENGTH_SHORT);
+                disToast.show();
+            }
+        });*/
 
     }
 
@@ -115,6 +143,36 @@ public class TinderActivity extends Activity {
     @OnClick(R.id.left)
     public void left() {
         flingContainer.getTopCardListener().selectLeft();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.options, menu);
+        menu.getItem(0).setVisible(true);
+        return (super.onCreateOptionsMenu(menu));
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                return (true);
+            case R.id.map:
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.about:
+                return (true);
+            case R.id.help:
+                return (true);
+        }
+        return (super.onOptionsItemSelected(item));
     }
 
 
