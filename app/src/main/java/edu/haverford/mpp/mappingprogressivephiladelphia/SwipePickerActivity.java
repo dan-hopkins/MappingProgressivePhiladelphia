@@ -36,7 +36,6 @@ public class SwipePickerActivity extends Activity {
         setContentView(R.layout.activity_my);
         ButterKnife.inject(this);
 
-
         al = new ArrayList<>();
         al.add("php");
         al.add("c");

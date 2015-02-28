@@ -20,7 +20,7 @@
             android:layout_height="0dp"
             android:scaleType="centerInside"
             android:padding="5dp"
-            android:src="@drawable/dan"
+            android:src="@drawable/tinder"
             android:layout_weight=".9"
          />
 
