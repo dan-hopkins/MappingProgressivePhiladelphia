@@ -134,10 +134,16 @@ public class SwipePickerActivity extends Activity {
 
     @OnClick(R.id.right)
     public void right() {
+
+        // THIS IS JUST DAN TRYING SOMETHING NEW
+        Intent intent = new Intent(getApplicationContext(), DBActive.class);
+        startActivity(intent);
+
+        //
         /**
          * Trigger the right event manually.
          */
-        flingContainer.getTopCardListener().selectRight();
+        //flingContainer.getTopCardListener().selectRight();
     }
 
     @OnClick(R.id.left)

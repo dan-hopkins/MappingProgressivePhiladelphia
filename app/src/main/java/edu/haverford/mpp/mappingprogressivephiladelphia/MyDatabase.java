@@ -11,6 +11,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
  * Created by dan on 2/28/15.
  */
 public class MyDatabase extends SQLiteAssetHelper {
+
     private static final String DATABASE_NAME = "northwind.db";
     private static final int DATABASE_VERSION = 1;
 

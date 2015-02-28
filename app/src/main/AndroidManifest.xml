@@ -29,6 +29,13 @@
             android:label="@string/title_activity_map"
             android:parentActivityName=".SwipePickerActivity" >
         </activity>
+
+        <activity
+            android:name=".DBActive"
+            android:parentActivityName=".SwipePickerActivity" >
+
+        </activity>
+
         <activity
             android:name=".SwipePickerActivity"
             android:label="@string/title_activity_tinder"
