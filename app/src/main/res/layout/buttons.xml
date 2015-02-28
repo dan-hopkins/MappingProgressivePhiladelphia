@@ -14,7 +14,8 @@
         android:text="Left"
         android:scaleType="centerInside"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:background="@null"/>
 
     <ImageButton
         android:id="@+id/right"
@@ -23,6 +24,7 @@
         android:scaleType="fitCenter"
         android:text="Right"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:background="@null"/>
 
 </LinearLayout>
