@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
@@ -133,10 +134,16 @@ public class SwipePickerActivity extends Activity {
 
     @OnClick(R.id.right)
     public void right() {
+
+        // THIS IS JUST DAN TRYING SOMETHING NEW
+        Intent intent = new Intent(getApplicationContext(), DBActive.class);
+        startActivity(intent);
+
+        //
         /**
          * Trigger the right event manually.
          */
-        flingContainer.getTopCardListener().selectRight();
+        //flingContainer.getTopCardListener().selectRight();
     }
 
     @OnClick(R.id.left)
