@@ -12,7 +12,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
  */
 public class MyDatabase extends SQLiteAssetHelper {
 
-    private static final String DATABASE_NAME = "northwind.db";
+    private static final String DATABASE_NAME = "mppdb";
     private static final int DATABASE_VERSION = 1;
 
     public MyDatabase(Context context) {
@@ -26,6 +26,22 @@ public class MyDatabase extends SQLiteAssetHelper {
 
     }
 
+    public Cursor getZipCode() {
+
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        String [] sqlSelect = {"0 _id", "ZipCode"}; // the 0 _id thing is necessary for some reason
+        String sqlTables = "mppdata"; // this is the table in the database that you want to work with
+
+        qb.setTables(sqlTables);
+        Cursor c = qb.query(db, sqlSelect, null, null, null, null, null);
+
+        c.moveToFirst();
+        return c;
+    }
+
+    /*
     public Cursor getEmployees() {
 
         SQLiteDatabase db = getReadableDatabase();
@@ -39,5 +55,5 @@ public class MyDatabase extends SQLiteAssetHelper {
 
         c.moveToFirst();
         return c;
-    }
+    } */
 }
