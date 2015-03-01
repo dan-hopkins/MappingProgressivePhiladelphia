@@ -11,7 +11,8 @@ import android.widget.SimpleCursorAdapter;
  */
 public class DBActive extends ListActivity {
 
-    private Cursor employees;
+    private Cursor zipcodes;
+    //private Cursor employees;
     private MyDatabase db;
 
     @Override
@@ -19,12 +20,12 @@ public class DBActive extends ListActivity {
         super.onCreate(savedInstanceState);
 
         db = new MyDatabase(this);
-        employees = db.getEmployees(); // you would not typically call this on the main thread
+        zipcodes = db.getZipCode(); // you would not typically call this on the main thread
 
         ListAdapter adapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1,
-                employees,
-                new String[] {"FirstName"},
+                zipcodes,
+                new String[] {"ZipCode"}, // table you want to look at
                 new int[] {android.R.id.text1});
 
         getListView().setAdapter(adapter);
@@ -33,7 +34,7 @@ public class DBActive extends ListActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        employees.close();
+        zipcodes.close();
         db.close();
     }
 }
