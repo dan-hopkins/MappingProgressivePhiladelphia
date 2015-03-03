@@ -56,9 +56,9 @@ public class MyDatabase extends SQLiteAssetHelper {
         if (c.moveToFirst()) {
             do {
                 PhillyOrg org = new PhillyOrg(
-                                c.getString(0),c.getString(1),c.getString(2),
+                                c.getInt(0), c.getString(1),c.getString(2),
                                 c.getString(3),c.getString(4),c.getString(5),
-                                c.getString(6),c.getString(7),c.getString(8));
+                                c.getString(6),c.getString(7),c.getString(8), c.getString(9));
 
                 allOrgs.add(org);
             } while (c.moveToNext());

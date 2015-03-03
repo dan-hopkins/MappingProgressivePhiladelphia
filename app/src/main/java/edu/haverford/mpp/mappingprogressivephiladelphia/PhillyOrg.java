@@ -7,6 +7,7 @@ import java.security.acl.Group;
  */
 public class PhillyOrg {
 
+    int id;
     String Timestamp;
     String GroupName;
     String Website;
@@ -18,7 +19,8 @@ public class PhillyOrg {
     String Twitter;
 
 
-    public PhillyOrg(String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode, String SocialIssues, String Mission, String Twitter){
+    public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode, String SocialIssues, String Mission, String Twitter){
+        this.id = id;
         this.Timestamp = Timestamp;
         this.GroupName = GroupName;
         this.Website = Website;
@@ -29,6 +31,8 @@ public class PhillyOrg {
         this.Mission = Mission;
         this.Twitter = Twitter;
     }
+
+    public int getId() { return id; }
 
     public String getTimestamp() {
         return Timestamp;
