@@ -94,7 +94,7 @@ public class MapActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
             case R.id.about:
                 return(true);

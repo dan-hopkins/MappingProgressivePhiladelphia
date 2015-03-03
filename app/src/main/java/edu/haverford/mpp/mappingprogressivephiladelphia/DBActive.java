@@ -3,8 +3,11 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.SimpleCursorAdapter;
+
+import java.util.ArrayList;
 
 /**
  * Created by dan on 2/28/15.
@@ -20,7 +23,10 @@ public class DBActive extends ListActivity {
         super.onCreate(savedInstanceState);
 
         db = new MyDatabase(this);
-        zipcodes = db.getZipCode(); // you would not typically call this on the main thread
+        ArrayList<PhillyOrg> test = db.getAllOrganizations();
+        Log.i("Size", Integer.toString(test.size()));
+        Log.i("Test", test.get(1).getGroupName());
+        zipcodes = db.getAllZipCodes(); // you would not typically call this on the main thread
 
         ListAdapter adapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1,

@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by dan on 2/28/15.
  */
@@ -26,7 +28,7 @@ public class MyDatabase extends SQLiteAssetHelper {
 
     }
 
-    public Cursor getZipCode() {
+    public Cursor getAllZipCodes() {
 
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -39,6 +41,29 @@ public class MyDatabase extends SQLiteAssetHelper {
 
         c.moveToFirst();
         return c;
+    }
+
+    public ArrayList<PhillyOrg> getAllOrganizations(){
+        ArrayList<PhillyOrg> allOrgs = new ArrayList<PhillyOrg>();
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        String [] sqlSelect = {"0 _id", "ZipCode"}; // the 0 _id thing is necessary for some reason
+        String sqlTables = "mppdata"; // this is the table in the database that you want to work with
+
+        qb.setTables(sqlTables);
+        Cursor c = qb.query(db, null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            do {
+                PhillyOrg org = new PhillyOrg(
+                                c.getString(0),c.getString(1),c.getString(2),
+                                c.getString(3),c.getString(4),c.getString(5),
+                                c.getString(6),c.getString(7),c.getString(8));
+
+                allOrgs.add(org);
+            } while (c.moveToNext());
+        }
+        return allOrgs;
     }
 
     /*
