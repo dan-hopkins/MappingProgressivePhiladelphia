@@ -27,6 +27,7 @@ public class SwipePickerActivity extends Activity {
     private ArrayList<String> al;
     private ArrayAdapter<String> arrayAdapter;
     private int i;
+    private int itemPos;
 
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
@@ -51,6 +52,7 @@ public class SwipePickerActivity extends Activity {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
                 al.remove(0);
+                itemPos++;
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -89,7 +91,7 @@ public class SwipePickerActivity extends Activity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(SwipePickerActivity.this, Integer.toString(itemPosition));
+                makeToast(SwipePickerActivity.this, Integer.toString(itemPos));
             }
         });
 
