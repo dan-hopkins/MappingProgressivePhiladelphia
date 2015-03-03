@@ -37,18 +37,12 @@ public class SwipePickerActivity extends Activity {
         setContentView(R.layout.activity_my);
         ButterKnife.inject(this);
 
-        al = new ArrayList<>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
-        al.add("html");
-        al.add("c++");
-        al.add("css");
-        al.add("javascript");
+        MyDatabase db = new MyDatabase(this);
+
+        al = db.getAllOrganizationNames();
+        //al = new ArrayList<>();
 
         arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
-
 
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -95,7 +89,7 @@ public class SwipePickerActivity extends Activity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(SwipePickerActivity.this, "Clicked!");
+                makeToast(SwipePickerActivity.this, Integer.toString(itemPosition));
             }
         });
 

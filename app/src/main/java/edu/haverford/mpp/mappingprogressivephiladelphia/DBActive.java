@@ -25,7 +25,7 @@ public class DBActive extends ListActivity {
         db = new MyDatabase(this);
         ArrayList<PhillyOrg> test = db.getAllOrganizations();
         Log.i("Size", Integer.toString(test.size()));
-        Log.i("Test", test.get(1).getGroupName());
+        Log.i("Test", db.getAllOrganizationNames().get(1));
         zipcodes = db.getAllZipCodes(); // you would not typically call this on the main thread
 
         ListAdapter adapter = new SimpleCursorAdapter(this,

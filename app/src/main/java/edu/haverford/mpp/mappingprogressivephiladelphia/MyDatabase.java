@@ -33,7 +33,7 @@ public class MyDatabase extends SQLiteAssetHelper {
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        String [] sqlSelect = {"0 _id", "ZipCode"}; // the 0 _id thing is necessary for some reason
+        String [] sqlSelect = {"_id", "ZipCode"}; // the 0 _id thing is necessary for some reason
         String sqlTables = "mppdata"; // this is the table in the database that you want to work with
 
         qb.setTables(sqlTables);
@@ -47,8 +47,6 @@ public class MyDatabase extends SQLiteAssetHelper {
         ArrayList<PhillyOrg> allOrgs = new ArrayList<PhillyOrg>();
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-
-        String [] sqlSelect = {"0 _id", "ZipCode"}; // the 0 _id thing is necessary for some reason
         String sqlTables = "mppdata"; // this is the table in the database that you want to work with
 
         qb.setTables(sqlTables);
@@ -66,6 +64,24 @@ public class MyDatabase extends SQLiteAssetHelper {
         return allOrgs;
     }
 
+    public ArrayList<String> getAllOrganizationNames() {
+        ArrayList<String> orgNames = new ArrayList<String>();
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        String[] sqlSelect = {"_id", "GroupName"}; // the 0 _id thing is necessary for some reason
+        String sqlTables = "mppdata"; // this the table in the database that you want to work with
+
+        qb.setTables(sqlTables);
+        Cursor c = qb.query(db, sqlSelect, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            do {
+                orgNames.add(c.getString(1));
+            } while (c.moveToNext());
+        }
+        return orgNames;
+    }
+
     /*
     public Cursor getEmployees() {
 
@@ -74,7 +90,7 @@ public class MyDatabase extends SQLiteAssetHelper {
 
         String [] sqlSelect = {"0 _id", "FirstName", "LastName"};
         String sqlTables = "Employees";
-
+s i
         qb.setTables(sqlTables);
         Cursor c = qb.query(db, sqlSelect, null, null, null, null, null);
 
