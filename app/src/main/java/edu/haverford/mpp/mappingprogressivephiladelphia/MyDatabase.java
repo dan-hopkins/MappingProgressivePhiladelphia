@@ -1,5 +1,6 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,6 +29,36 @@ public class MyDatabase extends SQLiteAssetHelper {
 
     }
 
+    public void insertSubYes(int id) {
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues updatedValues = new ContentValues();
+        updatedValues.put("Subscribed", 1);
+        db.update("mppdata", updatedValues, "_id=" + id, null);
+    }
+
+    public void insertSubNo(int id) {
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues updatedValues = new ContentValues();
+        updatedValues.put("Subscribed", 0);
+        db.update("mppdata", updatedValues, "_id=" + id, null);
+    }
+
+    public boolean isSubscribed(int id){
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String [] sqlSelect = {"_id", "Subscribed"}; // the 0 _id thing is necessary for some reason
+        qb.setTables("mppdata");
+        Cursor c = qb.query(db, sqlSelect, "_id = " + id, null, null, null, null);
+
+        if (c.moveToFirst())
+            return (c.getInt(1) == 1) ? true : false;
+        else
+            return false;
+    }
+
+
     public Cursor getAllZipCodes() {
 
         SQLiteDatabase db = getReadableDatabase();
@@ -53,10 +84,12 @@ public class MyDatabase extends SQLiteAssetHelper {
         Cursor c = qb.query(db, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             do {
+                boolean subbed = (c.getInt(12) == 1) ? true : false;
+
                 PhillyOrg org = new PhillyOrg(
                                 c.getInt(0), c.getString(1),c.getString(2),
                                 c.getString(3),c.getString(4),c.getString(5),
-                                c.getString(6),c.getString(7),c.getString(8), c.getString(9));
+                                c.getString(6),c.getString(7),c.getString(8), c.getString(9), subbed);
 
                 allOrgs.add(org);
             } while (c.moveToNext());

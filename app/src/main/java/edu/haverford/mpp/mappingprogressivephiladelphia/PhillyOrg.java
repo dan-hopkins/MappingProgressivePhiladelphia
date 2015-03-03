@@ -1,5 +1,7 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
+import org.w3c.dom.Text;
+
 import java.security.acl.Group;
 
 /**
@@ -17,9 +19,11 @@ public class PhillyOrg {
     String SocialIssues;
     String Mission;
     String Twitter;
+    boolean Subscribed;
 
 
-    public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode, String SocialIssues, String Mission, String Twitter){
+    public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode,
+                     String SocialIssues, String Mission, String Twitter, boolean Subscribed){
         this.id = id;
         this.Timestamp = Timestamp;
         this.GroupName = GroupName;
@@ -30,6 +34,8 @@ public class PhillyOrg {
         this.SocialIssues = SocialIssues;
         this.Mission = Mission;
         this.Twitter = Twitter;
+        //if (Subscribed == 1) this.Subscribed = true; else this.Subscribed = false;
+
     }
 
     public int getId() { return id; }
@@ -67,5 +73,7 @@ public class PhillyOrg {
     public String getTwitter() {
         return Twitter;
     }
+
+    public boolean getSubscribed() { return Subscribed; }
 
 }

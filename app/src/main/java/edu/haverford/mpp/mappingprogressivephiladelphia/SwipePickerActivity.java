@@ -61,12 +61,16 @@ public class SwipePickerActivity extends Activity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                makeToast(SwipePickerActivity.this, "Left!");
+                //makeToast(SwipePickerActivity.this, "Left!");
+                MyDatabase db = new MyDatabase(getApplicationContext()); //for this context
+                db.insertSubNo(itemPos);
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                makeToast(SwipePickerActivity.this, "Right!");
+                MyDatabase db = new MyDatabase(getApplicationContext());
+                db.insertSubYes(itemPos);
+                //makeToast(SwipePickerActivity.this, "Right!");
             }
 
             @Override
@@ -91,7 +95,8 @@ public class SwipePickerActivity extends Activity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(SwipePickerActivity.this, Integer.toString(itemPos));
+                MyDatabase db = new MyDatabase(getApplicationContext());
+                makeToast(SwipePickerActivity.this, Boolean.toString(db.isSubscribed(itemPos)));
             }
         });
 
