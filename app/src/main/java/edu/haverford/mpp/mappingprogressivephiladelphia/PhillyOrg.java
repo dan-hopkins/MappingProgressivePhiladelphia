@@ -10,6 +10,7 @@ public class PhillyOrg {
     String Timestamp;
     String GroupName;
     String Website;
+    String Facebook;
     String Address;
     String ZipCode;
     String SocialIssues;
@@ -21,6 +22,7 @@ public class PhillyOrg {
         this.Timestamp = Timestamp;
         this.GroupName = GroupName;
         this.Website = Website;
+        this.Facebook = Facebook;
         this.Address = Address;
         this.ZipCode = ZipCode;
         this.SocialIssues = SocialIssues;
@@ -39,6 +41,8 @@ public class PhillyOrg {
     public String getWebsite() {
         return Website;
     }
+
+    public String getFacebook() { return Facebook; }
 
     public String getAddress() {
         return Address;
