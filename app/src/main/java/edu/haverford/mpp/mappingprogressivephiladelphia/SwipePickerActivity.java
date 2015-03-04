@@ -27,6 +27,7 @@ public class SwipePickerActivity extends Activity {
     private ArrayList<String> al;
     private ArrayAdapter<String> arrayAdapter;
     private int i;
+    private int itemPos;
 
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
@@ -37,18 +38,12 @@ public class SwipePickerActivity extends Activity {
         setContentView(R.layout.activity_my);
         ButterKnife.inject(this);
 
-        al = new ArrayList<>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
-        al.add("html");
-        al.add("c++");
-        al.add("css");
-        al.add("javascript");
+        MyDatabase db = new MyDatabase(this);
+
+        al = db.getAllOrganizationNames();
+        //al = new ArrayList<>();
 
         arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
-
 
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -57,6 +52,7 @@ public class SwipePickerActivity extends Activity {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
                 al.remove(0);
+                itemPos++;
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -65,12 +61,16 @@ public class SwipePickerActivity extends Activity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                makeToast(SwipePickerActivity.this, "Left!");
+                //makeToast(SwipePickerActivity.this, "Left!");
+                MyDatabase db = new MyDatabase(getApplicationContext()); //for this context
+                db.insertSubNo(itemPos);
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                makeToast(SwipePickerActivity.this, "Right!");
+                MyDatabase db = new MyDatabase(getApplicationContext());
+                db.insertSubYes(itemPos);
+                //makeToast(SwipePickerActivity.this, "Right!");
             }
 
             @Override
@@ -95,7 +95,8 @@ public class SwipePickerActivity extends Activity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(SwipePickerActivity.this, "Clicked!");
+                MyDatabase db = new MyDatabase(getApplicationContext());
+                makeToast(SwipePickerActivity.this, Boolean.toString(db.isSubscribed(itemPos)));
             }
         });
 
