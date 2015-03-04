@@ -16,6 +16,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapActivity extends FragmentActivity {
 
+    int x = 1;
+    boolean y = (x==1) ? true : false;
+
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     @Override

@@ -38,6 +38,10 @@ public class PhillyOrg {
 
     }
 
+    public PhillyOrg(){
+
+    }
+
     public int getId() { return id; }
 
     public String getTimestamp() {

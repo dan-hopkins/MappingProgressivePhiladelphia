@@ -11,5 +11,6 @@
     <string name="orginfo">Organization Info</string>
     <string name="title_activity_tinder">Mapping Progressive Philadelphia</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_organization_info">OrganizationInfoActivity</string>
 
 </resources>

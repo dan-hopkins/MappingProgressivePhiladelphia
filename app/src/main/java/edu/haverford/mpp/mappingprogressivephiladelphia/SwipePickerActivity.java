@@ -44,7 +44,7 @@ public class SwipePickerActivity extends Activity {
         //al = new ArrayList<>();
 
         arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
-
+        itemPos = 1; //matches the id of the first item in the stack -- Increment itemPos as we remove cards so that it remains the correct id
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
@@ -63,13 +63,13 @@ public class SwipePickerActivity extends Activity {
                 //If you want to use it just cast it (String) dataObject
                 //makeToast(SwipePickerActivity.this, "Left!");
                 MyDatabase db = new MyDatabase(getApplicationContext()); //for this context
-                db.insertSubNo(itemPos);
+                db.insertSubNo(itemPos-1); //itemPos has incremented since object has been removed so offset by -1
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 MyDatabase db = new MyDatabase(getApplicationContext());
-                db.insertSubYes(itemPos);
+                db.insertSubYes(itemPos-1);  //itemPos has incremented since object has been removed so offset by -1
                 //makeToast(SwipePickerActivity.this, "Right!");
             }
 
@@ -95,8 +95,12 @@ public class SwipePickerActivity extends Activity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                MyDatabase db = new MyDatabase(getApplicationContext());
-                makeToast(SwipePickerActivity.this, Boolean.toString(db.isSubscribed(itemPos)));
+                //MyDatabase db = new MyDatabase(getApplicationContext());
+                //makeToast(SwipePickerActivity.this, Boolean.toString(db.isSubscribed(itemPos)));
+
+                Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
+                intent.putExtra("OrgID", itemPos);
+                startActivity(intent);
             }
         });
 
@@ -137,14 +141,14 @@ public class SwipePickerActivity extends Activity {
     public void right() {
 
         // THIS IS JUST DAN TRYING SOMETHING NEW
-        Intent intent = new Intent(getApplicationContext(), DBActive.class);
-        startActivity(intent);
+        /*Intent intent = new Intent(getApplicationContext(), DBActive.class);
+        startActivity(intent);*/
 
         //
         /**
          * Trigger the right event manually.
          */
-        //flingContainer.getTopCardListener().selectRight();
+        flingContainer.getTopCardListener().selectRight();
     }
 
     @OnClick(R.id.left)

@@ -3,8 +3,10 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -51,7 +53,7 @@ public class MyDatabase extends SQLiteAssetHelper {
         String [] sqlSelect = {"_id", "Subscribed"}; // the 0 _id thing is necessary for some reason
         qb.setTables("mppdata");
         Cursor c = qb.query(db, sqlSelect, "_id = " + id, null, null, null, null);
-
+        Log.d("Cursor", DatabaseUtils.dumpCursorToString(c));
         if (c.moveToFirst())
             return (c.getInt(1) == 1) ? true : false;
         else
@@ -95,6 +97,23 @@ public class MyDatabase extends SQLiteAssetHelper {
             } while (c.moveToNext());
         }
         return allOrgs;
+    }
+
+    public PhillyOrg getOrganizationById(int id){
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String sqlTables = "mppdata"; // this is the table in the database that you want to work with
+        qb.setTables(sqlTables);
+        Cursor c = qb.query(db, null, "_id = " + id, null, null, null, null);
+        if (c.moveToFirst()) {
+                boolean subbed = (c.getInt(12) == 1) ? true : false;
+                PhillyOrg org = new PhillyOrg(
+                        c.getInt(0), c.getString(1),c.getString(2),
+                        c.getString(3),c.getString(4),c.getString(5),
+                        c.getString(6),c.getString(7),c.getString(8), c.getString(9), subbed);
+            return org;
+        }
+        return null;
     }
 
     public ArrayList<String> getAllOrganizationNames() {
