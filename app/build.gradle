@@ -5,7 +5,7 @@ android {
         testKey {
             keyAlias 'DebugKey'
             keyPassword 'mpp'
-            storeFile file('~/.android/debug.keystore')
+            storeFile file('~/.android/mppdebug.keystore')
             storePassword 'mpp'
         }
     }
