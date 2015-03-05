@@ -134,6 +134,24 @@ public class MyDatabase extends SQLiteAssetHelper {
         return orgNames;
     }
 
+    public ArrayList<Integer> getAllSubscribedOrgIDs() {
+        ArrayList<Integer> subbedOrgs = new ArrayList<Integer>();
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        String[] sqlSelect = {"_id", "Subscribed"}; // the 0 _id thing is necessary for some reason
+        String sqlTables = "mppdata"; // this the table in the database that you want to work with
+
+        qb.setTables(sqlTables);
+        Cursor c = qb.query(db, sqlSelect, "Subscribed = 1", null, null, null, null);
+        Log.i("SubCursor", DatabaseUtils.dumpCursorToString(c));
+        if (c.moveToFirst()) {
+            do {
+                subbedOrgs.add(c.getInt(0));
+            } while (c.moveToNext());
+        }
+        return subbedOrgs;
+    }
     /*
     public Cursor getEmployees() {
 
