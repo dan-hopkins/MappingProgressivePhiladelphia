@@ -44,7 +44,7 @@ public class MyDatabase extends SQLiteAssetHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues updatedValues = new ContentValues();
         updatedValues.put("Subscribed", 0);
-        db.update("mppdata", updatedValues, "_id=" + id, null);
+        db.update("mppdata", updatedValues, "_id = " + id, null);
     }
 
     public boolean isSubscribed(int id){
