@@ -20,10 +20,12 @@ public class PhillyOrg {
     String Mission;
     String Twitter;
     boolean Subscribed;
+    double Longitude;
+    double Latitude;
 
 
     public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode,
-                     String SocialIssues, String Mission, String Twitter, boolean Subscribed){
+                     String SocialIssues, String Mission, String Twitter, double Longitude, double Latitude, boolean Subscribed){
         this.id = id;
         this.Timestamp = Timestamp;
         this.GroupName = GroupName;
@@ -34,7 +36,8 @@ public class PhillyOrg {
         this.SocialIssues = SocialIssues;
         this.Mission = Mission;
         this.Twitter = Twitter;
-        //if (Subscribed == 1) this.Subscribed = true; else this.Subscribed = false;
+        this.Longitude = Longitude;
+        this.Latitude = Latitude;
 
     }
 
@@ -77,6 +80,10 @@ public class PhillyOrg {
     public String getTwitter() {
         return Twitter;
     }
+
+    public double getLongitude() { return Longitude; }
+
+    public double getLatitude() { return Latitude; }
 
     public boolean getSubscribed() { return Subscribed; }
 

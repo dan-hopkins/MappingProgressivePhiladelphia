@@ -91,7 +91,7 @@ public class MyDatabase extends SQLiteAssetHelper {
                 PhillyOrg org = new PhillyOrg(
                                 c.getInt(0), c.getString(1),c.getString(2),
                                 c.getString(3),c.getString(4),c.getString(5),
-                                c.getString(6),c.getString(7),c.getString(8), c.getString(9), subbed);
+                                c.getString(6),c.getString(7),c.getString(8), c.getString(9), c.getDouble(10), c.getDouble(11), subbed);
 
                 allOrgs.add(org);
             } while (c.moveToNext());
@@ -110,7 +110,7 @@ public class MyDatabase extends SQLiteAssetHelper {
                 PhillyOrg org = new PhillyOrg(
                         c.getInt(0), c.getString(1),c.getString(2),
                         c.getString(3),c.getString(4),c.getString(5),
-                        c.getString(6),c.getString(7),c.getString(8), c.getString(9), subbed);
+                        c.getString(6),c.getString(7),c.getString(8), c.getString(9), c.getDouble(10), c.getDouble(11), subbed);
             return org;
         }
         return null;

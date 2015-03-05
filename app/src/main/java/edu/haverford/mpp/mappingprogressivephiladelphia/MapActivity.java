@@ -14,6 +14,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class MapActivity extends FragmentActivity {
 
     int x = 1;
@@ -77,9 +80,18 @@ public class MapActivity extends FragmentActivity {
     private void setUpMap() {
         final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
 
+        MyDatabase db = new MyDatabase(getApplicationContext());
+        ArrayList<Integer> subbedOrgIDs = db.getAllSubscribedOrgIDs();
+        PhillyOrg currentOrg = new PhillyOrg();
+
         mMap.addMarker(new MarkerOptions().position(new LatLng(40.00786,-75.306238)).title("Haverford College"));
+        for (int i = 0; i < subbedOrgIDs.size(); i++) {
+            currentOrg = db.getOrganizationById(subbedOrgIDs.get(i));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude())).title(currentOrg.getGroupName()));
+        }
+
         //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901,-75.33735)).title("Villanova University"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901, -75.33735)).title(mySharedPreferences.getString("Haverford", "")));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901, -75.33735)).title(mySharedPreferences.getString("Haverford", "")));
     }
 
     @Override
