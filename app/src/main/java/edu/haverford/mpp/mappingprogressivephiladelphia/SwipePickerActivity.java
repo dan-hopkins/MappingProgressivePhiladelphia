@@ -39,6 +39,7 @@ public class SwipePickerActivity extends Activity {
         ButterKnife.inject(this);
 
         MyDatabase db = new MyDatabase(this);
+        db.getAllSubscribedOrgIDs();
 
         al = db.getAllOrganizationNames();
         //al = new ArrayList<>();
