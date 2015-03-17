@@ -25,7 +25,7 @@ import butterknife.OnClick;
 public class SwipePickerActivity extends Activity {
 
     private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
+    private SwipePickerAdapter arrayAdapter;
     private int i;
     private int itemPos;
 
@@ -44,7 +44,7 @@ public class SwipePickerActivity extends Activity {
         al = db.getAllOrganizationNames();
         //al = new ArrayList<>();
 
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al );
+        arrayAdapter = new SwipePickerAdapter(this);
         itemPos = 1; //matches the id of the first item in the stack -- Increment itemPos as we remove cards so that it remains the correct id
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -104,32 +104,6 @@ public class SwipePickerActivity extends Activity {
                 startActivity(intent);
             }
         });
-
-        //From original MainActivity
-      /*  final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        final SharedPreferences.Editor editor = mySharedPreferences.edit(); //save name-value pairs
-
-        final EditText input = (EditText)findViewById(R.id.input);
-
-        Button saveButton = (Button)findViewById(R.id.savebutton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View s) {
-                editor.putString("Haverford", input.getText().toString());
-                editor.apply();
-                //Toast toast = Toast.makeText(MainActivity.this, mySharedPreferences.getString("Haverford", "Sorry, we couldn't find anything!"), Toast.LENGTH_SHORT);
-                //toast.show(); // THIS TOAST JUST READS BACK TO YOU THE VALUE YOU SAVE
-            }
-        });
-
-        Button dismiss = (Button)findViewById(R.id.dismiss);
-        dismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View d) {
-                Toast disToast = Toast.makeText(MainActivity.this, "Organization dismissed...", Toast.LENGTH_SHORT);
-                disToast.show();
-            }
-        });*/
 
     }
 
