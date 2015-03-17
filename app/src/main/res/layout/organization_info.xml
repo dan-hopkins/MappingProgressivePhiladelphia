@@ -8,7 +8,7 @@
         android:layout_width="218dp"
         android:layout_height="90dp"
         android:id="@+id/imageView"
-        android:src="@drawable/temp"
+        android:src="@drawable/default_pic"
         android:scaleType="fitCenter"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.31"
