@@ -21,7 +21,7 @@
             android:padding="5dp"
             android:layout_weight=".9"
             android:scaleType="fitCenter"
-            android:src="@drawable/temp"
+            android:src="@drawable/default_pic"
          />
 
         <TextView
