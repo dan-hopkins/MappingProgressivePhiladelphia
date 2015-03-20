@@ -87,4 +87,11 @@ public class PhillyOrg {
 
     public boolean getSubscribed() { return Subscribed; }
 
+    public void setSubscribed(Boolean subscribed) {this.Subscribed = subscribed;}
+
+    @Override
+    public String toString(){
+        return this.GroupName;
+    }
+
 }

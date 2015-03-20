@@ -1,15 +1,21 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,6 +34,13 @@ public class MapActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
+        try {
+            MapsInitializer.initialize(this);
+        } catch (Exception e) {
+            Log.e("TAG", "Failed to initialize map");
+        }
+
         setUpMapIfNeeded();
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -117,5 +130,18 @@ public class MapActivity extends FragmentActivity {
                 return(true);
         }
         return(super.onOptionsItemSelected(item));
+    }
+
+
+    private boolean isPlayServicesConfigured() {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(MapActivity.this);
+        if(status == ConnectionResult.SUCCESS)
+            return true;
+        else {
+            Log.d("STATUS", "Error connecting with Google Play services. Code: " + String.valueOf(status));
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, MapActivity.this, status);
+            dialog.show();
+            return false;
+        }
     }
 }

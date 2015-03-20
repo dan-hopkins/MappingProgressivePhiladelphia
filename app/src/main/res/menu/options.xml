@@ -8,6 +8,13 @@
     </item>
 
     <item
+        android:id="@+id/list"
+        android:icon="@drawable/ic_action_view_as_list"
+        android:title="@string/map"
+        android:showAsAction="always">
+    </item>
+
+    <item
         android:id="@+id/help"
         android:icon="@drawable/ic_action_help"
         android:title="@string/help"

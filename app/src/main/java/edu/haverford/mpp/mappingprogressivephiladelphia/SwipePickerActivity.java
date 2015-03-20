@@ -2,7 +2,9 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
@@ -22,12 +23,15 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
+
+
 public class SwipePickerActivity extends Activity {
 
     private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
+    private ArrayList<PhillyOrg> allOrgs;
+    //private ArrayAdapter<String> myCardAdapter;
+    private ArrayAdapter<PhillyOrg> myCardAdapter;
     private int i;
-    private int itemPos;
 
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
@@ -39,22 +43,21 @@ public class SwipePickerActivity extends Activity {
         ButterKnife.inject(this);
 
         MyDatabase db = new MyDatabase(this);
-        db.getAllSubscribedOrgIDs();
 
         al = db.getAllOrganizationNames();
         //al = new ArrayList<>();
+        allOrgs = db.getAllOrganizations();
 
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
-        itemPos = 1; //matches the id of the first item in the stack -- Increment itemPos as we remove cards so that it remains the correct id
-        flingContainer.setAdapter(arrayAdapter);
+        //myCardAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
+        myCardAdapter = new ArrayAdapter<PhillyOrg> (this, R.layout.item, R.id.helloText, allOrgs);
+        flingContainer.setAdapter(myCardAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                al.remove(0);
-                itemPos++;
-                arrayAdapter.notifyDataSetChanged();
+                allOrgs.remove(0);
+                myCardAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -64,23 +67,36 @@ public class SwipePickerActivity extends Activity {
                 //If you want to use it just cast it (String) dataObject
                 //makeToast(SwipePickerActivity.this, "Left!");
                 MyDatabase db = new MyDatabase(getApplicationContext()); //for this context
-                db.insertSubNo(itemPos-1); //itemPos has incremented since object has been removed so offset by -1
+                PhillyOrg currOrg = (PhillyOrg) dataObject;
+                db.insertSubNo(currOrg.id);
+
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
                 MyDatabase db = new MyDatabase(getApplicationContext());
-                db.insertSubYes(itemPos-1);  //itemPos has incremented since object has been removed so offset by -1
-                //makeToast(SwipePickerActivity.this, "Right!");
+                PhillyOrg currOrg = (PhillyOrg) dataObject;
+                db.insertSubYes(currOrg.id);
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                // Ask for more data here
-                al.add("XML ".concat(String.valueOf(i)));
-                arrayAdapter.notifyDataSetChanged();
-                Log.d("LIST", "notified");
-                i++;
+                new AlertDialog.Builder(SwipePickerActivity.this)
+                        .setTitle("Done")
+                        .setMessage("Would you like to look at the organizations again?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                MyDatabase db = new MyDatabase(SwipePickerActivity.this);
+                                allOrgs = db.getAllOrganizations();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
 
             @Override
@@ -97,11 +113,14 @@ public class SwipePickerActivity extends Activity {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
                 //MyDatabase db = new MyDatabase(getApplicationContext());
-                //makeToast(SwipePickerActivity.this, Boolean.toString(db.isSubscribed(itemPos)));
+                PhillyOrg currOrg = (PhillyOrg) dataObject;
+                makeToast(SwipePickerActivity.this, currOrg.toString());
 
-                Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
+               /* Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", itemPos);
-                startActivity(intent);
+                startActivity(intent);*/
+
+
             }
         });
 
@@ -149,10 +168,17 @@ public class SwipePickerActivity extends Activity {
 
             case android.R.id.home:
                 return (true);
-            case R.id.map:
-                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+
+            case R.id.list:
+                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.map:
+                intent = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.about:
                 return (true);
             case R.id.help:
