@@ -39,6 +39,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_tinder"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -48,6 +50,10 @@
             android:name=".OrganizationInfoActivity"
             android:label="@string/title_activity_organization_info" >
         </activity>
+        <activity android:name=".OrgListActivity"
+            android:label="@string/OrgListActivity" >
+        </activity>
+
     </application>
 
 </manifest>
