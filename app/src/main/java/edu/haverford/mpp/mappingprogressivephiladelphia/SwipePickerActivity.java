@@ -25,7 +25,7 @@ import butterknife.OnClick;
 public class SwipePickerActivity extends Activity {
 
     private ArrayList<String> al;
-    private SwipePickerAdapter arrayAdapter;
+    private ArrayAdapter<String> arrayAdapter;
     private int i;
     private int itemPos;
 
@@ -44,7 +44,7 @@ public class SwipePickerActivity extends Activity {
         al = db.getAllOrganizationNames();
         //al = new ArrayList<>();
 
-        arrayAdapter = new SwipePickerAdapter(this);
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
         itemPos = 1; //matches the id of the first item in the stack -- Increment itemPos as we remove cards so that it remains the correct id
         flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
