@@ -90,7 +90,6 @@ public class MapActivity extends FragmentActivity {
             mMap.addMarker(new MarkerOptions().position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude())).title(currentOrg.getGroupName()));
         }
 
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901,-75.33735)).title("Villanova University"));
         //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901, -75.33735)).title(mySharedPreferences.getString("Haverford", "")));
     }
 
