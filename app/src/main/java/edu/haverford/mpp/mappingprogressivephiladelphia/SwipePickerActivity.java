@@ -114,9 +114,9 @@ public class SwipePickerActivity extends Activity {
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 makeToast(SwipePickerActivity.this, currOrg.toString());
 
-               /* Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
-                intent.putExtra("OrgID", itemPos);
-                startActivity(intent);*/
+                Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
+                intent.putExtra("OrgID", currOrg.getId());
+                startActivity(intent);
 
 
             }
