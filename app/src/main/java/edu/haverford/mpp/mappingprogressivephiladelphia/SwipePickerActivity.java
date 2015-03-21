@@ -23,8 +23,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-
-
 public class SwipePickerActivity extends Activity {
 
     private ArrayList<String> al;

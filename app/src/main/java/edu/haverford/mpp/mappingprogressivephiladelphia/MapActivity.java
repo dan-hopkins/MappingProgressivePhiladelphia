@@ -1,6 +1,7 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -127,6 +128,10 @@ public class MapActivity extends FragmentActivity {
                 return(true);
             case R.id.help:
                 return(true);
+            case R.id.list:
+                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                startActivity(intent);
+                break;
         }
         return(super.onOptionsItemSelected(item));
     }
