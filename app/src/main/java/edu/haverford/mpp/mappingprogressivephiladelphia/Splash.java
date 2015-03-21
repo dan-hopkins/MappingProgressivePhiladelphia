@@ -27,7 +27,7 @@ public class Splash extends Activity {
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
 
         if (isFirstRun) {
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, R.style.DialogTheme)
                     .setTitle("Welcome to My Progressive Philadelphia!")
                     .setMessage("Here is a brief explanation on how to use the app. Do you want to subscribe now or later?")
                     .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
