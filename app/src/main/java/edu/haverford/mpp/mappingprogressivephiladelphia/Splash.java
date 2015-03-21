@@ -29,7 +29,8 @@ public class Splash extends Activity {
         if (isFirstRun) {
             new AlertDialog.Builder(this, R.style.DialogTheme)
                     .setTitle("Welcome to My Progressive Philadelphia!")
-                    .setMessage("Here is a brief explanation on how to use the app. Do you want to subscribe now or later?")
+                    .setMessage("Here is a brief explanation about how to use this application." + "\n" + "Check these" +
+                            "\n" + "new lines")
                     .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             switchAct();
