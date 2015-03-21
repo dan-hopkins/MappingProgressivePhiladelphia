@@ -18,8 +18,13 @@ public class Splash extends Activity {
         setContentView(R.layout.splashy);
     }
 
-    public void switchAct() {
+    public void switchToSwipe() {
         Intent intent = new Intent(this, SwipePickerActivity.class);
+        startActivity(intent);
+    }
+
+    public void switchToMap() {
+        Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
 
@@ -33,15 +38,15 @@ public class Splash extends Activity {
                             "\n" + "new lines")
                     .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            switchAct();
+                            switchToSwipe();
                         }
                     })
                     .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            switchAct();
+                            switchToSwipe(); // this should be switchToMap() once we get everything set up
                         }
                     })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(R.drawable.ic_launcher)
                     .show();
             // FIRST TIME ONLY: DISPLAY DIALOG
 
@@ -49,6 +54,6 @@ public class Splash extends Activity {
         }
 
         else
-            switchAct();
+            switchToSwipe(); // this should be switchToMap() once we get everything set up
     }
 }

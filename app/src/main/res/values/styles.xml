@@ -77,14 +77,18 @@
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Example</item>
     </style>
 
+    <color name="black">#FF000000</color>
+    <color name="whitegrey">#FFF2F2F2</color>
+
     <style name="DialogTheme" parent="android:Theme.Dialog">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
 
         <!-- No backgrounds, titles or window float -->
-        <item name="android:windowBackground">@null</item>
+        <item name="android:windowBackground">@color/whitegrey</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>
