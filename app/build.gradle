@@ -5,7 +5,7 @@ android {
         testKey {
             keyAlias 'DebugKey'
             keyPassword 'mpp'
-            storeFile file('~/.android/mppdebug.keystore')
+            storeFile file('~/.android/debug-3-20.keystore')
             storePassword 'mpp'
         }
     }
@@ -42,6 +42,9 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.retrofit:retrofit:1.8.0'
     compile 'com.google.android.gms:play-services:6.5.87'
+
+    //Facebook SDK
+    compile 'com.facebook.android:facebook-android-sdk:3.23.1'
 
     // Google Play Services
     compile 'com.google.android.gms:play-services:6.5.87'

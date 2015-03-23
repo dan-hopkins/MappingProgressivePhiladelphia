@@ -39,4 +39,11 @@
         android:title="@string/orginfo"
         android:showAsAction="never">
     </item>
+
+    <item
+        android:id="@+id/facebook"
+        android:title="Facebook Login"
+        android:showAsAction="never">
+
+        </item>
 </menu>

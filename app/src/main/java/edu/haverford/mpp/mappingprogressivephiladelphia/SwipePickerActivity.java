@@ -181,6 +181,9 @@ public class SwipePickerActivity extends Activity {
                 return (true);
             case R.id.help:
                 return (true);
+            case R.id.facebook:
+                intent = new Intent(getApplicationContext(), Facebook_Login.class);
+                startActivity(intent);
         }
         return (super.onOptionsItemSelected(item));
     }
