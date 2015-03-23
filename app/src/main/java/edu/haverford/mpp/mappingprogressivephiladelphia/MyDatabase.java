@@ -152,19 +152,4 @@ public class MyDatabase extends SQLiteAssetHelper {
         }
         return subbedOrgs;
     }
-    /*
-    public Cursor getEmployees() {
-
-        SQLiteDatabase db = getReadableDatabase();
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-
-        String [] sqlSelect = {"0 _id", "FirstName", "LastName"};
-        String sqlTables = "Employees";
-s i
-        qb.setTables(sqlTables);
-        Cursor c = qb.query(db, sqlSelect, null, null, null, null, null);
-
-        c.moveToFirst();
-        return c;
-    } */
 }

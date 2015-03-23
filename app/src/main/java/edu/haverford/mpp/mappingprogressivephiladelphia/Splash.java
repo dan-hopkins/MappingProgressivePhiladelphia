@@ -15,7 +15,6 @@ public class Splash extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkFirstRun();
-        setContentView(R.layout.splashy);
     }
 
     public void switchToSwipe() {

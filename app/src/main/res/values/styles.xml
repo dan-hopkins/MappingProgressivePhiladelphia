@@ -77,18 +77,28 @@
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Example</item>
     </style>
 
-    <color name="black">#FF000000</color>
-    <color name="whitegrey">#FFF2F2F2</color>
-
-    <style name="DialogTheme" parent="android:Theme.Dialog">
+    <style name = "DialogTheme" parent = "android:style/Theme.Holo.Light">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
 
         <!-- No backgrounds, titles or window float -->
-        <item name="android:windowBackground">@color/whitegrey</item>
+
+        <!-- This is the background behind the alert -->
+        <item name="android:windowBackground">@android:color/holo_blue_light</item>
+
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="android:textColor">@color/black</item>
+
+        <!-- This is the title text (Welcome to My Progressive Philadelphia) -->
+        <item name="android:textColor">@android:color/holo_green_light</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">25sp</item>
+
+        <!-- This is the body text -->
+        <item name="android:textColorPrimary">@android:color/holo_orange_dark</item>
+
+        <!-- This doesn't seem to work at the moment -->
+        <item name="android:scrollHorizontally">true</item>
     </style>
 
 </resources>

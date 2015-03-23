@@ -14,7 +14,4 @@
     <string name="title_activity_organization_info">OrganizationInfoActivity</string>
     <string name="OrgListActivity">OrgListActivity</string>
 
-    <string name="welcome"> <![CDATA[<html><body>
-    <p style="text-align:justify"> your paragraph text </p></body></html>]]></string>
-
 </resources>
