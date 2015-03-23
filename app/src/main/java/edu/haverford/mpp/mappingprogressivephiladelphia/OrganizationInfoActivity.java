@@ -2,20 +2,40 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.ProfilePictureView;
 
 
 public class OrganizationInfoActivity extends Activity {
 
     int currentOrgID;
+    private ProfilePictureView profilePictureView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // Check for an open session
+        Session session = Session.getActiveSession();
+        if (session != null && session.isOpened()) {
+            // Get the user's data
+            makeMeRequest(session);
+        }
+
+
+
         setContentView(R.layout.organization_info);
 
         Intent intent = getIntent();
@@ -42,8 +62,52 @@ public class OrganizationInfoActivity extends Activity {
         TextView subscribed = (TextView)findViewById(R.id.org_subscribed);
         subscribed.append(Boolean.toString(currOrg.getSubscribed()));
 
+        // Find the user's profile picture custom view
+
+        profilePictureView = (ProfilePictureView)findViewById(R.id.selection_profile_pic);
+        profilePictureView.setCropped(true);
+
+
     }
 
+    private void makeMeRequest(final Session session) {
+        // Make an API call to get user data and define a
+        // new callback to handle the response.
+        Request request = Request.newMeRequest(session,
+                new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        // If the response is successful
+                        if (session == Session.getActiveSession()) {
+                            if (user != null) {
+                                // Set the id for the ProfilePictureView
+                                // view that in turn displays the profile picture.
+                                profilePictureView.setVisibility(View.VISIBLE);
+                                profilePictureView.setProfileId(user.getId());
+                            }
+                        }
+                        if (response.getError() != null) {
+                            // Handle errors, will do so later.
+                        }
+                    }
+                });
+        request.executeAsync();
+    }
+
+    private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
+        if (session != null && session.isOpened()) {
+            // Get the user's data.
+            makeMeRequest(session);
+        }
+    }
+
+    private UiLifecycleHelper uiHelper;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(final Session session, final SessionState state, final Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
@@ -13,6 +16,15 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.31"
         android:layout_marginBottom="30dp"/>
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/selection_profile_pic"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:visibility="invisible"
+        />
 
     <TextView
         android:layout_width="192dp"

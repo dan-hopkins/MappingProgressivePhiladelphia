@@ -17,6 +17,7 @@ public class Splash extends Activity {
         checkFirstRun();
     }
 
+
     public void switchToSwipe() {
         Intent intent = new Intent(this, SwipePickerActivity.class);
         startActivity(intent);
