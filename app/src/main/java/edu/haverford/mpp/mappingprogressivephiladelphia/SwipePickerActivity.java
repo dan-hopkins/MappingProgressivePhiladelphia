@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -45,6 +45,7 @@ public class SwipePickerActivity extends Activity {
         al = db.getAllOrganizationNames();
         //al = new ArrayList<>();
         allOrgs = db.getAllOrganizations();
+        Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
 
         //myCardAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
         myCardAdapter = new ArrayAdapter<PhillyOrg> (this, R.layout.item, R.id.helloText, allOrgs);
@@ -86,11 +87,15 @@ public class SwipePickerActivity extends Activity {
                             public void onClick(DialogInterface dialog, int which) {
                                 MyDatabase db = new MyDatabase(SwipePickerActivity.this);
                                 allOrgs = db.getAllOrganizations();
+                                myCardAdapter = new ArrayAdapter<PhillyOrg> (SwipePickerActivity.this, R.layout.item, R.id.helloText, allOrgs);
+                                flingContainer.setAdapter(myCardAdapter);
+                                myCardAdapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
+                                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                                startActivity(intent);
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -129,20 +134,18 @@ public class SwipePickerActivity extends Activity {
     }
 
 
+    /**
+     * Trigger the right event manually.
+     */
     @OnClick(R.id.right)
     public void right() {
 
-        // THIS IS JUST DAN TRYING SOMETHING NEW
-        /*Intent intent = new Intent(getApplicationContext(), DBActive.class);
-        startActivity(intent);*/
-
-        //
-        /**
-         * Trigger the right event manually.
-         */
         flingContainer.getTopCardListener().selectRight();
     }
 
+    /**
+     * Trigger the left event manually.
+     */
     @OnClick(R.id.left)
     public void left() {
         flingContainer.getTopCardListener().selectLeft();
@@ -166,17 +169,14 @@ public class SwipePickerActivity extends Activity {
 
             case android.R.id.home:
                 return (true);
-
             case R.id.list:
                 Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
                 startActivity(intent);
                 break;
-
             case R.id.map:
                 intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
                 break;
-
             case R.id.about:
                 return (true);
             case R.id.help:

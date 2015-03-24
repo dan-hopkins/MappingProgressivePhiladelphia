@@ -29,7 +29,10 @@ public class OrgListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_org_list);
+    }
 
+    protected void onResume(){
+        super.onResume();
         MyDatabase db = new MyDatabase(this);
         //Array list of organizations
         ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
@@ -40,18 +43,6 @@ public class OrgListActivity extends Activity {
         ListView listView = (ListView) findViewById(R.id.listView1);
         // Assign adapter to ListView
         listView.setAdapter(mAdapter);
-
-
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // When clicked, show a toast with the TextView text
-                PhillyOrg currOrg = (PhillyOrg) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "Clicked on Row: " + currOrg.getGroupName() + ". Subscribed is: " + Boolean.toString(currOrg.getSubscribed()),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 
@@ -87,6 +78,16 @@ public class OrgListActivity extends Activity {
         }
         return (super.onOptionsItemSelected(item));
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this,
+                "You are now subscribed to " + mAdapter.saveSubscribed() + " organizations",
+                Toast.LENGTH_SHORT).show(); //testing the savesubscribed feature
+    }
+
+
 }
 
 class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
@@ -105,6 +106,10 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
     private class ViewHolder {
         TextView code;
         CheckBox name;
+
+        public void CheckMeOrNot(Boolean bool){
+            name.setChecked(bool);
+        }
     }
 
     @Override
@@ -112,7 +117,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
 
         ViewHolder holder = null;
         Log.v("ConvertView", String.valueOf(position));
-
+        MyDatabase db = new MyDatabase(mContext);
         if (convertView == null) {
             LayoutInflater vi = (LayoutInflater)mContext.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
@@ -121,7 +126,9 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
             holder = new ViewHolder();
             holder.code = (TextView) convertView.findViewById(R.id.code);
             holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
-
+            PhillyOrg currOrg = orgList.get(position);
+            holder.CheckMeOrNot(db.isSubscribed(currOrg.getId()));
+            Log.w("TAG", "getSubbed of " + currOrg.toString() + ": " + Boolean.toString(db.isSubscribed(currOrg.getId())));
             convertView.setTag(holder);
 
 
@@ -129,17 +136,15 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
                     PhillyOrg currOrg = (PhillyOrg) cb.getTag();
-                    Toast.makeText(mContext,
-                            "Clicked on Checkbox: " + cb.getText() +
-                                    " is " + cb.isChecked(),
-                            Toast.LENGTH_SHORT).show();
-                    MyDatabase db = new MyDatabase(mContext);
                     Boolean subbed = cb.isChecked();
                     currOrg.setSubscribed(subbed);
-                    if (subbed)
-                        db.insertSubYes(currOrg.id);
-                    else
-                        db.insertSubNo(currOrg.id);
+                    Toast.makeText(mContext,
+                            "Clicked on Checkbox: " + cb.getText() +
+                                    " is " + currOrg.getSubscribed(),
+                            Toast.LENGTH_SHORT).show();
+                    MyDatabase db = new MyDatabase(mContext);
+
+
                 }
             });
         }
@@ -148,14 +153,33 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
         }
 
         PhillyOrg currOrg = orgList.get(position);
-        holder.name.setChecked(currOrg.getSubscribed());
         holder.code.setText(" (" +  currOrg.getId() + ")");
         holder.name.setText(currOrg.getGroupName());
-        holder.name.setChecked(currOrg.getSubscribed());
+        //holder.name.setChecked(currOrg.getSubscribed());
         holder.name.setTag(currOrg);
 
         return convertView;
+    }
 
+    /**
+     * Saves the state of the checklist to the database.
+     * @return the final number of subscribed organizations after saving
+     */
+    public int saveSubscribed() {
+        int counter = 0;
+        MyDatabase db = new MyDatabase(mContext);
+        ArrayList<PhillyOrg> listToSave = this.orgList;
+        for (int i = 0; i < listToSave.size(); i++) {
+            PhillyOrg currOrg = listToSave.get(i);
+            if (currOrg.getSubscribed()) {
+                db.insertSubYes(currOrg.getId());
+                counter++;
+            }
+            else {
+                db.insertSubNo(currOrg.getId());
+            }
+        }
+        return counter;
     }
 
 }

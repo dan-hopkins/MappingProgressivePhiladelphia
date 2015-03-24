@@ -23,7 +23,21 @@ public class PhillyOrg {
     double Longitude;
     double Latitude;
 
-
+    /**
+     * @param id
+     * @param Timestamp
+     * @param GroupName
+     * @param Website
+     * @param Facebook
+     * @param Address
+     * @param ZipCode
+     * @param SocialIssues
+     * @param Mission
+     * @param Twitter
+     * @param Longitude
+     * @param Latitude
+     * @param Subscribed
+     */
     public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode,
                      String SocialIssues, String Mission, String Twitter, double Longitude, double Latitude, boolean Subscribed){
         this.id = id;
@@ -38,6 +52,7 @@ public class PhillyOrg {
         this.Twitter = Twitter;
         this.Longitude = Longitude;
         this.Latitude = Latitude;
+        this.Subscribed = Subscribed;
 
     }
 
