@@ -151,8 +151,6 @@ public class MapActivity extends FragmentActivity {
                 intent = new Intent(getApplicationContext(), OrgListActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.about:
-                return (true);
             case R.id.help:
                 return (true);
         }

@@ -31,7 +31,7 @@ public class Splash extends Activity {
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
 
         if (isFirstRun) {
-            new AlertDialog.Builder(this, R.style.DialogTheme)
+            new AlertDialog.Builder(this, R.style.DialogTheme) // try R.layout.splash
                     .setTitle("Welcome to Mapping Progressive Philadelphia!")
                     .setMessage("This app is made up of three parts: Swipes, Map, and List." + "\n" + "\n"
                             + "Swipes offers a Tinder-style interface for choosing organizations that " +
@@ -52,7 +52,7 @@ public class Splash extends Activity {
                     })
                     .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            switchToSwipe(); // this should be switchToMap() once we get everything set up
+                            switchToMap();
                         }
                     })
                     .setIcon(R.drawable.ic_launcher)
@@ -66,5 +66,3 @@ public class Splash extends Activity {
             switchToMap();
     }
 }
-
-//         <item name="android:textStyle">bold</item> if you wanna make the title bold

@@ -5,7 +5,6 @@
         android:icon="@drawable/ic_action_view_as_grid"
         android:title="@string/map"
         android:showAsAction="always">
-
     </item>
 
     <item
@@ -26,25 +25,6 @@
         android:id="@+id/help"
         android:icon="@drawable/ic_action_help"
         android:title="@string/help"
-        android:showAsAction="never">
-    </item>
-
-    <item
-        android:id="@+id/about"
-        android:icon="@drawable/ic_action_about"
-        android:title="@string/about"
-        android:showAsAction="never">
-    </item>
-
-    <item
-        android:id="@+id/contact"
-        android:title="@string/contact"
-        android:showAsAction="never">
-    </item>
-
-    <item
-        android:id="@+id/info"
-        android:title="@string/orginfo"
         android:showAsAction="never">
     </item>
 

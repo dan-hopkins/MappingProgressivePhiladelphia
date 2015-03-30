@@ -230,8 +230,6 @@ public class SwipePickerActivity extends Activity implements
             case R.id.map:
                 intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
-            case R.id.about:
-                return (true);
             case R.id.help:
                 return (true);
             case R.id.facebook:

@@ -93,8 +93,6 @@ public class OrgListActivity extends Activity {
                 intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.about:
-                return (true);
             case R.id.help:
                 return (true);
         }
