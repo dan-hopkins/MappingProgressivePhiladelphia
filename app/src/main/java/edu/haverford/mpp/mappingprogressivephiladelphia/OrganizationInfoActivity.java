@@ -138,8 +138,6 @@ public class OrganizationInfoActivity extends Activity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_settings:
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
