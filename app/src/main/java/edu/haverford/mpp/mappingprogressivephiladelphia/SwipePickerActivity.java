@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +16,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -23,13 +29,24 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class SwipePickerActivity extends Activity {
+public class SwipePickerActivity extends Activity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    // Request code to use when launching the resolution activity
+    private static final int REQUEST_RESOLVE_ERROR = 1001;
+    // Unique tag for the error dialog fragment
+    private static final String DIALOG_ERROR = "dialog_error";
+    // Bool to track whether the app is already resolving an error
+    private boolean mResolvingError = false;
 
     private ArrayList<String> al;
     private ArrayList<PhillyOrg> allOrgs;
     //private ArrayAdapter<String> myCardAdapter;
     private ArrayAdapter<PhillyOrg> myCardAdapter;
-    private int i;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+
 
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
@@ -38,6 +55,14 @@ public class SwipePickerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+
+        //set up google api for location
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
         ButterKnife.inject(this);
 
         MyDatabase db = new MyDatabase(this);
@@ -45,10 +70,10 @@ public class SwipePickerActivity extends Activity {
         al = db.getAllOrganizationNames();
         //al = new ArrayList<>();
         allOrgs = db.getAllOrganizations();
-        Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
+
 
         //myCardAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
-        myCardAdapter = new ArrayAdapter<PhillyOrg> (this, R.layout.item, R.id.helloText, allOrgs);
+        myCardAdapter = new ArrayAdapter<PhillyOrg> (this, R.layout.item, R.id.orgname, allOrgs);
         flingContainer.setAdapter(myCardAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
@@ -87,7 +112,8 @@ public class SwipePickerActivity extends Activity {
                             public void onClick(DialogInterface dialog, int which) {
                                 MyDatabase db = new MyDatabase(SwipePickerActivity.this);
                                 allOrgs = db.getAllOrganizations();
-                                myCardAdapter = new ArrayAdapter<PhillyOrg> (SwipePickerActivity.this, R.layout.item, R.id.helloText, allOrgs);
+                                Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
+                                myCardAdapter = new ArrayAdapter<PhillyOrg> (SwipePickerActivity.this, R.layout.item, R.id.orgname, allOrgs);
                                 flingContainer.setAdapter(myCardAdapter);
                                 myCardAdapter.notifyDataSetChanged();
                             }
@@ -117,10 +143,18 @@ public class SwipePickerActivity extends Activity {
             public void onItemClicked(int itemPosition, Object dataObject) {
                 //MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
-                makeToast(SwipePickerActivity.this, currOrg.toString());
+                float myDist;
+                if (mLastLocation != null) {
+                    myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371;
+                }
+                else
+                    myDist = (float)-1.0;
+
+                makeToast(SwipePickerActivity.this, Float.toString(myDist));
 
                 Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", currOrg.getId());
+                intent.putExtra("OrgDist", myDist);
                 startActivity(intent);
 
 
@@ -151,11 +185,32 @@ public class SwipePickerActivity extends Activity {
         flingContainer.getTopCardListener().selectLeft();
     }
 
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        //map
+        MenuItem map = menu.findItem(R.id.map);
+        map.setEnabled(true);
+        map.getIcon().setAlpha(255);
+
+        //swipe
+        MenuItem swipe = menu.findItem(R.id.swipe);
+        swipe.setEnabled(false);
+        swipe.getIcon().setAlpha(100);
+
+        //list
+        MenuItem list = menu.findItem(R.id.list);
+        list.setEnabled(true);
+        list.getIcon().setAlpha(255);
+
+        return true;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.options, menu);
-        menu.getItem(0).setVisible(true);
         return (super.onCreateOptionsMenu(menu));
     }
 
@@ -172,11 +227,9 @@ public class SwipePickerActivity extends Activity {
             case R.id.list:
                 Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
                 startActivity(intent);
-                break;
             case R.id.map:
                 intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
-                break;
             case R.id.about:
                 return (true);
             case R.id.help:
@@ -188,7 +241,54 @@ public class SwipePickerActivity extends Activity {
         return (super.onOptionsItemSelected(item));
     }
 
+    protected synchronized void buildGoogleApiClient() {
 
+    }
 
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // The connection has been interrupted.
+        // Disable any UI components that depend on Google APIs
+        // until onConnected() is called.
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        if (mResolvingError) {
+            // Already attempting to resolve an error.
+            return;
+        } else if (result.hasResolution()) {
+            try {
+                mResolvingError = true;
+                result.startResolutionForResult(this, REQUEST_RESOLVE_ERROR);
+            } catch (IntentSender.SendIntentException e) {
+                // There was an error with the resolution intent. Try again.
+                buildGoogleApiClient();
+            }
+        } else {
+            // Show dialog using GooglePlayServicesUtil.getErrorDialog()
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, REQUEST_RESOLVE_ERROR);
+            mResolvingError = true;
+        }
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if (!mResolvingError) {  // more about this later
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
 
 }

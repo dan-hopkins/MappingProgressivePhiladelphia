@@ -1,6 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/swipe"
+        android:icon="@drawable/ic_action_view_as_grid"
+        android:title="@string/map"
+        android:showAsAction="always">
+
+    </item>
+
+    <item
         android:id="@+id/map"
         android:icon="@drawable/ic_action_map"
         android:title="@string/map"
@@ -44,6 +52,6 @@
         android:id="@+id/facebook"
         android:title="Facebook Login"
         android:showAsAction="never">
+    </item>
 
-        </item>
 </menu>

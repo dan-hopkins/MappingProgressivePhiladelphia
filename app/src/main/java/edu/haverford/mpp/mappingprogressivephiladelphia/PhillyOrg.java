@@ -1,5 +1,9 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import org.w3c.dom.Text;
 
 import java.security.acl.Group;
@@ -58,6 +62,13 @@ public class PhillyOrg {
 
     public PhillyOrg(){
 
+    }
+
+    public Location getLocation(){
+        Location location = new Location("");
+        location.setLatitude(this.Latitude);
+        location.setLongitude(this.Longitude);
+        return location;
     }
 
     public int getId() { return id; }

@@ -46,12 +46,30 @@ public class OrgListActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //map
+        MenuItem map = menu.findItem(R.id.map);
+        map.setEnabled(true);
+        map.getIcon().setAlpha(255);
+
+        //swipe
+        MenuItem swipe = menu.findItem(R.id.swipe);
+        swipe.setEnabled(true);
+        swipe.getIcon().setAlpha(255);
+
+        //list
+        MenuItem list = menu.findItem(R.id.list);
+        list.setEnabled(false);
+        list.getIcon().setAlpha(100);
+
+        return true;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.options, menu);
-        menu.getItem(0).setVisible(true);
         return (super.onCreateOptionsMenu(menu));
     }
 
@@ -64,13 +82,17 @@ public class OrgListActivity extends Activity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
+                finish();
                 return (true);
 
-            case R.id.map:
-                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+            case R.id.swipe:
+                Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
                 startActivity(intent);
                 break;
-
+            case R.id.map:
+                intent = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(intent);
+                break;
             case R.id.about:
                 return (true);
             case R.id.help:
@@ -182,6 +204,6 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
         return counter;
     }
 
-}
+    }
 
 

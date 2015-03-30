@@ -16,6 +16,8 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
 
+import org.w3c.dom.Text;
+
 
 public class OrganizationInfoActivity extends Activity {
 
@@ -63,10 +65,20 @@ public class OrganizationInfoActivity extends Activity {
         TextView subscribed = (TextView)findViewById(R.id.org_subscribed);
         subscribed.append(Boolean.toString(currOrg.getSubscribed()));
 
-        // Find the user's profile picture custom view
+        TextView distance = (TextView)findViewById(R.id.my_distance);
+        float myDist = intent.getFloatExtra("OrgDist", (float)-1.0);
+        if (myDist == (float)-1.0){
+            distance.append("Currently Unknown");
+        }
+        else{
+            float p = Math.round(myDist * 10) / 10;
+            distance.append(Float.toString(p) + "mi");
+        }
+
+        /*// Find the user's profile picture custom view
 
         profilePictureView = (ProfilePictureView)findViewById(R.id.selection_profile_pic);
-        profilePictureView.setCropped(true);
+        profilePictureView.setCropped(true);*/
 
 
     }

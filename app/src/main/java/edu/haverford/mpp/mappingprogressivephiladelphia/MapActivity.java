@@ -103,15 +103,35 @@ public class MapActivity extends FragmentActivity {
             currentOrg = db.getOrganizationById(subbedOrgIDs.get(i));
             mMap.addMarker(new MarkerOptions().position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude())).title(currentOrg.getGroupName()));
         }
+        mMap.setMyLocationEnabled(true);
 
         //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901, -75.33735)).title(mySharedPreferences.getString("Haverford", "")));
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        //map
+        MenuItem map = menu.findItem(R.id.map);
+        map.setEnabled(false);
+        map.getIcon().setAlpha(100);
+
+        //swipe
+        MenuItem swipe = menu.findItem(R.id.swipe);
+        swipe.setEnabled(true);
+        swipe.getIcon().setAlpha(255);
+
+        //list
+        MenuItem list = menu.findItem(R.id.list);
+        list.setEnabled(true);
+        list.getIcon().setAlpha(255);
+
+        return true;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.options, menu);
-        menu.getItem(0).setVisible(false);
         return (super.onCreateOptionsMenu(menu));
     }
 
@@ -124,14 +144,18 @@ public class MapActivity extends FragmentActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.about:
-                return(true);
-            case R.id.help:
-                return(true);
-            case R.id.list:
-                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+            case R.id.swipe:
+                Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.list:
+                intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.about:
+                return (true);
+            case R.id.help:
+                return (true);
         }
         return(super.onOptionsItemSelected(item));
     }
