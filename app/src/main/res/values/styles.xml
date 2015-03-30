@@ -91,14 +91,13 @@
 
         <!-- This is the title text (Welcome to My Progressive Philadelphia) -->
         <item name="android:textColor">@android:color/holo_green_light</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">25sp</item>
 
         <!-- This is the body text -->
         <item name="android:textColorPrimary">@android:color/holo_orange_dark</item>
 
         <!-- This doesn't seem to work at the moment -->
-        <item name="android:scrollHorizontally">true</item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
     </style>
 
 </resources>

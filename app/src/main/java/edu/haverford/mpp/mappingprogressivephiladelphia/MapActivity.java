@@ -98,7 +98,6 @@ public class MapActivity extends FragmentActivity {
         ArrayList<Integer> subbedOrgIDs = db.getAllSubscribedOrgIDs();
         PhillyOrg currentOrg = new PhillyOrg();
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.00786,-75.306238)).title("Haverford College"));
         for (int i = 0; i < subbedOrgIDs.size(); i++) {
             currentOrg = db.getOrganizationById(subbedOrgIDs.get(i));
             mMap.addMarker(new MarkerOptions().position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude())).title(currentOrg.getGroupName()));
