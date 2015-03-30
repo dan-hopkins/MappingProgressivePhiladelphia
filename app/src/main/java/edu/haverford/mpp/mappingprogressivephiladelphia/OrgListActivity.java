@@ -38,7 +38,7 @@ public class OrgListActivity extends Activity {
         //Array list of organizations
         ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
 
-        //create an ArrayAdaptar from the String Array
+        //create an ArrayAdapter from the String Array
         mAdapter = new OrgListAdapter(this,
                 R.layout.org_list_item, orgList);
         ListView listView = (ListView) findViewById(R.id.listView1);

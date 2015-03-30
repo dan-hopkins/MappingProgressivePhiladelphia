@@ -44,11 +44,11 @@ public class MapActivity extends FragmentActivity {
 
         setUpMapIfNeeded();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
 
         // Move the camera instantly to Philadelphia with a zoom of 11.
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 11)); //Town Center Philadelphia
-
+        // If we get geocoding working, we should have it zoom to your location
     }
 
     @Override
@@ -103,8 +103,6 @@ public class MapActivity extends FragmentActivity {
             mMap.addMarker(new MarkerOptions().position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude())).title(currentOrg.getGroupName()));
         }
         mMap.setMyLocationEnabled(true);
-
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(40.034901, -75.33735)).title(mySharedPreferences.getString("Haverford", "")));
     }
 
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -141,7 +139,7 @@ public class MapActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                // finish();
                 return true;
             case R.id.swipe:
                 Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
