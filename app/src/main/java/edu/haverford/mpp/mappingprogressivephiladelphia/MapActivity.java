@@ -152,7 +152,12 @@ public class MapActivity extends FragmentActivity {
                 startActivity(intent);
                 break;
             case R.id.help:
-                return (true);
+                intent = new Intent(getApplicationContext(), Splash.class);
+                SharedPreferences.Editor editor = getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit();
+                editor.putBoolean("isFirstRun", true);
+                editor.apply();
+                startActivity(intent);
+                break;
         }
         return(super.onOptionsItemSelected(item));
     }

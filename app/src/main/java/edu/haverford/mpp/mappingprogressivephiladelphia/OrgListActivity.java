@@ -3,6 +3,7 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -94,7 +95,12 @@ public class OrgListActivity extends Activity {
                 startActivity(intent);
                 break;
             case R.id.help:
-                return (true);
+                intent = new Intent(getApplicationContext(), Splash.class);
+                SharedPreferences.Editor editor = getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit();
+                editor.putBoolean("isFirstRun", true);
+                editor.apply();
+                startActivity(intent);
+                break;
         }
         return (super.onOptionsItemSelected(item));
     }

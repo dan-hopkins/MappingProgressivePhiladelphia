@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -227,14 +228,22 @@ public class SwipePickerActivity extends Activity implements
             case R.id.list:
                 Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
                 startActivity(intent);
+                break;
             case R.id.map:
                 intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
+                break;
             case R.id.help:
-                return (true);
+                intent = new Intent(getApplicationContext(), Splash.class);
+                SharedPreferences.Editor editor = getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit();
+                editor.putBoolean("isFirstRun", true);
+                editor.apply();
+                startActivity(intent);
+                break;
             case R.id.facebook:
                 intent = new Intent(getApplicationContext(), Facebook_Login.class);
                 startActivity(intent);
+                break;
         }
         return (super.onOptionsItemSelected(item));
     }
