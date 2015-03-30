@@ -57,8 +57,6 @@ public class Splash extends Activity {
                     })
                     .setIcon(R.drawable.ic_launcher)
                     .show();
-            // FIRST TIME ONLY: DISPLAY DIALOG
-
             getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
         }
 
