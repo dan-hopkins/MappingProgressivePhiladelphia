@@ -45,6 +45,7 @@ public class Splash extends Activity {
                             "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
                             "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
                             "again by clicking on the Help button in the overflow menu.")
+                    // add  + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "hello" to see that scroll works
                     .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             switchToSwipe();
