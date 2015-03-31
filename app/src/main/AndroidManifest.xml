@@ -30,6 +30,10 @@
             android:name=".MapActivity"
             android:label="@string/title_activity_map"
             android:parentActivityName=".SwipePickerActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".DBActive"
@@ -41,15 +45,7 @@
             android:label="@string/title_activity_tinder"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".Splash" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
-        
-        
         <activity
             android:name=".OrganizationInfoActivity"
             android:label="@string/title_activity_organization_info" >

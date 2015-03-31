@@ -1,6 +1,8 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Criteria;
@@ -37,6 +39,7 @@ public class MapActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkFirstRun();
         setContentView(R.layout.activity_map);
         Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
         try {
@@ -49,23 +52,23 @@ public class MapActivity extends FragmentActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        // ADDED BY DAN
+        /**
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria,true);
         Location location = locationManager.getLastKnownLocation(provider);
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        LatLng latLng = new LatLng(latitude, longitude);
+        LatLng latLng = new LatLng(latitude, longitude); */
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
 
         // This zooms, the above one does not. I think the zooming looks kind of distracting, especially if it happens every time.
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
         // Move the camera instantly to Philadelphia with a zoom of 12.
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
     }
 
     @Override
@@ -167,11 +170,7 @@ public class MapActivity extends FragmentActivity {
                 startActivity(intent);
                 break;
             case R.id.help:
-                intent = new Intent(getApplicationContext(), Splash.class);
-                SharedPreferences.Editor editor = getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit();
-                editor.putBoolean("isFirstRun", true);
-                editor.apply();
-                startActivity(intent);
+                getMapHelp();
                 break;
         }
         return(super.onOptionsItemSelected(item));
@@ -188,5 +187,68 @@ public class MapActivity extends FragmentActivity {
             dialog.show();
             return false;
         }
+    }
+
+    public void checkFirstRun() {
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+
+        if (isFirstRun) {
+            new AlertDialog.Builder(this, R.style.DialogTheme)
+                    .setTitle("Welcome to Mapping Progressive Philadelphia!")
+                    .setMessage("This app is made up of three parts: Swipes, Map, and List." + "\n" + "\n"
+                            + "Swipes offers a Tinder-style interface for choosing organizations that " +
+                            "you'd like to subscribe to and learn more about. Just swipe the cards left " +
+                            "(no thanks!) or right (sign me up!)." + "\n" + "\n" + "Subscribing to an organization " +
+                            "simply allows the app to notify you when there's an event going on and places " +
+                            "that organization on your personal map of Progressive Philadelphia." + "\n" + "\n" +
+                            "Map displays all of the organizations you're subscribed to and allows you to click" +
+                            " on a point to get more information about that organization." + "\n" + "\n" + "List is " +
+                            "another way to choose organizations to subscribe to, using a more conventional design " +
+                            "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
+                            "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
+                            "again by clicking on the Help button in the overflow menu.")
+                            // add  + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "hello" to see that scroll works
+                    .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setIcon(R.drawable.ic_launcher)
+                    .show();
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
+        }
+    }
+
+    public void getMapHelp() {
+        new AlertDialog.Builder(this, R.style.DialogTheme)
+                .setTitle("Welcome to Mapping Progressive Philadelphia!")
+                .setMessage("This app is made up of three parts: Swipes, Map, and List." + "\n" + "\n"
+                        + "Swipes offers a Tinder-style interface for choosing organizations that " +
+                        "you'd like to subscribe to and learn more about. Just swipe the cards left " +
+                        "(no thanks!) or right (sign me up!)." + "\n" + "\n" + "Subscribing to an organization " +
+                        "simply allows the app to notify you when there's an event going on and places " +
+                        "that organization on your personal map of Progressive Philadelphia." + "\n" + "\n" +
+                        "Map displays all of the organizations you're subscribed to and allows you to click" +
+                        " on a point to get more information about that organization." + "\n" + "\n" + "List is " +
+                        "another way to choose organizations to subscribe to, using a more conventional design " +
+                        "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
+                        "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
+                        "again by clicking on the Help button in the overflow menu.")
+                .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {}
+                })
+                .setIcon(R.drawable.ic_launcher)
+                .show();
     }
 }
