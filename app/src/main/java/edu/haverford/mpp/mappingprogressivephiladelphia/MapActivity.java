@@ -3,6 +3,9 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -45,6 +48,14 @@ public class MapActivity extends FragmentActivity {
         setUpMapIfNeeded();
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
+
+        /** ADDED BY DAN
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria,true);
+        Location location = locationManager.getLastKnownLocation(provider);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((LatLng) location, 12)); */
 
         // Move the camera instantly to Philadelphia with a zoom of 11.
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
