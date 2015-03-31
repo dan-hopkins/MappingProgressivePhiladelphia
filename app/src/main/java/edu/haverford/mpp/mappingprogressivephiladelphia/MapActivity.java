@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -136,12 +137,20 @@ public class MapActivity extends FragmentActivity implements
         PhillyOrg currentOrg = new PhillyOrg();
         Marker currMarker;
         OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
-        
+
         for (int i = 0; i < subbedOrgIDs.size(); i++) {
             currentOrg = db.getOrganizationById(subbedOrgIDs.get(i));
-            currMarker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
-                    .title(currentOrg.getGroupName()));
+            if (currentOrg.getSubscribed()){
+                currMarker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
+                        .title(currentOrg.getGroupName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            }else{
+                currMarker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
+                        .title(currentOrg.getGroupName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+            }
 
             OrgMarkerHash.put(currMarker, currentOrg);
         }
