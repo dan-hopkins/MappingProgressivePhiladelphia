@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<LinearLayout
+
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,8 +30,10 @@
         android:visibility="invisible"
         />-->
 
+    <!-- the Name textview had layout_width="192dp" for some reason -->
+
     <TextView
-        android:layout_width="192dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Name: "
         android:id="@+id/org_group_name"
@@ -72,9 +78,7 @@
         android:text="Subscribed: "
         android:id="@+id/org_subscribed"
         android:layout_marginTop="10dp"
-
-        />
-
+    />
 
     <TextView
         android:layout_width="match_parent"
@@ -82,7 +86,7 @@
         android:text="Distance from me: "
         android:id="@+id/my_distance"
         android:layout_marginTop="10dp"
-
-        />
+    />
 
 </LinearLayout>
+</ScrollView>
