@@ -151,7 +151,7 @@ public class SwipePickerActivity extends Activity implements
                 else
                     myDist = (float)-1.0;
 
-                makeToast(SwipePickerActivity.this, Float.toString(myDist)); // TODO Remove toast
+                //makeToast(SwipePickerActivity.this, Float.toString(myDist)); // TODO Remove toast
 
                 Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", currOrg.getId());
@@ -274,7 +274,11 @@ public class SwipePickerActivity extends Activity implements
     }
 
     protected synchronized void buildGoogleApiClient() {
-
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     @Override

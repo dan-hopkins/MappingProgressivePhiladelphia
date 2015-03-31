@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
@@ -15,32 +16,48 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
-public class MapActivity extends FragmentActivity {
+public class MapActivity extends FragmentActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
+    // Request code to use when launching the resolution activity
+    private static final int REQUEST_RESOLVE_ERROR = 1001;
+    // Unique tag for the error dialog fragment
+    private static final String DIALOG_ERROR = "dialog_error";
+    // Bool to track whether the app is already resolving an error
+    private boolean mResolvingError = false;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
     int x = 1;
     boolean y = (x==1) ? true : false;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private HashMap<Marker, PhillyOrg> OrgMarkerHash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkFirstRun();
         setContentView(R.layout.activity_map);
+        buildGoogleApiClient();
         Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
         try {
             MapsInitializer.initialize(this);
@@ -50,25 +67,25 @@ public class MapActivity extends FragmentActivity {
 
         setUpMapIfNeeded();
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+        //getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        /**
+        // ADDED BY DAN
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria,true);
         Location location = locationManager.getLastKnownLocation(provider);
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        LatLng latLng = new LatLng(latitude, longitude); */
+        LatLng latLng = new LatLng(latitude, longitude);
 
-        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
 
         // This zooms, the above one does not. I think the zooming looks kind of distracting, especially if it happens every time.
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
         // Move the camera instantly to Philadelphia with a zoom of 12.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
     }
 
     @Override
@@ -117,12 +134,39 @@ public class MapActivity extends FragmentActivity {
         MyDatabase db = new MyDatabase(getApplicationContext());
         ArrayList<Integer> subbedOrgIDs = db.getAllSubscribedOrgIDs();
         PhillyOrg currentOrg = new PhillyOrg();
-
+        Marker currMarker;
+        OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
+        
         for (int i = 0; i < subbedOrgIDs.size(); i++) {
             currentOrg = db.getOrganizationById(subbedOrgIDs.get(i));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude())).title(currentOrg.getGroupName()));
+            currMarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
+                    .title(currentOrg.getGroupName()));
+
+            OrgMarkerHash.put(currMarker, currentOrg);
         }
         mMap.setMyLocationEnabled(true);
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                PhillyOrg currOrg = OrgMarkerHash.get(marker);
+                float myDist;
+                if (!mLastLocation.equals(null)) {
+                    myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371; //convert between meters and miles
+                }
+                else
+                    myDist = (float)-1.0;
+
+                //makeToast(SwipePickerActivity.this, Float.toString(myDist)); // TODO Remove toast
+
+                Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
+                intent.putExtra("OrgID", currOrg.getId());
+                intent.putExtra("OrgDist", myDist);
+                startActivity(intent);
+            }
+
+        });
     }
 
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -250,5 +294,59 @@ public class MapActivity extends FragmentActivity {
                 })
                 .setIcon(R.drawable.ic_launcher)
                 .show();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // The connection has been interrupted.
+        // Disable any UI components that depend on Google APIs
+        // until onConnected() is called.
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        if (mResolvingError) {
+            // Already attempting to resolve an error.
+            return;
+        } else if (result.hasResolution()) {
+            try {
+                mResolvingError = true;
+                result.startResolutionForResult(this, REQUEST_RESOLVE_ERROR);
+            } catch (IntentSender.SendIntentException e) {
+                // There was an error with the resolution intent. Try again.
+                buildGoogleApiClient();
+            }
+        } else {
+            // Show dialog using GooglePlayServicesUtil.getErrorDialog()
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, REQUEST_RESOLVE_ERROR);
+            mResolvingError = true;
+        }
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if (!mResolvingError) {  // more about this later
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 }
