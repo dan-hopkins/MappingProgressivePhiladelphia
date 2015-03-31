@@ -151,7 +151,7 @@ public class SwipePickerActivity extends Activity implements
                 else
                     myDist = (float)-1.0;
 
-                makeToast(SwipePickerActivity.this, Float.toString(myDist));
+                makeToast(SwipePickerActivity.this, Float.toString(myDist)); // TODO Remove toast
 
                 Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", currOrg.getId());
@@ -164,7 +164,7 @@ public class SwipePickerActivity extends Activity implements
 
     }
 
-    static void makeToast(Context ctx, String s){
+    static void makeToast(Context ctx, String s){ // TODO Remove toast
         Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
     }
 

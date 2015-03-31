@@ -108,9 +108,9 @@ public class OrgListActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this,
+        Toast.makeText(this, // TODO Remove toast
                 "You are now subscribed to " + mAdapter.saveSubscribed() + " organizations",
-                Toast.LENGTH_SHORT).show(); //testing the savesubscribed feature
+                Toast.LENGTH_SHORT).show(); //testing the save subscribed feature
     }
 
 
@@ -164,7 +164,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
                     PhillyOrg currOrg = (PhillyOrg) cb.getTag();
                     Boolean subbed = cb.isChecked();
                     currOrg.setSubscribed(subbed);
-                    Toast.makeText(mContext,
+                    Toast.makeText(mContext, // TODO Remove toast
                             "Clicked on Checkbox: " + cb.getText() +
                                     " is " + currOrg.getSubscribed(),
                             Toast.LENGTH_SHORT).show();
