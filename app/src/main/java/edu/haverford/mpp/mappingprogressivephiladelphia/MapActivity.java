@@ -57,6 +57,7 @@ public class MapActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkFirstRun();
         setContentView(R.layout.activity_map);
         buildGoogleApiClient();
         Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
@@ -68,7 +69,7 @@ public class MapActivity extends FragmentActivity implements
 
         setUpMapIfNeeded();
 
-        //getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
 
         /**
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
