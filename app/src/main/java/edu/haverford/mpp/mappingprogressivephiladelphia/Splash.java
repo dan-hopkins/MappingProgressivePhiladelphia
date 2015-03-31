@@ -17,16 +17,6 @@ public class Splash extends Activity {
         checkFirstRun();
     }
 
-    public void switchToSwipe() {
-        Intent intent = new Intent(this, SwipePickerActivity.class);
-        startActivity(intent);
-    }
-
-    public void switchToMap() {
-        Intent intent = new Intent(this, MapActivity.class);
-        startActivity(intent);
-    }
-
     public void checkFirstRun() {
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
 
@@ -45,21 +35,25 @@ public class Splash extends Activity {
                             "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
                             "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
                             "again by clicking on the Help button in the overflow menu.")
-                    // add  + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "hello" to see that scroll works
+                            // add  + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "hello" to see that scroll works
                     .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            switchToSwipe();
+                            Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                            startActivity(intent);
                         }
                     })
                     .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            switchToMap();
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            startActivity(intent);
                         }
                     })
                     .setIcon(R.drawable.ic_launcher)
                     .show();
             getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
-        } else
-            switchToMap();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+            startActivity(intent);
+        }
     }
 }
