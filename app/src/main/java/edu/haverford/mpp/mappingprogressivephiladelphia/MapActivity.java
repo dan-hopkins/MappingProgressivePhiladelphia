@@ -49,17 +49,23 @@ public class MapActivity extends FragmentActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        /** ADDED BY DAN
-
+        // ADDED BY DAN
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria,true);
         Location location = locationManager.getLastKnownLocation(provider);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((LatLng) location, 12)); */
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
 
-        // Move the camera instantly to Philadelphia with a zoom of 11.
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
-        // If we get geocoding working, we should have it zoom to your location
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+
+        // This zooms, the above one does not. I think the zooming looks kind of distracting, especially if it happens every time.
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        //mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+
+        // Move the camera instantly to Philadelphia with a zoom of 12.
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
     }
 
     @Override
