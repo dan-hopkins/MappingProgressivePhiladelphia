@@ -29,15 +29,12 @@ public class OrganizationInfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         // Check for an open session
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
             // Get the user's data
             makeMeRequest(session);
         }
-
-
 
         setContentView(R.layout.organization_info);
 
@@ -79,8 +76,6 @@ public class OrganizationInfoActivity extends Activity {
 
         profilePictureView = (ProfilePictureView)findViewById(R.id.selection_profile_pic);
         profilePictureView.setCropped(true);*/
-
-
     }
 
     private void makeMeRequest(final Session session) {
