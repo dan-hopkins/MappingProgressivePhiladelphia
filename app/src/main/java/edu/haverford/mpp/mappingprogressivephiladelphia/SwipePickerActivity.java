@@ -107,21 +107,24 @@ public class SwipePickerActivity extends Activity implements
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 new AlertDialog.Builder(SwipePickerActivity.this)
-                        .setTitle("Done")
-                        .setMessage("Would you like to look at the organizations again?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setTitle("We're running out of organizations to show you!")
+                        .setMessage("Go to the map to see all of your organizations and get some more information about them!"
+                        + "\n" + "\n" + "Or you can head over to your list of organizations and manage them in a more conventional way.")
+                        .setPositiveButton("Organization List", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                MyDatabase db = new MyDatabase(SwipePickerActivity.this);
+                                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                                startActivity(intent);
+                                /*MyDatabase db = new MyDatabase(SwipePickerActivity.this);
                                 allOrgs = db.getAllOrganizations();
                                 Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
                                 myCardAdapter = new ArrayAdapter<PhillyOrg> (SwipePickerActivity.this, R.layout.item, R.id.orgname, allOrgs);
                                 flingContainer.setAdapter(myCardAdapter);
-                                myCardAdapter.notifyDataSetChanged();
+                                myCardAdapter.notifyDataSetChanged();*/
                             }
                         })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Map", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                                 startActivity(intent);
                             }
                         })
@@ -151,7 +154,6 @@ public class SwipePickerActivity extends Activity implements
                 else
                     myDist = (float)-1.0;
 
-                //makeToast(SwipePickerActivity.this, Float.toString(myDist)); // TODO Remove toast
 
                 Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", currOrg.getId());
@@ -163,11 +165,6 @@ public class SwipePickerActivity extends Activity implements
         });
 
     }
-
-    static void makeToast(Context ctx, String s){ // TODO Remove toast
-        Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
-    }
-
 
     /**
      * Trigger the right event manually.
