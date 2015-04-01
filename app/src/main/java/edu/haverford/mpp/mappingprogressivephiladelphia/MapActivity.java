@@ -2,6 +2,7 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -9,6 +10,8 @@ import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -168,8 +171,6 @@ public class MapActivity extends FragmentActivity implements
                 else
                     myDist = (float)-1.0;
 
-                //makeToast(SwipePickerActivity.this, Float.toString(myDist)); // TODO Remove toast
-
                 Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", currOrg.getId());
                 intent.putExtra("OrgDist", myDist);
@@ -251,34 +252,47 @@ public class MapActivity extends FragmentActivity implements
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
 
         if (isFirstRun) {
-            new AlertDialog.Builder(this, R.style.DialogTheme)
-                    .setTitle("Welcome to Mapping Progressive Philadelphia!")
-                    .setMessage("This app is made up of three parts: Swipes, Map, and List." + "\n" + "\n"
-                            + "Swipes offers a Tinder-style interface for choosing organizations that " +
-                            "you'd like to subscribe to and learn more about. Just swipe the cards left " +
-                            "(no thanks!) or right (sign me up!)." + "\n" + "\n" + "Subscribing to an organization " +
-                            "simply allows the app to notify you when there's an event going on and places " +
-                            "that organization on your personal map of Progressive Philadelphia." + "\n" + "\n" +
-                            "Map displays all of the organizations you're subscribed to and allows you to click" +
-                            " on a point to get more information about that organization." + "\n" + "\n" + "List is " +
-                            "another way to choose organizations to subscribe to, using a more conventional design " +
-                            "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
-                            "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
-                            "again by clicking on the Help button in the overflow menu.")
-                            // add  + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "hello" to see that scroll works
-                    .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
-                            startActivity(intent);
-                        }
-                    })
-                    .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .setIcon(R.drawable.ic_launcher)
-                    .show();
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
+            if (isNetworkConnected() != true) {
+                new AlertDialog.Builder(this, R.style.DialogTheme)
+                        .setTitle("No internet connection detected!")
+                        .setMessage("Please check to make sure that your internet is turned on and try again!" + "\n" + "\n" + "Internet is needed for the app to get set up.")
+                        .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // close application
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                            }
+                        })
+                        .show();
+            } else {
+                new AlertDialog.Builder(this, R.style.DialogTheme)
+                        .setTitle("Welcome to Mapping Progressive Philadelphia!")
+                        .setMessage("This app is made up of three parts: Swipes, Map, and List." + "\n" + "\n"
+                                + "Swipes offers a Tinder-style interface for choosing organizations that " +
+                                "you'd like to subscribe to and learn more about. Just swipe the cards left " +
+                                "(no thanks!) or right (sign me up!)." + "\n" + "\n" + "Subscribing to an organization " +
+                                "simply allows the app to notify you when there's an event going on and places " +
+                                "that organization on your personal map of Progressive Philadelphia." + "\n" + "\n" +
+                                "Map displays all of the organizations you're subscribed to and allows you to click" +
+                                " on a point to get more information about that organization." + "\n" + "\n" + "List is " +
+                                "another way to choose organizations to subscribe to, using a more conventional design " +
+                                "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
+                                "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
+                                "again by clicking on the Help button in the overflow menu.")
+                                // add  + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "hello" to see that scroll works
+                        .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setIcon(R.drawable.ic_launcher)
+                        .show();
+                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
+            }
         }
     }
 
@@ -362,5 +376,15 @@ public class MapActivity extends FragmentActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) {
+            // There are no active networks.
+            return false;
+        } else
+            return true;
     }
 }
