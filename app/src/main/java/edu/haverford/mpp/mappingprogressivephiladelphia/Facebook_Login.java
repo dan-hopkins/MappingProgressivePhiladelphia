@@ -29,15 +29,14 @@ public class Facebook_Login extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.facebook_login);
         Firebase.setAndroidContext(this);
-        Firebase myFirebaseRef = new Firebase("https://mappingprogressiveph.firebaseio.com/");
-        myFirebaseRef.child("Out4STEM1").addValueEventListener(new ValueEventListener() {
-
+        Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
+        myFirebaseRef.child("Out4STEM15").addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                //Log.d("string", "string");
+                Log.d("string", "string");
                 //System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
-                id = snapshot.child("Facebook_ID").getValue().toString();
+                id = snapshot.child("FacebookID").getValue().toString();
                 System.out.println(id);
 
                 ImageView imageView = (ImageView) findViewById(R.id.imageView);
@@ -74,7 +73,7 @@ public class Facebook_Login extends FragmentActivity{
     }
 
 
- 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
