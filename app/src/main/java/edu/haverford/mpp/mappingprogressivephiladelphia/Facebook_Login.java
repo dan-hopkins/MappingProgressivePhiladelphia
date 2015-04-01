@@ -30,6 +30,35 @@ public class Facebook_Login extends FragmentActivity{
         setContentView(R.layout.facebook_login);
         Firebase.setAndroidContext(this);
         Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
+        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+                //System.out.println(snapshot.getValue());
+                //System.out.println(snapshot.getChildren());
+
+                Iterable orgs = snapshot.getChildren();
+                for (int i = 0; i<snapshot.getChildrenCount(); i++){
+                    Object org = orgs.iterator().next();
+                    System.out.println(org.getClass());
+                    System.out.println(org);
+                    //This is just trolling
+                    //orgs.iterator().next is returning an object, but then the type of that object
+                    //is a DataSnapshot? Either way, I don't know how to access the info
+                    //Check the console to see how each organization be logged
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+
+        });
+
         myFirebaseRef.child("Out4STEM15").addValueEventListener(new ValueEventListener() {
 
             @Override
