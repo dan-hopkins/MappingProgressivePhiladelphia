@@ -40,7 +40,7 @@ public class Facebook_Login extends FragmentActivity{
                 Iterable orgs = snapshot.getChildren();
 
                 for (int i = 0; i<snapshot.getChildrenCount(); i++){
-                    Object org = orgs.iterator().next();
+                    Object org = orgs.iterator().next(); // object is A-Space, for example
                     System.out.println(org.getClass());
                     System.out.println(org);
                     DataSnapshot organ = (DataSnapshot) org;
@@ -50,7 +50,6 @@ public class Facebook_Login extends FragmentActivity{
                     //orgs.iterator().next is returning an object, but then the type of that object
                     //is a DataSnapshot? Either way, I don't know how to access the info
                     //Check the console to see how each organization be logged
-
                 }
 
 
