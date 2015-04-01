@@ -9,6 +9,12 @@ android {
             storePassword 'mpp'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     defaultConfig {
@@ -42,24 +48,22 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.retrofit:retrofit:1.8.0'
     compile 'com.google.android.gms:play-services:6.5.87'
-
     //Facebook SDK
     compile 'com.facebook.android:facebook-android-sdk:3.23.1'
-
     // Google Play Services
     compile 'com.google.android.gms:play-services:6.5.87'
-
+    //Firebase
+    compile 'com.firebase:firebase-client-android:2.2.3+'
     // Support Libraries
     /*    compile 'com.android.support:cardview-v7:21.0.3'
-        compile 'com.android.support:gridlayout-v7:21.0.3'
-        compile 'com.android.support:leanback-v17:21.0.3'
-        compile 'com.android.support:mediarouter-v7:21.0.3'
-        compile 'com.android.support:palette-v7:21.0.3'
-        compile 'com.android.support:recyclerview-v7:21.0.3'
-        compile 'com.android.support:support-annotations:21.0.3'
-        compile 'com.android.support:support-v13:21.0.3'
-        compile 'com.android.support:support-v4:21.0.3'*/
-
+            compile 'com.android.support:gridlayout-v7:21.0.3'
+            compile 'com.android.support:leanback-v17:21.0.3'
+            compile 'com.android.support:mediarouter-v7:21.0.3'
+            compile 'com.android.support:palette-v7:21.0.3'
+            compile 'com.android.support:recyclerview-v7:21.0.3'
+            compile 'com.android.support:support-annotations:21.0.3'
+            compile 'com.android.support:support-v13:21.0.3'
+            compile 'com.android.support:support-v4:21.0.3'*/
     // Note: these libraries require the "Google Repository" and "Android Repository"
     //       to be installed via the SDK manager.
     compile 'com.lorentzos.swipecards:library:1.0.8@aar'
