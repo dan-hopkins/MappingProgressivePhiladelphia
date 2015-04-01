@@ -226,6 +226,10 @@ public class MapActivity extends FragmentActivity implements
             case R.id.help:
                 getMapHelp();
                 break;
+            case R.id.facebook_login:
+                intent = new Intent(getApplicationContext(), Facebook_Login.class);
+                startActivity(intent);
+                break;
         }
         return(super.onOptionsItemSelected(item));
     }
