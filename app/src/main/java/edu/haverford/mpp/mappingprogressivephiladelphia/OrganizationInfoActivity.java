@@ -49,18 +49,23 @@ public class OrganizationInfoActivity extends Activity {
 
         TextView address = (TextView)findViewById(R.id.org_address);
         address.append(currOrg.getAddress());
+        address.append(", " + currOrg.getZipCode()); //
 
-        TextView zip = (TextView)findViewById(R.id.org_zip);
-        zip.append(currOrg.getZipCode());
+        /* TextView zip = (TextView)findViewById(R.id.org_zip);
+        zip.append(currOrg.getZipCode());*/
 
         TextView issue = (TextView)findViewById(R.id.org_issue);
-        issue.append(currOrg.getSocialIssues());
+        issue.append("\n" + currOrg.getSocialIssues());
 
         TextView mission = (TextView)findViewById(R.id.org_mission);
-        mission.append(currOrg.getMission());
+        mission.append("\n" + currOrg.getMission());
 
         TextView subscribed = (TextView)findViewById(R.id.org_subscribed);
-        subscribed.append(Boolean.toString(currOrg.getSubscribed()));
+        if (currOrg.getSubscribed()) {
+            subscribed.append("Yes");
+        } else {
+            subscribed.append("No");
+        }
 
         TextView distance = (TextView)findViewById(R.id.my_distance);
         float myDist = intent.getFloatExtra("OrgDist", (float)-1.0);
