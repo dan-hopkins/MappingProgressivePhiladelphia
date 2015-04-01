@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <LinearLayout
-
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="60dp"
+    android:padding="40dp"
     android:weightSum="1">
 
     <ImageView
@@ -19,7 +18,7 @@
         android:src="@drawable/default_pic"
         android:scaleType="fitXY"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="25dp"/>
 
     <!--<com.facebook.widget.ProfilePictureView
         android:id="@+id/selection_profile_pic"
@@ -31,6 +30,7 @@
         />-->
 
     <!-- the Name textview had layout_width="192dp" for some reason -->
+    <!-- android:layout_marginTop="10dp" is what padding used to be -->
 
     <TextView
         android:layout_width="match_parent"

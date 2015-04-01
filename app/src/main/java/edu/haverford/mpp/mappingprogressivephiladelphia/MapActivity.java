@@ -57,6 +57,7 @@ public class MapActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkFirstRun();
         setContentView(R.layout.activity_map);
         buildGoogleApiClient();
         Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
@@ -68,9 +69,9 @@ public class MapActivity extends FragmentActivity implements
 
         setUpMapIfNeeded();
 
-        //getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        // ADDED BY DAN
+        /**
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria,true);
@@ -79,14 +80,14 @@ public class MapActivity extends FragmentActivity implements
         double longitude = location.getLongitude();
         LatLng latLng = new LatLng(latitude, longitude);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12)); */
 
         // This zooms, the above one does not. I think the zooming looks kind of distracting, especially if it happens every time.
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
         // Move the camera instantly to Philadelphia with a zoom of 12.
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
     }
 
     @Override
