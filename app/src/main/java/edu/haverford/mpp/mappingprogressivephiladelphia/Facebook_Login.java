@@ -8,9 +8,11 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +31,47 @@ public class Facebook_Login extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.facebook_login);
         Firebase.setAndroidContext(this);
-        Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
+
+        Firebase ref = new Firebase("https://mappp.firebaseio.com/");
+        Query queryRef = ref.orderByChild("Zipcode").limitToLast(2); // returns the IDs of the orgs with the two highest zipcodes (19147 and 19143) so returns 22 and 10.
+
+        // https://www.firebase.com/blog/2014-11-04-firebase-realtime-queries.html
+        // https://www.firebase.com/docs/android/guide/retrieving-data.html
+        // https://www.firebase.com/docs/web/api/query/
+
+        // CHECK THESE ^^^ BUT NOTE THAT FIRST ONE HAS A TYPO IN THE FIRST EXAMPLE
+
+
+        queryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                System.out.println(snapshot.getKey());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        // THIS IS ALL EVAN'S STUFF FROM YESTERDAY
+
+        /*Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -60,9 +102,9 @@ public class Facebook_Login extends FragmentActivity{
             public void onCancelled(FirebaseError error) {
             }
 
-        });
+        });*/
 
-        myFirebaseRef.child("Out4STEM15").addValueEventListener(new ValueEventListener() {
+       /* myFirebaseRef.child("Out4STEM15").addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -87,7 +129,7 @@ public class Facebook_Login extends FragmentActivity{
             }
 
 
-        });
+        });*/
 
         /*
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
