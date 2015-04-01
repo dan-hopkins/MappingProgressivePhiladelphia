@@ -152,4 +152,8 @@ public class MyDatabase extends SQLiteAssetHelper {
         }
         return subbedOrgs;
     }
+
+    /*public ArrayList<PhillyOrg> getAllOrgsByIDs(ArrayList<Integer> IDs){
+
+    }*/
 }
