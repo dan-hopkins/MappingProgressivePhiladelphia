@@ -38,10 +38,14 @@ public class Facebook_Login extends FragmentActivity{
                 //System.out.println(snapshot.getChildren());
 
                 Iterable orgs = snapshot.getChildren();
+
                 for (int i = 0; i<snapshot.getChildrenCount(); i++){
                     Object org = orgs.iterator().next();
                     System.out.println(org.getClass());
                     System.out.println(org);
+                    DataSnapshot organ = (DataSnapshot) org;
+                    System.out.println(organ.getValue());
+                    Object orgz = organ.getValue();
                     //This is just trolling
                     //orgs.iterator().next is returning an object, but then the type of that object
                     //is a DataSnapshot? Either way, I don't know how to access the info
