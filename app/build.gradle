@@ -68,4 +68,8 @@ dependencies {
     //       to be installed via the SDK manager.
     compile 'com.lorentzos.swipecards:library:1.0.8@aar'
     compile 'com.jakewharton:butterknife:5.1.2'
+
+    //Picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
 }
