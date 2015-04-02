@@ -16,6 +16,8 @@ import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 /**
  * Created by evanhamilton on 3/22/15.
  */
@@ -32,9 +34,92 @@ public class Facebook_Login extends FragmentActivity{
         setContentView(R.layout.facebook_login);
         Firebase.setAndroidContext(this);
 
-        Firebase ref = new Firebase("https://mappp.firebaseio.com/");
-        Query queryRef = ref.orderByChild("Zipcode").limitToLast(2); // returns the IDs of the orgs with the two highest zipcodes (19147 and 19143) so returns 22 and 10.
+        Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
+        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
 
+                Iterable orgs = snapshot.getChildren();
+
+                for (int i = 0; i<snapshot.getChildrenCount(); i++){
+                    Object o = orgs.iterator().next(); // object is A-Space, for example, required to be an object even though it's really a DataSnapshot
+                    // System.out.println(o); // o is a DataSnapshot object (can be found by doing o.getClass())
+                    // DataSnapshot { key = 1. value = {Updated=2015-04-01T02:04:54.716Z, Name=A-Space (Space), FacebookID=30987050865, Is Deleted=noo, Website=TEMP, Social-Issues=Disability, Racial Justice, Gender, Immigration / Immigrant Rights, LGBTQ, Poverty, Incarceration, Funding / Grantwriting, Education, Housing, Youth, Fun things to Do!, Health, Women, Arts & Culture, Public Safety, Recreation, Food Justice, Address=4722 Baltimore Ave, Mission=A-Space is a collectively run anarchist community center and art gallery in Philadelphia. A-Space hosts a Books Through Bars program, the Philadelphia Anti-War Forum, and meetings of the National Organization for the Reform of Marijuana Laws (NORML)., Facebook=https://www.facebook.com/pages/A-Space-Anarchist-Community-Center/30987050865, Zipcode=19143, Timestamp=3/9/2014 14:46:50, Twitter=TEMP} }
+                    // prints this ^^^ for each organization
+
+                    DataSnapshot org = (DataSnapshot) o;
+                    // just need to figure out how to parse
+                    //System.out.println(org.getValue()); // this correctly prints the value for the current org
+                    //System.out.println(org.getKey()); // this correctly prints the key (id) for the current org
+                    //System.out.println(org.child("Name")); // this prints out: DataSnapshot { key = Name, value = A-Space (Space) } for each organization
+                    //System.out.println(org.child("Name").getValue()); // this prints out: A-Space (Space)
+                    String organ = org.child("Name").getValue().toString(); // this works!!!!!
+                    System.out.println(organ);
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+
+        });
+
+        /*myFirebaseRef.child("Out4STEM15").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Log.d("string", "string");
+                //System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+                id = snapshot.child("FacebookID").getValue().toString();
+                System.out.println(id);
+
+                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                url = new String("https://graph.facebook.com/" + id + "/picture?type=large");
+                Log.d(url, "URL");
+
+                Picasso.with(getBaseContext())
+                        .load(url)
+                        .error(R.drawable.default_pic)
+                        .into(imageView);
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+
+
+        });*/
+
+        /*ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        url = new String("https://graph.facebook.com/"+id+"/picture?type=large");
+        Log.d(url, "URL");
+
+        Picasso.with(this)
+                .load(url)
+                .error(R.drawable.default_pic)
+                .into(imageView);*/
+
+
+
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+/*        Firebase ref = new Firebase("https://mappp.firebaseio.com/");
+        // Query queryRef = ref.orderByChild("Zipcode").limitToLast(2); // returns the IDs of the orgs with the two highest zipcodes (19147 and 19143) so returns 22 and 10.
         // https://www.firebase.com/blog/2014-11-04-firebase-realtime-queries.html
         // https://www.firebase.com/docs/android/guide/retrieving-data.html
         // https://www.firebase.com/docs/web/api/query/
@@ -67,96 +152,7 @@ public class Facebook_Login extends FragmentActivity{
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });
-
-        // THIS IS ALL EVAN'S STUFF FROM YESTERDAY
-
-        /*Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
-        myFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                //System.out.println(snapshot.getValue());
-                //System.out.println(snapshot.getChildren());
-
-                Iterable orgs = snapshot.getChildren();
-
-                for (int i = 0; i<snapshot.getChildrenCount(); i++){
-                    Object org = orgs.iterator().next(); // object is A-Space, for example
-                    System.out.println(org.getClass());
-                    System.out.println(org);
-                    DataSnapshot organ = (DataSnapshot) org;
-                    System.out.println(organ.getValue());
-                    Object orgz = organ.getValue();
-                    //This is just trolling
-                    //orgs.iterator().next is returning an object, but then the type of that object
-                    //is a DataSnapshot? Either way, I don't know how to access the info
-                    //Check the console to see how each organization be logged
-                }
-
-
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError error) {
-            }
-
         });*/
-
-       /* myFirebaseRef.child("Out4STEM15").addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Log.d("string", "string");
-                //System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
-                id = snapshot.child("FacebookID").getValue().toString();
-                System.out.println(id);
-
-                ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                url = new String("https://graph.facebook.com/" + id + "/picture?type=large");
-                Log.d(url, "URL");
-
-                Picasso.with(getBaseContext())
-                        .load(url)
-                        .error(R.drawable.default_pic)
-                        .into(imageView);
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError error) {
-            }
-
-
-        });*/
-
-        /*
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        url = new String("https://graph.facebook.com/"+id+"/picture?type=large");
-        Log.d(url, "URL");
-
-        Picasso.with(this)
-                .load(url)
-                .error(R.drawable.default_pic)
-                .into(imageView);
-        */
-
-
-
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-
 
 
 
