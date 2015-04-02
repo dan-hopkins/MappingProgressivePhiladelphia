@@ -33,7 +33,6 @@ public class Facebook_Login extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.facebook_login);
         Firebase.setAndroidContext(this);
-
         Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class MyDatabase extends SQLiteAssetHelper {
 
-    private static final String DATABASE_NAME = "mppdb";
+    private static final String DATABASE_NAME = "mppsubbeddb";
     private static final int DATABASE_VERSION = 1;
 
     public MyDatabase(Context context) {
@@ -61,7 +61,7 @@ public class MyDatabase extends SQLiteAssetHelper {
     }
 
 
-    public Cursor getAllZipCodes() {
+/*    public Cursor getAllZipCodes() {
 
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -74,7 +74,7 @@ public class MyDatabase extends SQLiteAssetHelper {
 
         c.moveToFirst();
         return c;
-    }
+    }*/
 
     public ArrayList<PhillyOrg> getAllOrganizations(){
         ArrayList<PhillyOrg> allOrgs = new ArrayList<PhillyOrg>();
@@ -116,7 +116,7 @@ public class MyDatabase extends SQLiteAssetHelper {
         return null;
     }
 
-    public ArrayList<String> getAllOrganizationNames() {
+/*    public ArrayList<String> getAllOrganizationNames() {
         ArrayList<String> orgNames = new ArrayList<String>();
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -151,7 +151,7 @@ public class MyDatabase extends SQLiteAssetHelper {
             } while (c.moveToNext());
         }
         return subbedOrgs;
-    }
+    }*/
 
     /*public ArrayList<PhillyOrg> getAllOrgsByIDs(ArrayList<Integer> IDs){
 

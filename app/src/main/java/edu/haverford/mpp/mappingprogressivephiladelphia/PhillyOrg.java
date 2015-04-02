@@ -60,6 +60,21 @@ public class PhillyOrg {
 
     }
 
+    PhillyOrg(int id,String GroupName, String Website, String Facebook, String Address, String ZipCode,
+            String SocialIssues, String Mission, String Twitter, Boolean isDeleted){
+        this.id = id;
+        this.GroupName = GroupName;
+        this.Website = Website;
+        this.Facebook = Facebook;
+        this.Address = Address;
+        this.ZipCode = ZipCode;
+        this.SocialIssues = SocialIssues;
+        this.Mission = Mission;
+        this.Twitter = Twitter;
+        //this.Subscribed = ; TODO
+
+    }
+
     public PhillyOrg(){
 
     }
