@@ -120,9 +120,6 @@ public class OrgListActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this, // TODO Remove toast
-                "You are now subscribed to " + mAdapter.saveSubscribed() + " organizations",
-                Toast.LENGTH_SHORT).show(); //testing the save subscribed feature
     }
 
     public void getListHelp() {
@@ -266,16 +263,21 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
             Log.w("TAG", "getSubbed of " + currOrg.toString() + ": " + Boolean.toString(db.isSubscribed(currOrg.getId())));
             convertView.setTag(holder);
 
-
+            holder.code.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v){
+                    TextView tv = (TextView) v ;
+                    Intent intent = new Intent(mContext, OrganizationInfoActivity.class);
+                    PhillyOrg currOrg = (PhillyOrg) tv.getTag();
+                    intent.putExtra("OrgID", currOrg.getId());
+                    mContext.startActivity(intent);
+                }
+            });
             holder.name.setOnClickListener( new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
                     PhillyOrg currOrg = (PhillyOrg) cb.getTag();
                     Boolean subbed = cb.isChecked();
                     currOrg.setSubscribed(subbed);
-                    MyDatabase db = new MyDatabase(mContext);
-
-
                 }
             });
         }
@@ -288,7 +290,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
         holder.name.setText(currOrg.getGroupName());
         //holder.name.setChecked(currOrg.getSubscribed());
         holder.name.setTag(currOrg);
-
+        holder.code.setTag(currOrg);
         return convertView;
     }
 
