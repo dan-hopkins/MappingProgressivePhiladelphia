@@ -167,7 +167,34 @@ public class MyDatabase extends SQLiteAssetHelper {
                     String twitter = org.child("Twitter").getValue().toString();*/
     public void updateEntry(int id, String updated, String name, String facebookID, String isDeleted,
                             String website, String socialIssues, String address, String mission, String
-                            facebook, String zipcode, String timestamp, String twitter) {
+                            facebook, String zipcode, String timestamp, String twitter, Double latitude, Double longitude) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues updatedValues = new ContentValues();
+        //updatedValues.put("_id", id);
+        updatedValues.put("Updated", updated);
+        updatedValues.put("GroupName", name);
+        updatedValues.put("FacebookID", facebookID);
+        updatedValues.put("isDeleted", isDeleted);
+        updatedValues.put("Website", website);
+        updatedValues.put("SocialIssues", socialIssues);
+        updatedValues.put("Address", address);
+        updatedValues.put("Mission", mission);
+        updatedValues.put("Facebook", facebook);
+        updatedValues.put("ZipCode", zipcode);
+        updatedValues.put("Timestamp", timestamp);
+        updatedValues.put("Twitter", twitter);
+        updatedValues.put("Longitude", longitude);
+        updatedValues.put("Latitude", latitude);
+        //db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE);
+        //System.out.println(db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE));
+        db.update("mppdata", updatedValues, "_id = " + id, null); //TODO make it work with insert as well as update
+
+
+    }
+
+    public void updateEntry(int id, String updated, String name, String facebookID, String isDeleted,
+                            String website, String socialIssues, String address, String mission, String
+            facebook, String zipcode, String timestamp, String twitter) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues updatedValues = new ContentValues();
         //updatedValues.put("_id", id);
@@ -189,6 +216,8 @@ public class MyDatabase extends SQLiteAssetHelper {
 
 
     }
+
+
 
     /*public ArrayList<PhillyOrg> getAllOrgsByIDs(ArrayList<Integer> IDs){
 

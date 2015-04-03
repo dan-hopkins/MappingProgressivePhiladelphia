@@ -65,7 +65,7 @@ public class Facebook_Login extends FragmentActivity{
                     String zipcode = org.child("Zipcode").getValue().toString();
                     String timestamp = org.child("Timestamp").getValue().toString();
                     String twitter = org.child("Twitter").getValue().toString();
-                    db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+                    //db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
 
                 }
 

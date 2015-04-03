@@ -38,6 +38,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.Geometry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,12 +155,12 @@ public class MapActivity extends FragmentActivity implements
             currentOrg = allOrgs.get(i);
             if (currentOrg.getSubscribed()){
                 currMarker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
+                        .position(currentOrg.getLatLng())
                         .title(currentOrg.getGroupName())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             }else{
                 currMarker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
+                        .position(currentOrg.getLatLng())
                         .title(currentOrg.getGroupName())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
             }
@@ -359,7 +363,23 @@ public class MapActivity extends FragmentActivity implements
                         String zipcode = org.child("Zipcode").getValue().toString();
                         String timestamp = org.child("Timestamp").getValue().toString();
                         String twitter = org.child("Twitter").getValue().toString();
-                        db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+                        /*String latitude = org.child("Latitude").getValue().toString();
+                        String longitude = org.child("Longitude").getValue().toString();*//*
+                        double lat = Double.parseDouble(latitude);
+                        double lng =  Double.parseDouble(longitude);*/
+                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE");
+                        try {
+                            GeocodingResult[] results = GeocodingApi.geocode(context,
+                                    address + " Philadelphia, PA " + zipcode).await();
+                            Geometry myGeo = results[0].geometry;
+                            double lat = myGeo.location.lat;
+                            double lng = myGeo.location.lng;
+                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
+                            break;
+                        } catch (Exception e){e.printStackTrace();
+                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+
+                        }
                     }
                 }
 

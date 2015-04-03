@@ -3,6 +3,10 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.Geometry;
 
 import org.w3c.dom.Text;
 
@@ -90,6 +94,10 @@ public class PhillyOrg {
         location.setLatitude(this.Latitude);
         location.setLongitude(this.Longitude);
         return location;
+    }
+
+    public LatLng getLatLng(){
+        return new LatLng(this.Latitude, this.Longitude);
     }
 
     public int getId() { return id; }
