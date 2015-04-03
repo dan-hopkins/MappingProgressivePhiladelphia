@@ -26,6 +26,11 @@ public class PhillyOrg {
     boolean Subscribed;
     double Longitude;
     double Latitude;
+    String FacebookID;
+
+    public String getFacebookID() {
+        return FacebookID;
+    }
 
     /**
      * @param id
@@ -43,7 +48,7 @@ public class PhillyOrg {
      * @param Subscribed
      */
     public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode,
-                     String SocialIssues, String Mission, String Twitter, double Longitude, double Latitude, boolean Subscribed){
+                     String SocialIssues, String Mission, String Twitter, double Longitude, double Latitude, boolean Subscribed, String FacebookID){
         this.id = id;
         this.Timestamp = Timestamp;
         this.GroupName = GroupName;
@@ -57,6 +62,7 @@ public class PhillyOrg {
         this.Longitude = Longitude;
         this.Latitude = Latitude;
         this.Subscribed = Subscribed;
+        this.FacebookID = FacebookID;
 
     }
 

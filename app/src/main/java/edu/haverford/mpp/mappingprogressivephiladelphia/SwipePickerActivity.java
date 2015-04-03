@@ -11,10 +11,16 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -24,7 +30,12 @@ import com.google.android.gms.location.LocationServices;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -43,7 +54,7 @@ public class SwipePickerActivity extends Activity implements
     private ArrayList<String> al;
     private ArrayList<PhillyOrg> allOrgs;
     //private ArrayAdapter<String> myCardAdapter;
-    private ArrayAdapter<PhillyOrg> myCardAdapter;
+    private myArrayAdapter myCardAdapter;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -74,7 +85,7 @@ public class SwipePickerActivity extends Activity implements
 
 
         //myCardAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
-        myCardAdapter = new ArrayAdapter<PhillyOrg> (this, R.layout.item, R.id.orgname, allOrgs);
+        myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
         flingContainer.setAdapter(myCardAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
@@ -325,3 +336,4 @@ public class SwipePickerActivity extends Activity implements
     }
 
 }
+
