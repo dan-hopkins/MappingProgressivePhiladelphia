@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +25,18 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.Geometry;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -244,9 +254,8 @@ public class SwipePickerActivity extends Activity implements
             case R.id.help:
                 getSwipeHelp();
                 break;
-            case R.id.facebook:
-                intent = new Intent(getApplicationContext(), Facebook_Login.class);
-                startActivity(intent);
+            case R.id.update_db:
+                updateDatabase();
                 break;
         }
         return (super.onOptionsItemSelected(item));
@@ -279,6 +288,73 @@ public class SwipePickerActivity extends Activity implements
                 })
                 .setIcon(R.drawable.ic_launcher)
                 .show();
+    }
+
+    public void updateDatabase() {
+        if (!isNetworkConnected()) {
+            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
+            Firebase.setAndroidContext(this);
+            Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
+            myFirebaseRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    Iterable orgs = snapshot.getChildren();
+                    MyDatabase db = new MyDatabase(SwipePickerActivity.this);
+                    for (int i = 0; i < snapshot.getChildrenCount(); i++) {
+                        Object o = orgs.iterator().next();
+                        DataSnapshot org = (DataSnapshot) o;
+                        int id = Integer.parseInt(org.getKey());
+                        String updated = org.child("Updated").getValue().toString();
+                        String name = org.child("Name").getValue().toString();
+                        String facebookID = org.child("FacebookID").getValue().toString();
+                        String isDeleted = org.child("Is Deleted").getValue().toString();
+                        String website = org.child("Website").getValue().toString();
+                        String socialIssues = org.child("Social-Issues").getValue().toString();
+                        String address = org.child("Address").getValue().toString();
+                        String mission = org.child("Mission").getValue().toString();
+                        String facebook = org.child("Facebook").getValue().toString();
+                        String zipcode = org.child("Zipcode").getValue().toString();
+                        String timestamp = org.child("Timestamp").getValue().toString();
+                        String twitter = org.child("Twitter").getValue().toString();
+                        /*String latitude = org.child("Latitude").getValue().toString();
+                        String longitude = org.child("Longitude").getValue().toString();*//*
+                        double lat = Double.parseDouble(latitude);
+                        double lng =  Double.parseDouble(longitude);*/
+                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE");
+                        try {
+                            GeocodingResult[] results = GeocodingApi.geocode(context,
+                                    address + " Philadelphia, PA " + zipcode).await();
+                            Geometry myGeo = results[0].geometry;
+                            double lat = myGeo.location.lat;
+                            double lng = myGeo.location.lng;
+                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
+                            break;
+                        } catch (Exception e){e.printStackTrace();
+                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError error) {
+                }
+
+            });
+            Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) {
+            // There are no active networks.
+            return false;
+        } else
+            return true;
     }
 
     protected synchronized void buildGoogleApiClient() {

@@ -60,10 +60,7 @@ public class OrganizationInfoActivity extends Activity {
 
         TextView address = (TextView)findViewById(R.id.org_address);
         address.append(currOrg.getAddress());
-        address.append(", " + currOrg.getZipCode()); //
-
-        /* TextView zip = (TextView)findViewById(R.id.org_zip);
-        zip.append(currOrg.getZipCode());*/
+        address.append(", " + currOrg.getZipCode());
 
         TextView issue = (TextView)findViewById(R.id.org_issue);
         issue.append("\n" + currOrg.getSocialIssues());

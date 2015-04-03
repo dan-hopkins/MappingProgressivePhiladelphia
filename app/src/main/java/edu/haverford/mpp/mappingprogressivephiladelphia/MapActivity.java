@@ -38,6 +38,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.Geometry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,21 +81,6 @@ public class MapActivity extends FragmentActivity implements
         setUpMapIfNeeded();
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
-
-        /**
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria,true);
-        Location location = locationManager.getLastKnownLocation(provider);
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        LatLng latLng = new LatLng(latitude, longitude);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12)); */
-
-        // This zooms, the above one does not. I think the zooming looks kind of distracting, especially if it happens every time.
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        //mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
         // Move the camera instantly to Philadelphia with a zoom of 12.
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
@@ -151,12 +140,12 @@ public class MapActivity extends FragmentActivity implements
             currentOrg = allOrgs.get(i);
             if (currentOrg.getSubscribed()){
                 currMarker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
+                        .position(currentOrg.getLatLng())
                         .title(currentOrg.getGroupName())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             }else{
                 currMarker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))
+                        .position(currentOrg.getLatLng())
                         .title(currentOrg.getGroupName())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
             }
@@ -232,10 +221,6 @@ public class MapActivity extends FragmentActivity implements
             case R.id.help:
                 getMapHelp();
                 break;
-            case R.id.facebook_login:
-                intent = new Intent(getApplicationContext(), Facebook_Login.class);
-                startActivity(intent);
-                break;
             case R.id.update_db:
                 updateDatabase();
                 break;
@@ -295,6 +280,7 @@ public class MapActivity extends FragmentActivity implements
                         })
                         .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                setUpMap();
                             }
                         })
                         .setIcon(R.drawable.ic_launcher)
@@ -336,6 +322,7 @@ public class MapActivity extends FragmentActivity implements
         if (!isNetworkConnected()) {
             Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_LONG).show();
         } else {
+            Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
             Firebase.setAndroidContext(this);
             Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
             myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -359,7 +346,22 @@ public class MapActivity extends FragmentActivity implements
                         String zipcode = org.child("Zipcode").getValue().toString();
                         String timestamp = org.child("Timestamp").getValue().toString();
                         String twitter = org.child("Twitter").getValue().toString();
-                        db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+                        /*String latitude = org.child("Latitude").getValue().toString();
+                        String longitude = org.child("Longitude").getValue().toString();*//*
+                        double lat = Double.parseDouble(latitude);
+                        double lng =  Double.parseDouble(longitude);*/
+                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE");
+                        try {
+                            GeocodingResult[] results = GeocodingApi.geocode(context,
+                                    address + " Philadelphia, PA " + zipcode).await();
+                            Geometry myGeo = results[0].geometry;
+                            double lat = myGeo.location.lat;
+                            double lng = myGeo.location.lng;
+                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
+                        } catch (Exception e){e.printStackTrace();
+                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+
+                        }
                     }
                 }
 
@@ -368,6 +370,7 @@ public class MapActivity extends FragmentActivity implements
                 }
 
             });
+            Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
         }
     }
 
