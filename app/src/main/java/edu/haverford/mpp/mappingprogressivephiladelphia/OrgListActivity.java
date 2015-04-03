@@ -273,10 +273,6 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
                     PhillyOrg currOrg = (PhillyOrg) cb.getTag();
                     Boolean subbed = cb.isChecked();
                     currOrg.setSubscribed(subbed);
-                    Toast.makeText(mContext, // TODO Remove toast
-                            "Clicked on Checkbox: " + cb.getText() +
-                                    " is " + currOrg.getSubscribed(),
-                            Toast.LENGTH_SHORT).show();
                     MyDatabase db = new MyDatabase(mContext);
 
 
