@@ -31,7 +31,13 @@
     <item
         android:id="@+id/facebook"
         android:title="Facebook Login"
-        android:showAsAction="always">
+        android:showAsAction="never">
+    </item>
+
+    <item
+        android:id="@+id/update_db"
+        android:title="Sync Database"
+        android:showAsAction="never">
     </item>
 
 </menu>

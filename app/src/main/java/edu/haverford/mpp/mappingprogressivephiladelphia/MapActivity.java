@@ -236,6 +236,9 @@ public class MapActivity extends FragmentActivity implements
                 intent = new Intent(getApplicationContext(), Facebook_Login.class);
                 startActivity(intent);
                 break;
+            case R.id.update_db:
+                updateDatabase();
+                break;
         }
         return(super.onOptionsItemSelected(item));
     }
@@ -256,7 +259,7 @@ public class MapActivity extends FragmentActivity implements
     public void checkFirstRun() {
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun) {
-            if (isNetworkConnected() != true) {
+            if (!isNetworkConnected()) {
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("No internet connection detected!")
                         .setMessage("Please check to make sure that your internet is turned on and try again!" + "\n" + "\n" + "Internet is needed for the app to get set up.")
@@ -330,38 +333,42 @@ public class MapActivity extends FragmentActivity implements
     }
 
     public void updateDatabase() {
-        Firebase.setAndroidContext(this);
-        Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
-        myFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Iterable orgs = snapshot.getChildren();
-                MyDatabase db = new MyDatabase(MapActivity.this);
-                for (int i = 0; i<snapshot.getChildrenCount(); i++){
-                    Object o = orgs.iterator().next();
-                    DataSnapshot org = (DataSnapshot) o;
-                    int id = Integer.parseInt(org.getKey());
-                    String updated = org.child("Updated").getValue().toString();
-                    String name = org.child("Name").getValue().toString();
-                    String facebookID = org.child("FacebookID").getValue().toString();
-                    String isDeleted = org.child("Is Deleted").getValue().toString();
-                    String website = org.child("Website").getValue().toString();
-                    String socialIssues = org.child("Social-Issues").getValue().toString();
-                    String address = org.child("Address").getValue().toString();
-                    String mission = org.child("Mission").getValue().toString();
-                    String facebook = org.child("Facebook").getValue().toString();
-                    String zipcode = org.child("Zipcode").getValue().toString();
-                    String timestamp = org.child("Timestamp").getValue().toString();
-                    String twitter = org.child("Twitter").getValue().toString();
-                    db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+        if (!isNetworkConnected()) {
+            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_LONG).show();
+        } else {
+            Firebase.setAndroidContext(this);
+            Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
+            myFirebaseRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    Iterable orgs = snapshot.getChildren();
+                    MyDatabase db = new MyDatabase(MapActivity.this);
+                    for (int i = 0; i < snapshot.getChildrenCount(); i++) {
+                        Object o = orgs.iterator().next();
+                        DataSnapshot org = (DataSnapshot) o;
+                        int id = Integer.parseInt(org.getKey());
+                        String updated = org.child("Updated").getValue().toString();
+                        String name = org.child("Name").getValue().toString();
+                        String facebookID = org.child("FacebookID").getValue().toString();
+                        String isDeleted = org.child("Is Deleted").getValue().toString();
+                        String website = org.child("Website").getValue().toString();
+                        String socialIssues = org.child("Social-Issues").getValue().toString();
+                        String address = org.child("Address").getValue().toString();
+                        String mission = org.child("Mission").getValue().toString();
+                        String facebook = org.child("Facebook").getValue().toString();
+                        String zipcode = org.child("Zipcode").getValue().toString();
+                        String timestamp = org.child("Timestamp").getValue().toString();
+                        String twitter = org.child("Twitter").getValue().toString();
+                        db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError error) {
-            }
+                @Override
+                public void onCancelled(FirebaseError error) {
+                }
 
-        });
+            });
+        }
     }
 
     @Override
