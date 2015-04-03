@@ -82,21 +82,6 @@ public class MapActivity extends FragmentActivity implements
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        /**
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria,true);
-        Location location = locationManager.getLastKnownLocation(provider);
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        LatLng latLng = new LatLng(latitude, longitude);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12)); */
-
-        // This zooms, the above one does not. I think the zooming looks kind of distracting, especially if it happens every time.
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        //mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
-
         // Move the camera instantly to Philadelphia with a zoom of 12.
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
     }
@@ -236,10 +221,6 @@ public class MapActivity extends FragmentActivity implements
             case R.id.help:
                 getMapHelp();
                 break;
-            case R.id.facebook_login:
-                intent = new Intent(getApplicationContext(), Facebook_Login.class);
-                startActivity(intent);
-                break;
             case R.id.update_db:
                 updateDatabase();
                 break;
@@ -299,6 +280,7 @@ public class MapActivity extends FragmentActivity implements
                         })
                         .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                setUpMap();
                             }
                         })
                         .setIcon(R.drawable.ic_launcher)
@@ -340,6 +322,7 @@ public class MapActivity extends FragmentActivity implements
         if (!isNetworkConnected()) {
             Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_LONG).show();
         } else {
+            Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
             Firebase.setAndroidContext(this);
             Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
             myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -375,7 +358,6 @@ public class MapActivity extends FragmentActivity implements
                             double lat = myGeo.location.lat;
                             double lng = myGeo.location.lng;
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
-                            break;
                         } catch (Exception e){e.printStackTrace();
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
 
@@ -388,6 +370,7 @@ public class MapActivity extends FragmentActivity implements
                 }
 
             });
+            Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
         }
     }
 
