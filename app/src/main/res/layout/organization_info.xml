@@ -8,17 +8,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="40dp"
+    android:padding="20dp"
     android:weightSum="1">
 
     <ImageView
-        android:layout_width="500dp"
-        android:layout_height="500dp"
-        android:id="@+id/imageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:id="@+id/org_info_pic"
         android:src="@drawable/default_pic"
-        android:scaleType="fitXY"
+        android:scaleType="fitStart"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="25dp"/>
+        android:adjustViewBounds="true"
+        android:layout_marginBottom="15dp"
+        android:cropToPadding="false"
+        android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large" />
 
     <!--<com.facebook.widget.ProfilePictureView
         android:id="@+id/selection_profile_pic"
