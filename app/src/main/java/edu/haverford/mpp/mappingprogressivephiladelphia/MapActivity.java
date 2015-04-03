@@ -21,6 +21,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -251,10 +255,8 @@ public class MapActivity extends FragmentActivity implements
 
     public void checkFirstRun() {
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
-
         if (isFirstRun) {
             if (isNetworkConnected() != true) {
-                updateDatabase();
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("No internet connection detected!")
                         .setMessage("Please check to make sure that your internet is turned on and try again!" + "\n" + "\n" + "Internet is needed for the app to get set up.")
@@ -266,6 +268,7 @@ public class MapActivity extends FragmentActivity implements
                         })
                         .show();
             } else {
+                updateDatabase();
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("Welcome to Mapping Progressive Philadelphia!")
                         .setMessage("This app is made up of three parts: Swipes, Map, and List." + "\n" + "\n"
@@ -327,7 +330,38 @@ public class MapActivity extends FragmentActivity implements
     }
 
     public void updateDatabase() {
-        // update the database!!!
+        Firebase.setAndroidContext(this);
+        Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
+        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Iterable orgs = snapshot.getChildren();
+                MyDatabase db = new MyDatabase(MapActivity.this);
+                for (int i = 0; i<snapshot.getChildrenCount(); i++){
+                    Object o = orgs.iterator().next();
+                    DataSnapshot org = (DataSnapshot) o;
+                    int id = Integer.parseInt(org.getKey());
+                    String updated = org.child("Updated").getValue().toString();
+                    String name = org.child("Name").getValue().toString();
+                    String facebookID = org.child("FacebookID").getValue().toString();
+                    String isDeleted = org.child("Is Deleted").getValue().toString();
+                    String website = org.child("Website").getValue().toString();
+                    String socialIssues = org.child("Social-Issues").getValue().toString();
+                    String address = org.child("Address").getValue().toString();
+                    String mission = org.child("Mission").getValue().toString();
+                    String facebook = org.child("Facebook").getValue().toString();
+                    String zipcode = org.child("Zipcode").getValue().toString();
+                    String timestamp = org.child("Timestamp").getValue().toString();
+                    String twitter = org.child("Twitter").getValue().toString();
+                    db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+
+        });
     }
 
     @Override
