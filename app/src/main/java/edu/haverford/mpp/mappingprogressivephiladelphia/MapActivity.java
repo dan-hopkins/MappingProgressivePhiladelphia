@@ -254,6 +254,7 @@ public class MapActivity extends FragmentActivity implements
 
         if (isFirstRun) {
             if (isNetworkConnected() != true) {
+                updateDatabase();
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("No internet connection detected!")
                         .setMessage("Please check to make sure that your internet is turned on and try again!" + "\n" + "\n" + "Internet is needed for the app to get set up.")
@@ -323,6 +324,10 @@ public class MapActivity extends FragmentActivity implements
                 })
                 .setIcon(R.drawable.ic_launcher)
                 .show();
+    }
+
+    public void updateDatabase() {
+        // update the database!!!
     }
 
     @Override
