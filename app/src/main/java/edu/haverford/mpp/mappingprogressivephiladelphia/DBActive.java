@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class DBActive extends ListActivity {
 
-    private Cursor zipcodes;
+    /*private Cursor zipcodes;
     //private Cursor employees;
     private MyDatabase db;
 
@@ -42,5 +42,5 @@ public class DBActive extends ListActivity {
         super.onDestroy();
         zipcodes.close();
         db.close();
-    }
+    }*/
 }

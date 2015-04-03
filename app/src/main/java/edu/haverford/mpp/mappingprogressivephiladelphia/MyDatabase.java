@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class MyDatabase extends SQLiteAssetHelper {
 
-    private static final String DATABASE_NAME = "mppsubbeddb";
+    private static final String DATABASE_NAME = "mppdb";
     private static final int DATABASE_VERSION = 1;
 
     public MyDatabase(Context context) {
@@ -152,6 +152,43 @@ public class MyDatabase extends SQLiteAssetHelper {
         }
         return subbedOrgs;
     }*/
+
+    /*int id = Integer.parseInt(org.getKey());
+                    String updated = org.child("Updated").getValue().toString();
+                    String name = org.child("Name").getValue().toString(); // this works!!!!!
+                    String facebookID = org.child("FacebookID").getValue().toString();
+                    String isDeleted = org.child("Is Deleted").getValue().toString();
+                    String website = org.child("Website").getValue().toString();
+                    String socialIssues = org.child("Social-Issues").getValue().toString();
+                    String address = org.child("Address").getValue().toString();
+                    String mission = org.child("Mission").getValue().toString();
+                    String facebook = org.child("Facebook").getValue().toString();
+                    String zipcode = org.chichild("Timestamp").getValue().toString();
+                    String twitter = org.child("Twitter").getValue().toString();*/
+    public void updateEntry(int id, String updated, String name, String facebookID, String isDeleted,
+                            String website, String socialIssues, String address, String mission, String
+                            facebook, String zipcode, String timestamp, String twitter) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues updatedValues = new ContentValues();
+        //updatedValues.put("_id", id);
+        updatedValues.put("Updated", updated);
+        updatedValues.put("GroupName", name);
+        updatedValues.put("FacebookID", facebookID);
+        updatedValues.put("isDeleted", isDeleted);
+        updatedValues.put("Website", website);
+        updatedValues.put("SocialIssues", socialIssues);
+        updatedValues.put("Address", address);
+        updatedValues.put("Mission", mission);
+        updatedValues.put("Facebook", facebook);
+        updatedValues.put("ZipCode", zipcode);
+        updatedValues.put("Timestamp", timestamp);
+        updatedValues.put("Twitter", twitter);
+        //db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE);
+        //System.out.println(db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE));
+        db.update("mppdata", updatedValues, "_id = " + id, null); //TODO make it work with insert as well as update
+
+
+    }
 
     /*public ArrayList<PhillyOrg> getAllOrgsByIDs(ArrayList<Integer> IDs){
 

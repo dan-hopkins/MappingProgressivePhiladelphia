@@ -68,7 +68,7 @@ public class SwipePickerActivity extends Activity implements
 
         MyDatabase db = new MyDatabase(this);
 
-        al = db.getAllOrganizationNames();
+        //al = db.getAllOrganizationNames();
         //al = new ArrayList<>();
         allOrgs = db.getAllOrganizations();
 

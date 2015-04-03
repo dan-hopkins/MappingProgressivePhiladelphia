@@ -137,13 +137,14 @@ public class MapActivity extends FragmentActivity implements
         final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
 
         MyDatabase db = new MyDatabase(getApplicationContext());
-        ArrayList<Integer> subbedOrgIDs = db.getAllSubscribedOrgIDs();
+        //ArrayList<Integer> subbedOrgIDs = db.getAllSubscribedOrgIDs();
         PhillyOrg currentOrg = new PhillyOrg();
+        ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
         Marker currMarker;
         OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
 
-        for (int i = 0; i < subbedOrgIDs.size(); i++) {
-            currentOrg = db.getOrganizationById(subbedOrgIDs.get(i));
+        for (int i = 0; i < allOrgs.size(); i++) {
+            currentOrg = allOrgs.get(i);
             if (currentOrg.getSubscribed()){
                 currMarker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(currentOrg.getLatitude(), currentOrg.getLongitude()))

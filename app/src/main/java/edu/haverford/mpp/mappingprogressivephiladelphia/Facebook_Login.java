@@ -39,7 +39,7 @@ public class Facebook_Login extends FragmentActivity{
             public void onDataChange(DataSnapshot snapshot) {
 
                 Iterable orgs = snapshot.getChildren();
-
+                MyDatabase db = new MyDatabase(Facebook_Login.this);
                 for (int i = 0; i<snapshot.getChildrenCount(); i++){
                     Object o = orgs.iterator().next(); // object is A-Space, for example, required to be an object even though it's really a DataSnapshot
                     // System.out.println(o); // o is a DataSnapshot object (can be found by doing o.getClass())
@@ -53,21 +53,19 @@ public class Facebook_Login extends FragmentActivity{
                     //System.out.println(org.child("Name")); // this prints out: DataSnapshot { key = Name, value = A-Space (Space) } for each organization
                     //System.out.println(org.child("Name").getValue()); // this prints out: A-Space (Space)
                     int id = Integer.parseInt(org.getKey());
-                    // Updated
+                    String updated = org.child("Updated").getValue().toString();
                     String name = org.child("Name").getValue().toString(); // this works!!!!!
-                    int facebookID = Integer.parseInt(org.child("FacebookID").getValue().toString());
+                    String facebookID = org.child("FacebookID").getValue().toString();
                     String isDeleted = org.child("Is Deleted").getValue().toString();
                     String website = org.child("Website").getValue().toString();
                     String socialIssues = org.child("Social-Issues").getValue().toString();
                     String address = org.child("Address").getValue().toString();
                     String mission = org.child("Mission").getValue().toString();
                     String facebook = org.child("Facebook").getValue().toString();
-                    int zipcode = Integer.parseInt(org.child("Zipcode").getValue().toString());
-                    // Timestamp
+                    String zipcode = org.child("Zipcode").getValue().toString();
+                    String timestamp = org.child("Timestamp").getValue().toString();
                     String twitter = org.child("Twitter").getValue().toString();
-
-                    // MAKE A PHILLYORG WITH THIS INFO / MAKE A DATABASE R SOMETHIN
-
+                    db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
 
                 }
 
