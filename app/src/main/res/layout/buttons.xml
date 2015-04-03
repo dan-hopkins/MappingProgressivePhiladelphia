@@ -13,6 +13,7 @@
         android:src="@drawable/circleno"
         android:text="Left"
         android:scaleType="centerInside"
+        android:visibility="invisible"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@null"/>
@@ -22,9 +23,12 @@
         android:layout_margin="10dp"
         android:src="@drawable/circleyes"
         android:scaleType="fitCenter"
+        android:visibility="invisible"
         android:text="Right"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@null"/>
+
+
 
 </LinearLayout>
