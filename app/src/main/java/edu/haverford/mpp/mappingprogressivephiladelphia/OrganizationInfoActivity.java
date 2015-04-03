@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.Request;
@@ -15,8 +16,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
-
-import org.w3c.dom.Text;
+import com.squareup.picasso.Picasso;
 
 
 public class OrganizationInfoActivity extends Activity {
@@ -24,9 +24,11 @@ public class OrganizationInfoActivity extends Activity {
     int currentOrgID;
     private ProfilePictureView profilePictureView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Check for an open session
@@ -38,11 +40,20 @@ public class OrganizationInfoActivity extends Activity {
 
         setContentView(R.layout.organization_info);
 
+
+
         Intent intent = getIntent();
         currentOrgID = intent.getIntExtra("OrgID", -1);
 
         MyDatabase db = new MyDatabase(this);
         PhillyOrg currOrg = db.getOrganizationById(currentOrgID);
+
+
+        ImageView image = (ImageView)findViewById(R.id.org_info_pic);
+        Picasso.with(this)
+                .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?type=large")
+                .placeholder(R.drawable.default_pic)
+                .into(image);
 
         TextView name = (TextView)findViewById(R.id.org_group_name);
         name.append(currOrg.getGroupName());
