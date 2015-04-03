@@ -317,7 +317,6 @@ public class SwipePickerActivity extends Activity implements
                             double lat = myGeo.location.lat;
                             double lng = myGeo.location.lng;
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
-                            break;
                         } catch (Exception e){e.printStackTrace();
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
 
