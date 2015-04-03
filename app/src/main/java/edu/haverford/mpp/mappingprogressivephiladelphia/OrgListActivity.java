@@ -47,6 +47,10 @@ public class OrgListActivity extends Activity {
 
     protected void onResume(){
         super.onResume();
+        loadActivity();
+    }
+
+    protected void loadActivity(){
         MyDatabase db = new MyDatabase(this);
         //Array list of organizations
         ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
@@ -57,7 +61,6 @@ public class OrgListActivity extends Activity {
         ListView listView = (ListView) findViewById(R.id.listView1);
         // Assign adapter to ListView
         listView.setAdapter(mAdapter);
-
     }
 
     @Override
@@ -217,6 +220,7 @@ public class OrgListActivity extends Activity {
 
             });
             Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
+            loadActivity();
         }
     }
 

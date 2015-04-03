@@ -94,6 +94,7 @@ public class SwipePickerActivity extends Activity implements
         allOrgs = db.getAllOrganizations();
         Collections.shuffle(allOrgs);
 
+
         //myCardAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
         myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
         flingContainer.setAdapter(myCardAdapter);
@@ -156,8 +157,8 @@ public class SwipePickerActivity extends Activity implements
             @Override
             public void onScroll(float scrollProgressPercent) {
                 View view = flingContainer.getSelectedView();
-                /*view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);*/
+                //view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
+                //view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
             }
         });
 
@@ -343,6 +344,12 @@ public class SwipePickerActivity extends Activity implements
 
             });
             Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
+            MyDatabase db = new MyDatabase(SwipePickerActivity.this);
+            allOrgs = db.getAllOrganizations();
+            Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
+            myCardAdapter = new myArrayAdapter(SwipePickerActivity.this, R.layout.item, allOrgs);
+            flingContainer.setAdapter(myCardAdapter);
+            myCardAdapter.notifyDataSetChanged();
         }
     }
 
