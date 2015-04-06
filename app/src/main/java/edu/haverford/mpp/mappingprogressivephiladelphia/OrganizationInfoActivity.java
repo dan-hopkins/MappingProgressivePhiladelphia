@@ -24,30 +24,23 @@ public class OrganizationInfoActivity extends Activity {
     int currentOrgID;
     private ProfilePictureView profilePictureView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Check for an open session
-        Session session = Session.getActiveSession();
+        Session session = Session.getActiveSession(); // Check for an open session
         if (session != null && session.isOpened()) {
-            // Get the user's data
-            makeMeRequest(session);
+            makeMeRequest(session); // Get the user's data
         }
 
         setContentView(R.layout.organization_info);
-
-
 
         Intent intent = getIntent();
         currentOrgID = intent.getIntExtra("OrgID", -1);
 
         MyDatabase db = new MyDatabase(this);
         PhillyOrg currOrg = db.getOrganizationById(currentOrgID);
-
 
         ImageView image = (ImageView)findViewById(R.id.org_info_pic);
         Picasso.with(this)
@@ -86,23 +79,19 @@ public class OrganizationInfoActivity extends Activity {
         }
 
         /*// Find the user's profile picture custom view
-
         profilePictureView = (ProfilePictureView)findViewById(R.id.selection_profile_pic);
         profilePictureView.setCropped(true);*/
+
     }
 
     private void makeMeRequest(final Session session) {
-        // Make an API call to get user data and define a
-        // new callback to handle the response.
-        Request request = Request.newMeRequest(session,
+        Request request = Request.newMeRequest(session, // Make an API call to get user data and define a new callback to handle the response
                 new Request.GraphUserCallback() {
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
-                        // If the response is successful
-                        if (session == Session.getActiveSession()) {
+                        if (session == Session.getActiveSession()) { // If the response is successful
                             if (user != null) {
-                                // Set the id for the ProfilePictureView
-                                // view that in turn displays the profile picture.
+                                // Set the id for the ProfilePictureView view that in turn displays the profile picture
                                 profilePictureView.setVisibility(View.VISIBLE);
                                 profilePictureView.setProfileId(user.getId());
                             }
@@ -117,8 +106,7 @@ public class OrganizationInfoActivity extends Activity {
 
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
         if (session != null && session.isOpened()) {
-            // Get the user's data.
-            makeMeRequest(session);
+            makeMeRequest(session); // Get the user's data
         }
     }
 
@@ -131,17 +119,13 @@ public class OrganizationInfoActivity extends Activity {
     };
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+    public boolean onCreateOptionsMenu(Menu menu) { // adds items to the action bar
         getMenuInflater().inflate(R.menu.menu_organization_info, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+    public boolean onOptionsItemSelected(MenuItem item) { // handles action bar item clicks
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();

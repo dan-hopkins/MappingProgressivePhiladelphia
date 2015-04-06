@@ -45,26 +45,24 @@ public class OrgListActivity extends Activity {
         setContentView(R.layout.activity_org_list);
     }
 
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         loadActivity();
     }
 
-    protected void loadActivity(){
+    protected void loadActivity() {
         MyDatabase db = new MyDatabase(this);
-        //Array list of organizations
-        ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
+        ArrayList<PhillyOrg> orgList = db.getAllOrganizations(); // Array list of organizations
 
-        //create an ArrayAdapter from the String Array
-        mAdapter = new OrgListAdapter(this,
+        mAdapter = new OrgListAdapter(this, //create an ArrayAdapter from the String Array
                 R.layout.org_list_item, orgList);
         ListView listView = (ListView) findViewById(R.id.listView1);
-        // Assign adapter to ListView
-        listView.setAdapter(mAdapter);
+        listView.setAdapter(mAdapter); // Assign adapter to ListView
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+
         //map
         MenuItem map = menu.findItem(R.id.map);
         map.setEnabled(true);
@@ -84,24 +82,19 @@ public class OrgListActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+    public boolean onCreateOptionsMenu(Menu menu) { // adds items to action bar
         getMenuInflater().inflate(R.menu.options, menu);
         return (super.onCreateOptionsMenu(menu));
     }
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+    public boolean onOptionsItemSelected(MenuItem item) { // handle action bar items
         switch (item.getItemId()) {
 
             case android.R.id.home:
                 finish();
                 return (true);
-
             case R.id.swipe:
                 Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
                 startActivity(intent);
@@ -159,8 +152,7 @@ public class OrgListActivity extends Activity {
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (ni == null) {
-            // There are no active networks.
+        if (ni == null) { // There are no active networks
             return false;
         } else
             return true;
@@ -168,7 +160,7 @@ public class OrgListActivity extends Activity {
 
     public void updateDatabase() {
         if (!isNetworkConnected()) {
-            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
             Firebase.setAndroidContext(this);
@@ -178,6 +170,7 @@ public class OrgListActivity extends Activity {
                 public void onDataChange(DataSnapshot snapshot) {
                     Iterable orgs = snapshot.getChildren();
                     MyDatabase db = new MyDatabase(OrgListActivity.this);
+
                     for (int i = 0; i < snapshot.getChildrenCount(); i++) {
                         Object o = orgs.iterator().next();
                         DataSnapshot org = (DataSnapshot) o;
@@ -198,6 +191,7 @@ public class OrgListActivity extends Activity {
                         String longitude = org.child("Longitude").getValue().toString();*//*
                         double lat = Double.parseDouble(latitude);
                         double lng =  Double.parseDouble(longitude);*/
+
                         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE");
                         try {
                             GeocodingResult[] results = GeocodingApi.geocode(context,
@@ -207,9 +201,8 @@ public class OrgListActivity extends Activity {
                             double lng = myGeo.location.lng;
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
 
-                        } catch (Exception e){e.printStackTrace();
+                        } catch (Exception e) {e.printStackTrace();
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
-
                         }
                     }
                 }
@@ -223,7 +216,6 @@ public class OrgListActivity extends Activity {
             loadActivity();
         }
     }
-
 }
 
 class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
@@ -292,7 +284,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
         PhillyOrg currOrg = orgList.get(position);
         holder.code.setText(" (" +  currOrg.getId() + ")");
         holder.name.setText(currOrg.getGroupName());
-        //holder.name.setChecked(currOrg.getSubscribed());
+        // holder.name.setChecked(currOrg.getSubscribed());
         holder.name.setTag(currOrg);
         holder.code.setTag(currOrg);
         return convertView;
@@ -302,6 +294,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
      * Saves the state of the checklist to the database.
      * @return the final number of subscribed organizations after saving
      */
+
     public int saveSubscribed() {
         int counter = 0;
         MyDatabase db = new MyDatabase(mContext);
@@ -318,9 +311,4 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
         }
         return counter;
     }
-
-
-
-    }
-
-
+}

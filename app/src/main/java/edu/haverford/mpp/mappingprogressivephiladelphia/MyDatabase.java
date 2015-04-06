@@ -22,17 +22,14 @@ public class MyDatabase extends SQLiteAssetHelper {
 
     public MyDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
         // you can use an alternate constructor to specify a database location
         // (such as a folder on the sd card)
         // you must ensure that this folder is available and you have permission
         // to write to it
-        //super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
-
+        // super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);
     }
 
     public void insertSubYes(int id) {
-
         SQLiteDatabase db = getWritableDatabase();
         ContentValues updatedValues = new ContentValues();
         updatedValues.put("Subscribed", 1);
@@ -40,7 +37,6 @@ public class MyDatabase extends SQLiteAssetHelper {
     }
 
     public void insertSubNo(int id) {
-
         SQLiteDatabase db = getWritableDatabase();
         ContentValues updatedValues = new ContentValues();
         updatedValues.put("Subscribed", 0);
@@ -60,8 +56,7 @@ public class MyDatabase extends SQLiteAssetHelper {
             return false;
     }
 
-
-/*    public Cursor getAllZipCodes() {
+ /* public Cursor getAllZipCodes() {
 
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -165,6 +160,7 @@ public class MyDatabase extends SQLiteAssetHelper {
                     String facebook = org.child("Facebook").getValue().toString();
                     String zipcode = org.chichild("Timestamp").getValue().toString();
                     String twitter = org.child("Twitter").getValue().toString();*/
+
     public void updateEntry(int id, String updated, String name, String facebookID, String isDeleted,
                             String website, String socialIssues, String address, String mission, String
                             facebook, String zipcode, String timestamp, String twitter, Double latitude, Double longitude) {
@@ -188,8 +184,6 @@ public class MyDatabase extends SQLiteAssetHelper {
         //db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE);
         //System.out.println(db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE));
         db.update("mppdata", updatedValues, "_id = " + id, null); //TODO make it work with insert as well as update
-
-
     }
 
     public void updateEntry(int id, String updated, String name, String facebookID, String isDeleted,
@@ -213,13 +207,6 @@ public class MyDatabase extends SQLiteAssetHelper {
         //db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE);
         //System.out.println(db.insertWithOnConflict("mppdata", null, updatedValues, SQLiteDatabase.CONFLICT_REPLACE));
         db.update("mppdata", updatedValues, "_id = " + id, null); //TODO make it work with insert as well as update
-
-
     }
-
-
-
-    /*public ArrayList<PhillyOrg> getAllOrgsByIDs(ArrayList<Integer> IDs){
-
-    }*/
+    // public ArrayList<PhillyOrg> getAllOrgsByIDs(ArrayList<Integer> IDs){ }
 }

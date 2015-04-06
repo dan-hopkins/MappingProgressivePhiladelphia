@@ -50,12 +50,9 @@ import java.util.Map;
 public class MapActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
-    // Request code to use when launching the resolution activity
-    private static final int REQUEST_RESOLVE_ERROR = 1001;
-    // Unique tag for the error dialog fragment
-    private static final String DIALOG_ERROR = "dialog_error";
-    // Bool to track whether the app is already resolving an error
-    private boolean mResolvingError = false;
+    private static final int REQUEST_RESOLVE_ERROR = 1001; // Request code to use when launching the resolution activity
+    private static final String DIALOG_ERROR = "dialog_error"; // Unique tag for the error dialog fragment
+    private boolean mResolvingError = false; // Bool to track whether the app is already resolving an error
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -79,11 +76,9 @@ public class MapActivity extends FragmentActivity implements
         }
 
         setUpMapIfNeeded();
+        getActionBar().setDisplayHomeAsUpEnabled(false); // default is false but necessary to declare false
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-
-        // Move the camera instantly to Philadelphia with a zoom of 12.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); //Town Center Philadelphia
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); // Town Center Philadelphia, zoom = 12
     }
 
     @Override
@@ -107,25 +102,22 @@ public class MapActivity extends FragmentActivity implements
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
+
     private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+        if (mMap == null) { // Do a null check to confirm that we have not already instantiated the map
+            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)) // Try to obtain the map from the SupportMapFragment
                     .getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
+            if (mMap != null) { // Check if we were successful in obtaining the map
                 setUpMap();
             }
         }
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
+     * This is where we can add markers or lines, add listeners or move the camera.
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
+
     private void setUpMap() {
         final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
 
@@ -142,16 +134,17 @@ public class MapActivity extends FragmentActivity implements
                 currMarker = mMap.addMarker(new MarkerOptions()
                         .position(currentOrg.getLatLng())
                         .title(currentOrg.getGroupName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            }else{
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // color for subscribed markers
+            } else {
                 currMarker = mMap.addMarker(new MarkerOptions()
                         .position(currentOrg.getLatLng())
                         .title(currentOrg.getGroupName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))); // color for unsubscribed markers
             }
 
             OrgMarkerHash.put(currMarker, currentOrg);
         }
+
         mMap.setMyLocationEnabled(true);
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -160,7 +153,7 @@ public class MapActivity extends FragmentActivity implements
                 PhillyOrg currOrg = OrgMarkerHash.get(marker);
                 float myDist;
                 if (!mLastLocation.equals(null)) {
-                    myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371; //convert between meters and miles
+                    myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371; // convert between meters and miles
                 }
                 else
                     myDist = (float)-1.0;
@@ -176,17 +169,17 @@ public class MapActivity extends FragmentActivity implements
 
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        //map
+        // map
         MenuItem map = menu.findItem(R.id.map);
         map.setEnabled(false);
         map.getIcon().setAlpha(100);
 
-        //swipe
+        // swipe
         MenuItem swipe = menu.findItem(R.id.swipe);
         swipe.setEnabled(true);
         swipe.getIcon().setAlpha(255);
 
-        //list
+        // list
         MenuItem list = menu.findItem(R.id.list);
         list.setEnabled(true);
         list.getIcon().setAlpha(255);
@@ -196,19 +189,14 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.options, menu);
+        getMenuInflater().inflate(R.menu.options, menu); // Inflate the menu; this adds items to the action bar if it is present
         return (super.onCreateOptionsMenu(menu));
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+    public boolean onOptionsItemSelected(MenuItem item) { // handle action bar selections
         switch (item.getItemId()) {
             case android.R.id.home:
-                // finish();
                 return true;
             case R.id.swipe:
                 Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
@@ -225,9 +213,9 @@ public class MapActivity extends FragmentActivity implements
                 updateDatabase();
                 break;
         }
+
         return(super.onOptionsItemSelected(item));
     }
-
 
     private boolean isPlayServicesConfigured() {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(MapActivity.this);
@@ -250,8 +238,7 @@ public class MapActivity extends FragmentActivity implements
                         .setMessage("Please check to make sure that your internet is turned on and try again!" + "\n" + "\n" + "Internet is needed for the app to get set up.")
                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // close application
-                                android.os.Process.killProcess(android.os.Process.myPid());
+                                android.os.Process.killProcess(android.os.Process.myPid()); // close application
                             }
                         })
                         .show();
@@ -271,7 +258,6 @@ public class MapActivity extends FragmentActivity implements
                                 "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
                                 "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
                                 "again by clicking on the Help button in the overflow menu.")
-                                // add  + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "hello" to see that scroll works
                         .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
@@ -312,7 +298,9 @@ public class MapActivity extends FragmentActivity implements
                     }
                 })
                 .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {}
+                    public void onClick(DialogInterface dialog, int which) {
+                        setUpMap();
+                    }
                 })
                 .setIcon(R.drawable.ic_launcher)
                 .show();
@@ -320,7 +308,7 @@ public class MapActivity extends FragmentActivity implements
 
     public void updateDatabase() {
         if (!isNetworkConnected()) {
-            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
             Firebase.setAndroidContext(this);
@@ -330,6 +318,7 @@ public class MapActivity extends FragmentActivity implements
                 public void onDataChange(DataSnapshot snapshot) {
                     Iterable orgs = snapshot.getChildren();
                     MyDatabase db = new MyDatabase(MapActivity.this);
+
                     for (int i = 0; i < snapshot.getChildrenCount(); i++) {
                         Object o = orgs.iterator().next();
                         DataSnapshot org = (DataSnapshot) o;
@@ -347,10 +336,11 @@ public class MapActivity extends FragmentActivity implements
                         String timestamp = org.child("Timestamp").getValue().toString();
                         String twitter = org.child("Twitter").getValue().toString();
                         /*String latitude = org.child("Latitude").getValue().toString();
-                        String longitude = org.child("Longitude").getValue().toString();*//*
+                        String longitude = org.child("Longitude").getValue().toString();
                         double lat = Double.parseDouble(latitude);
                         double lng =  Double.parseDouble(longitude);*/
-                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE");
+
+                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE"); // TODO This is slowing down the app
                         try {
                             GeocodingResult[] results = GeocodingApi.geocode(context,
                                     address + " Philadelphia, PA " + zipcode).await();
@@ -358,9 +348,8 @@ public class MapActivity extends FragmentActivity implements
                             double lat = myGeo.location.lat;
                             double lng = myGeo.location.lng;
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
-                        } catch (Exception e){e.printStackTrace();
+                        } catch (Exception e) {e.printStackTrace();
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
-
                         }
                     }
                 }
@@ -389,19 +378,16 @@ public class MapActivity extends FragmentActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         if (mResolvingError) {
-            // Already attempting to resolve an error.
-            return;
+            return; // Already attempting to resolve an error.
         } else if (result.hasResolution()) {
             try {
                 mResolvingError = true;
                 result.startResolutionForResult(this, REQUEST_RESOLVE_ERROR);
             } catch (IntentSender.SendIntentException e) {
-                // There was an error with the resolution intent. Try again.
-                buildGoogleApiClient();
+                buildGoogleApiClient(); // There was an error with the resolution intent. Try again.
             }
         } else {
-            // Show dialog using GooglePlayServicesUtil.getErrorDialog()
-            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, REQUEST_RESOLVE_ERROR);
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, REQUEST_RESOLVE_ERROR); // Show dialog using GooglePlayServicesUtil.getErrorDialog()
             mResolvingError = true;
         }
     }
@@ -409,7 +395,7 @@ public class MapActivity extends FragmentActivity implements
     @Override
     protected void onStart(){
         super.onStart();
-        if (!mResolvingError) {  // more about this later
+        if (!mResolvingError) {
             mGoogleApiClient.connect();
         }
     }
@@ -431,8 +417,7 @@ public class MapActivity extends FragmentActivity implements
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (ni == null) {
-            // There are no active networks.
+        if (ni == null) { // There are no active networks
             return false;
         } else
             return true;

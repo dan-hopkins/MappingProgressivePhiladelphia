@@ -51,8 +51,9 @@ public class PhillyOrg {
      * @param Latitude
      * @param Subscribed
      */
+
     public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode,
-                     String SocialIssues, String Mission, String Twitter, double Longitude, double Latitude, boolean Subscribed, String FacebookID){
+                     String SocialIssues, String Mission, String Twitter, double Longitude, double Latitude, boolean Subscribed, String FacebookID) {
         this.id = id;
         this.Timestamp = Timestamp;
         this.GroupName = GroupName;
@@ -67,11 +68,10 @@ public class PhillyOrg {
         this.Latitude = Latitude;
         this.Subscribed = Subscribed;
         this.FacebookID = FacebookID;
-
     }
 
     PhillyOrg(int id,String GroupName, String Website, String Facebook, String Address, String ZipCode,
-            String SocialIssues, String Mission, String Twitter, Boolean isDeleted){
+            String SocialIssues, String Mission, String Twitter, Boolean isDeleted) {
         this.id = id;
         this.GroupName = GroupName;
         this.Website = Website;
@@ -82,12 +82,9 @@ public class PhillyOrg {
         this.Mission = Mission;
         this.Twitter = Twitter;
         //this.Subscribed = ; TODO
-
     }
 
-    public PhillyOrg(){
-
-    }
+    public PhillyOrg(){}
 
     public Location getLocation(){
         Location location = new Location("");

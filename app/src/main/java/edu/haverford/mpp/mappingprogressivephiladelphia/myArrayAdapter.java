@@ -32,7 +32,7 @@ public class myArrayAdapter extends ArrayAdapter {
     Context mContext;
 
     public myArrayAdapter(Context context, int textViewResourceId, ArrayList<PhillyOrg> orgs) {
-        super(context, textViewResourceId, /*objects*/orgs);
+        super(context, textViewResourceId, /*objects*/ orgs);
         mContext = context;
     }
 
@@ -57,5 +57,4 @@ public class myArrayAdapter extends ArrayAdapter {
 
         return view;
     }
-
 }
