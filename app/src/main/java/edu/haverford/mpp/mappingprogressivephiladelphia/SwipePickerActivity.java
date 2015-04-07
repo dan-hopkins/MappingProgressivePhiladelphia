@@ -103,6 +103,7 @@ public class SwipePickerActivity extends Activity implements
             public void onLeftCardExit(Object dataObject) {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 db.insertSubNo(currOrg.id);
@@ -175,12 +176,56 @@ public class SwipePickerActivity extends Activity implements
     }
 
     @OnClick(R.id.right)
-    public void right() { flingContainer.getTopCardListener().selectRight(); }
+    public void right() {
+        boolean isFirstRight = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRight", true);
+        if (isFirstRight) {
+            new AlertDialog.Builder(this, R.style.DialogTheme)
+                    .setTitle("Are you sure")
+                    .setMessage("really?")
+                    .setPositiveButton("Yeah I'm sure", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            flingContainer.getTopCardListener().selectRight();
+                        }
+                    })
+                    .setNegativeButton("No actually wait", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) { }
+                    })
+                    .setIcon(R.drawable.ic_launcher)
+                    .show();
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
+        } else {
+            flingContainer.getTopCardListener().selectRight();
+        }
+    }
 
     @OnClick(R.id.left)
     public void left() {
-        flingContainer.getTopCardListener().selectLeft();
+        System.out.println("HEY THERE");
+        boolean isFirstLeft = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstLeft", true);
+        if (isFirstLeft) {
+            new AlertDialog.Builder(this, R.style.DialogTheme)
+                    .setTitle("Are you sure L")
+                    .setMessage("really L")
+                    .setPositiveButton("Yeah I'm sure", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            flingContainer.getTopCardListener().selectLeft();
+                        }
+                    })
+                    .setNegativeButton("No actually wait", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) { }
+                    })
+                    .setIcon(R.drawable.ic_launcher)
+                    .show();
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLeft", false).apply();
+        } else {
+            flingContainer.getTopCardListener().selectLeft();
+        }
     }
+
+/*    @OnClick(R.id.left)
+    public void left() {
+        flingContainer.getTopCardListener().selectLeft();
+    }*/
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -204,14 +249,14 @@ public class SwipePickerActivity extends Activity implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) { // adds items to action bar
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options, menu);
         return (super.onCreateOptionsMenu(menu));
     }
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { // handle action bar item clicks
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
             case android.R.id.home:
@@ -237,18 +282,7 @@ public class SwipePickerActivity extends Activity implements
     public void getSwipeHelp() {
         new AlertDialog.Builder(this, R.style.DialogTheme)
                 .setTitle("Welcome to Mapping Progressive Philadelphia!")
-                .setMessage("This app is made up of three parts: Swipes, Map, and List." + "\n" + "\n"
-                        + "Swipes offers a Tinder-style interface for choosing organizations that " +
-                        "you'd like to subscribe to and learn more about. Just swipe the cards left " +
-                        "(no thanks!) or right (sign me up!)." + "\n" + "\n" + "Subscribing to an organization " +
-                        "simply allows the app to notify you when there's an event going on and places " +
-                        "that organization on your personal map of Progressive Philadelphia." + "\n" + "\n" +
-                        "Map displays all of the organizations you're subscribed to and allows you to click" +
-                        " on a point to get more information about that organization." + "\n" + "\n" + "List is " +
-                        "another way to choose organizations to subscribe to, using a more conventional design " +
-                        "if Swipes just isn't your style." + "\n" + "\n" + "Click 'Subscribe Now' to get started with " +
-                        "Swipes or 'Subscribe Later' to head over to the Map. You can always review this information " +
-                        "again by clicking on the Help button in the overflow menu.")
+                .setMessage(R.string.dialogMessage)
                 .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {}
                 })
