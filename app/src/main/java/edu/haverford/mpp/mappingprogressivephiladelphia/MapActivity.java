@@ -76,7 +76,7 @@ public class MapActivity extends FragmentActivity implements
         }
 
         setUpMapIfNeeded();
-        getActionBar().setDisplayHomeAsUpEnabled(false); // default is false but necessary to declare false
+        getActionBar().setDisplayHomeAsUpEnabled(false); // necessary to declare false
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); // Town Center Philadelphia, zoom = 12
     }
@@ -139,8 +139,8 @@ public class MapActivity extends FragmentActivity implements
                 currMarker = mMap.addMarker(new MarkerOptions()
                         .position(currentOrg.getLatLng())
                         .title(currentOrg.getGroupName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))); // color for unsubscribed markers
-            }
+                        .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers (
+            } // hue picker: http://www.color-blindness.com/color-name-hue/
 
             OrgMarkerHash.put(currMarker, currentOrg);
         }

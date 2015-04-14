@@ -107,7 +107,7 @@ public class SwipePickerActivity extends Activity implements
                 if (isFirstLeft) {
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
                             .setTitle("Swiped left!")
-                            .setMessage("Swiping organizations to the left makes sure you won't see any information from that organization. You can change these settings in the List view.")
+                            .setMessage("Swiping organizations to the left hides information from those organizations. The organization will appear blue on the map.\n\nYou can change these settings in the List view.")
                             .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) { }
                             })
@@ -128,7 +128,7 @@ public class SwipePickerActivity extends Activity implements
                 if (isFirstRight) {
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
                             .setTitle("Swiped right!")
-                            .setMessage("Swiping organizations to the right makes sure that you can see this organization on the map and get the right info! You can change these settings in the List view.")
+                            .setMessage("Swiping organizations to the right subscribes you to those organizations. The organization will appear yellow on the map.\n\nYou can change these settings in the List view.")
                             .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) { }
                             })
