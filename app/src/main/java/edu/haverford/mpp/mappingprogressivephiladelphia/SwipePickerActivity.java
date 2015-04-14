@@ -94,7 +94,6 @@ public class SwipePickerActivity extends Activity implements
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Log.d("LIST", "removed object!");
                 allOrgs.remove(0);
                 myCardAdapter.notifyDataSetChanged();
             }
@@ -104,14 +103,44 @@ public class SwipePickerActivity extends Activity implements
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
 
+                boolean isFirstLeft = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstLeft", true);
+                if (isFirstLeft) {
+                    new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
+                            .setTitle("Swiped left!")
+                            .setMessage("Swiping organizations to the left makes sure you won't see any information from that organization. You can change these settings in the List view.")
+                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    flingContainer.getTopCardListener().selectLeft();
+                                }
+                            })
+                            .setIcon(R.drawable.ic_launcher)
+                            .show();
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLeft", false).apply();
+                }
+
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 db.insertSubNo(currOrg.id);
-
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
+
+                boolean isFirstRight = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRight", true);
+                if (isFirstRight) {
+                    new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
+                            .setTitle("Swiped right!")
+                            .setMessage("Swiping organizations to the right makes sure that you can see this organization on the map and get the right info! You can change these settings in the List view.")
+                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    flingContainer.getTopCardListener().selectRight();
+                                }
+                            })
+                            .setIcon(R.drawable.ic_launcher)
+                            .show();
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
+                }
+
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 db.insertSubYes(currOrg.id);
@@ -200,7 +229,6 @@ public class SwipePickerActivity extends Activity implements
 
     @OnClick(R.id.left)
     public void left() {
-        System.out.println("HEY THERE");
         boolean isFirstLeft = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstLeft", true);
         if (isFirstLeft) {
             new AlertDialog.Builder(this, R.style.DialogTheme)
