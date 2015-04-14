@@ -109,9 +109,7 @@ public class SwipePickerActivity extends Activity implements
                             .setTitle("Swiped left!")
                             .setMessage("Swiping organizations to the left makes sure you won't see any information from that organization. You can change these settings in the List view.")
                             .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    flingContainer.getTopCardListener().selectLeft();
-                                }
+                                public void onClick(DialogInterface dialog, int which) { }
                             })
                             .setIcon(R.drawable.ic_launcher)
                             .show();
@@ -132,9 +130,7 @@ public class SwipePickerActivity extends Activity implements
                             .setTitle("Swiped right!")
                             .setMessage("Swiping organizations to the right makes sure that you can see this organization on the map and get the right info! You can change these settings in the List view.")
                             .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    flingContainer.getTopCardListener().selectRight();
-                                }
+                                public void onClick(DialogInterface dialog, int which) { }
                             })
                             .setIcon(R.drawable.ic_launcher)
                             .show();
@@ -177,8 +173,8 @@ public class SwipePickerActivity extends Activity implements
             @Override
             public void onScroll(float scrollProgressPercent) {
                 View view = flingContainer.getSelectedView();
-                //view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-                //view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+                view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
+                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
             }
         });
 
