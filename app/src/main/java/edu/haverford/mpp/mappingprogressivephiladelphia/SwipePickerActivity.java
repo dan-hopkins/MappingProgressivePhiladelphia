@@ -79,9 +79,7 @@ public class SwipePickerActivity extends Activity implements
 
         ButterKnife.inject(this);
 
-        // TODO: say this only happens if isPostUpdate is true
-        // TODO: then set isPostUpdate = false
-        // TODO: in updateDatabase, set isPostUpdate = true at the end
+        // TODO: figure out how to prevent cards from getting reshuffled for SwipePickerActivity onCreate AND down in updateDatabase
 
         MyDatabase db = new MyDatabase(this);
 
