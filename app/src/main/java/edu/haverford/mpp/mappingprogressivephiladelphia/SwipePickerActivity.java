@@ -305,7 +305,7 @@ public class SwipePickerActivity extends Activity implements
 
     public void getSwipeHelp() {
         new AlertDialog.Builder(this, R.style.DialogTheme)
-                .setTitle("Welcome to Mapping Progressive Philadelphia!")
+                .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
                 .setMessage(R.string.dialogMessage)
                 .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {}

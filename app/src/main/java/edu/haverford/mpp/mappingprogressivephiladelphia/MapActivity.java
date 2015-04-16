@@ -245,7 +245,7 @@ public class MapActivity extends FragmentActivity implements
             } else {
                 updateDatabase();
                 new AlertDialog.Builder(this, R.style.DialogTheme)
-                        .setTitle("Welcome to Mapping Progressive Philadelphia!")
+                        .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
                         .setMessage(R.string.dialogMessage)
                         .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -267,7 +267,7 @@ public class MapActivity extends FragmentActivity implements
 
     public void getMapHelp() {
         new AlertDialog.Builder(this, R.style.DialogTheme)
-                .setTitle("Welcome to Mapping Progressive Philadelphia!")
+                .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
                 .setMessage(R.string.dialogMessage)
                 .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

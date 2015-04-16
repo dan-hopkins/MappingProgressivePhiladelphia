@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MPPhilly</string>
+    <string name="app_name">PAVE</string>
     <string name="title_activity_map">Map</string>
     <string name="help">Help</string>
     <string name="map">Map</string>
@@ -11,6 +11,5 @@
     <string name="OrgListActivity">Organization List</string>
     <string name="facebook_app_id">1392253821092727</string>
     <string name="dialogMessage">Click \'Subscribe Now\' to start looking through the organizations in our database or click \'Subscribe Later\' to check out your map of Philly!\n\nYou can always review this information again by clicking on the Help button in the overflow menu.</string>
-    <string name="oldDialogMessage">This app is made up of three parts: Swipes, Map, and List.\n\nSwipes offers a Tinder-style interface for choosing organizations that you\'d like to subscribe to and learn more about.  Just swipe the cards left (no thanks!) or right (sign me up!).\n \n Subscribing to an organization simply allows the app to notify you when there\'s an event going on and places that organization on your personal map of Progressive Philadelphia. \n \n Map displays all of the organizations you\'re subscribed to and allows you to click on a point to get more information about that organization. \n \n List is another way to choose organizations to subscribe to, using a more conventional design if Swipes just isn\'t your style. \n \n Click \'Subscribe Now\' to get started with Swipes or \'Subscribe Later\' to head over to the Map. You can always review this information again by clicking on the Help button in the overflow menu. </string>
 
 </resources>
