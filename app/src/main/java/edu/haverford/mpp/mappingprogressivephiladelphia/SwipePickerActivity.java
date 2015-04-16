@@ -79,6 +79,10 @@ public class SwipePickerActivity extends Activity implements
 
         ButterKnife.inject(this);
 
+        // TODO: say this only happens if isPostUpdate is true
+        // TODO: then set isPostUpdate = false
+        // TODO: in updateDatabase, set isPostUpdate = true at the end
+
         MyDatabase db = new MyDatabase(this);
 
         //al = db.getAllOrganizationNames();
