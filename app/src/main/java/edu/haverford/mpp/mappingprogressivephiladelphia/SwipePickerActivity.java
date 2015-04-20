@@ -6,22 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -39,11 +30,7 @@ import com.google.maps.model.Geometry;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,6 +50,8 @@ public class SwipePickerActivity extends Activity implements
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+
+    public int facebookCardCount = 0;
 
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
@@ -102,6 +91,7 @@ public class SwipePickerActivity extends Activity implements
 
             @Override
             public void onLeftCardExit(Object dataObject) {
+                facebookCardCount++;
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
 
@@ -118,6 +108,18 @@ public class SwipePickerActivity extends Activity implements
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLeft", false).apply();
                 }
 
+                if (facebookCardCount ==5){
+                    new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
+                            .setTitle("Facebook")
+                            .setMessage("Can we access FB")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) { }
+                            })
+                            .setIcon(R.drawable.ic_launcher)
+                            .show();
+
+                }
+
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 db.insertSubNo(currOrg.id);
@@ -125,6 +127,8 @@ public class SwipePickerActivity extends Activity implements
 
             @Override
             public void onRightCardExit(Object dataObject) {
+                facebookCardCount++;
+
 
                 boolean isFirstRight = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRight", true);
                 if (isFirstRight) {
@@ -138,6 +142,19 @@ public class SwipePickerActivity extends Activity implements
                             .show();
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
                 }
+
+                if (facebookCardCount ==5){
+                    new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
+                            .setTitle("Facebook")
+                            .setMessage("Can we access FB")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) { }
+                            })
+                            .setIcon(R.drawable.ic_launcher)
+                            .show();
+
+                }
+
 
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
