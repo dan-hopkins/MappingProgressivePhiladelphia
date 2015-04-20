@@ -30,27 +30,13 @@
             android:src="@drawable/default_pic"
             android:background="#B0C4DE"
             android:maxWidth="@dimen/com_facebook_profilepictureview_preset_size_large"
-            android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large" />
+            android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large"
+            android:layout_gravity="bottom" /><![CDATA[
 
 
         />
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/orgname"
-            android:textSize="30sp"
-            android:background= "#B0C4DE"
-            android:layout_marginTop="0dp"
-            android:textAlignment="center"
-            android:includeFontPadding="false"
-            android:gravity="center"
-            android:layout_weight=".2"
-            android:padding="0dp"
-            android:singleLine="false"
-            android:layout_marginBottom="4dp"
-            android:maxLines="4"
-            />
+        ]]>
 
         <ImageView
             android:id="@+id/item_swipe_right_indicator"
@@ -74,6 +60,23 @@
             android:adjustViewBounds="true"
             android:layout_gravity="left"
             android:src="@drawable/yup"
+            />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/orgname"
+            android:textSize="30sp"
+            android:background= "#B0C4DE"
+            android:layout_marginTop="0dp"
+            android:textAlignment="center"
+            android:includeFontPadding="false"
+            android:gravity="center"
+            android:layout_weight=".2"
+            android:padding="0dp"
+            android:singleLine="false"
+            android:layout_marginBottom="4dp"
+            android:maxLines="4"
             />
 
 
