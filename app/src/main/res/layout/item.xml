@@ -36,7 +36,7 @@
         />
 
         <TextView
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:id="@+id/orgname"
             android:textSize="30sp"
@@ -68,7 +68,7 @@
             android:id="@+id/item_swipe_left_indicator"
             android:alpha="0"
             android:rotation="-20"
-            android:layout_width="70dp"
+            android:layout_width="fill_parent"
             android:layout_height="70dp"
             android:layout_margin="30dp"
             android:adjustViewBounds="true"
