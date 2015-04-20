@@ -60,6 +60,7 @@ public class SwipePickerActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
+
         mGoogleApiClient = new GoogleApiClient.Builder(this) // set up google api for location
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -115,12 +116,21 @@ public class SwipePickerActivity extends Activity implements
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("checkedForFB", true).apply();
 
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
-                            .setTitle("Facebook")
-                            .setMessage("Can we access FB")
+                            .setTitle("Want Events?")
+                            .setMessage("If you log into Facebook, PAVE will automatically include event data from your subscribed organizations. Don't worry though, we won't post anything to Facebook!")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) { }
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    Intent intent = new Intent(getApplicationContext(), FacebookLogin.class);
+                                    startActivity(intent);
+                                    }
                             })
                             .setIcon(R.drawable.ic_launcher)
+                            .setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            })
                             .show();
 
                 }
@@ -145,6 +155,7 @@ public class SwipePickerActivity extends Activity implements
                                 public void onClick(DialogInterface dialog, int which) { }
                             })
                             .setIcon(R.drawable.ic_launcher)
+
                             .show();
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
                 }
@@ -156,9 +167,17 @@ public class SwipePickerActivity extends Activity implements
                             .setTitle("Want Events?")
                             .setMessage("If you log into Facebook, PAVE will automatically include event data from your subscribed organizations. Don't worry though, we won't post anything to Facebook!")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) { }
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    Intent intent = new Intent(getApplicationContext(), FacebookLogin.class);
+                                    startActivity(intent);
+                                }
                             })
                             .setIcon(R.drawable.ic_launcher)
+                            .setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            return;
+                                        }})
                             .show();
 
                 }
@@ -168,6 +187,8 @@ public class SwipePickerActivity extends Activity implements
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 db.insertSubYes(currOrg.id);
             }
+
+
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
