@@ -145,8 +145,8 @@ public class SwipePickerActivity extends Activity implements
 
                 if (facebookCardCount ==5){
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
-                            .setTitle("Facebook")
-                            .setMessage("Can we access FB")
+                            .setTitle("Want Events?")
+                            .setMessage("If you log into Facebook, PAVE will automatically include event data from your subscribed organizations. Don't worry though, we won't post anything to Facebook!")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) { }
                             })
