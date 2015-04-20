@@ -96,6 +96,9 @@ public class SwipePickerActivity extends Activity implements
                 //If you want to use it just cast it (String) dataObject
 
                 boolean isFirstLeft = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstLeft", true);
+                boolean checkedForFB = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("checkedForFB", false);
+
+
                 if (isFirstLeft) {
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
                             .setTitle("Swiped left!")
@@ -108,7 +111,9 @@ public class SwipePickerActivity extends Activity implements
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLeft", false).apply();
                 }
 
-                if (facebookCardCount ==5){
+                if (facebookCardCount ==5 & !checkedForFB){
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("checkedForFB", true).apply();
+
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
                             .setTitle("Facebook")
                             .setMessage("Can we access FB")
@@ -129,6 +134,7 @@ public class SwipePickerActivity extends Activity implements
             public void onRightCardExit(Object dataObject) {
                 facebookCardCount++;
 
+                boolean checkedForFB = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("checkedForFB", false);
 
                 boolean isFirstRight = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRight", true);
                 if (isFirstRight) {
@@ -143,7 +149,9 @@ public class SwipePickerActivity extends Activity implements
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
                 }
 
-                if (facebookCardCount ==5){
+                if (facebookCardCount ==5 & !checkedForFB ){
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("checkedForFB", true).apply();
+
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
                             .setTitle("Want Events?")
                             .setMessage("If you log into Facebook, PAVE will automatically include event data from your subscribed organizations. Don't worry though, we won't post anything to Facebook!")
