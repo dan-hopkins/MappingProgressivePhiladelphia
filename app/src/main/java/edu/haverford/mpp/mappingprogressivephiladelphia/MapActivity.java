@@ -210,8 +210,8 @@ public class MapActivity extends FragmentActivity implements
             case R.id.update_db:
                 updateDatabase();
                 break;
-            case R.id.facebook_login:
-                intent = new Intent(getApplicationContext(), OrgListActivity.class);
+            case R.id.Facebook:
+                intent = new Intent(getApplicationContext(), FacebookLogin.class);
                 startActivity(intent);
 
         }
