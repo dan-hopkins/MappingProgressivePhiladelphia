@@ -5,34 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.ProfilePictureView;
 import com.squareup.picasso.Picasso;
 
 
 public class OrganizationInfoActivity extends Activity {
 
     int currentOrgID;
-    private ProfilePictureView profilePictureView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Session session = Session.getActiveSession(); // Check for an open session
-        if (session != null && session.isOpened()) {
-            makeMeRequest(session); // Get the user's data
-        }
 
         setContentView(R.layout.organization_info);
 
@@ -44,7 +31,7 @@ public class OrganizationInfoActivity extends Activity {
 
         ImageView image = (ImageView)findViewById(R.id.org_info_pic);
         Picasso.with(this)
-                .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?type=large")
+                .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=99999")
                 .placeholder(R.drawable.default_pic)
                 .into(image);
 
@@ -84,39 +71,6 @@ public class OrganizationInfoActivity extends Activity {
 
     }
 
-    private void makeMeRequest(final Session session) {
-        Request request = Request.newMeRequest(session, // Make an API call to get user data and define a new callback to handle the response
-                new Request.GraphUserCallback() {
-                    @Override
-                    public void onCompleted(GraphUser user, Response response) {
-                        if (session == Session.getActiveSession()) { // If the response is successful
-                            if (user != null) {
-                                // Set the id for the ProfilePictureView view that in turn displays the profile picture
-                                profilePictureView.setVisibility(View.VISIBLE);
-                                profilePictureView.setProfileId(user.getId());
-                            }
-                        }
-                        if (response.getError() != null) {
-                            // Handle errors, will do so later.
-                        }
-                    }
-                });
-        request.executeAsync();
-    }
-
-    private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
-        if (session != null && session.isOpened()) {
-            makeMeRequest(session); // Get the user's data
-        }
-    }
-
-    private UiLifecycleHelper uiHelper;
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(final Session session, final SessionState state, final Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { // adds items to the action bar

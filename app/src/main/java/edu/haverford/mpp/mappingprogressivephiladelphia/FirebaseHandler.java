@@ -2,7 +2,6 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.content.Context;
 
-import com.facebook.android.Facebook;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
