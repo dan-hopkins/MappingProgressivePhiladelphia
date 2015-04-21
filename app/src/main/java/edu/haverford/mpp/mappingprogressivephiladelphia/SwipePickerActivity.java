@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -60,6 +62,8 @@ public class SwipePickerActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
 
         mGoogleApiClient = new GoogleApiClient.Builder(this) // set up google api for location
                 .addConnectionCallbacks(this)
@@ -95,6 +99,10 @@ public class SwipePickerActivity extends Activity implements
                 facebookCardCount++;
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
+
+
+
+
 
                 boolean isFirstLeft = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstLeft", true);
                 boolean checkedForFB = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("checkedForFB", false);
@@ -175,9 +183,10 @@ public class SwipePickerActivity extends Activity implements
                             })
                             .setIcon(R.drawable.ic_launcher)
                             .setNegativeButton("Later", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            return;
-                                        }})
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            })
                             .show();
 
                 }
