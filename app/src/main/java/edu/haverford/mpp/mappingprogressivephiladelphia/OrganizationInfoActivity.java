@@ -8,12 +8,14 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
 import com.squareup.picasso.Picasso;
 
 
 public class OrganizationInfoActivity extends Activity {
 
-    int currentOrgID;
+    // TODO: Delete this activity
+    /*int currentOrgID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +67,9 @@ public class OrganizationInfoActivity extends Activity {
             distance.append(Float.toString(p) + "mi");
         }
 
-        /*// Find the user's profile picture custom view
-        profilePictureView = (ProfilePictureView)findViewById(R.id.selection_profile_pic);
-        profilePictureView.setCropped(true);*/
+        // Find the user's profile picture custom view
+        //profilePictureView = (ProfilePictureView)findViewById(R.id.selection_profile_pic);
+        //profilePictureView.setCropped(true);
 
     }
 
@@ -86,5 +88,5 @@ public class OrganizationInfoActivity extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

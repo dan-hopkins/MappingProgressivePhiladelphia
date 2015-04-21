@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.Geometry;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,7 +155,7 @@ public class MapActivity extends FragmentActivity implements
             public void onInfoWindowClick(Marker marker) {
                 PhillyOrg currOrg = OrgMarkerHash.get(marker);
                 float myDist;
-                if (!mLastLocation.equals(null)) {
+                if (!mLastLocation.equals(null)) { // TODO: I keep getting null pointer exceptions every once in a while here
                     myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371; // convert between meters and miles
                 }
                 else
@@ -163,17 +165,79 @@ public class MapActivity extends FragmentActivity implements
                 intent.putExtra("OrgID", currOrg.getId());
                 intent.putExtra("OrgDist", myDist);
                 startActivity(intent);*/
-                // custom dialog
-                final Dialog dialog = new Dialog(getApplicationContext());
-                dialog.setContentView(R.layout.organization_info);
-                dialog.setTitle("Title...");
+                // originally for organizationinfoactivity
 
-                // set the custom dialog components - text, image and button
-                TextView text = (TextView) dialog.findViewById(R.id.orgname);
-                text.setText("OrgActivity");
-                ImageView image = (ImageView) dialog.findViewById(R.id.image);
-                image.setImageResource(R.drawable.ic_launcher);
+
+                // custom dialog
+                final Dialog dialog = new Dialog(MapActivity.this);
+                dialog.setContentView(R.layout.organization_info);
+                dialog.setTitle(currOrg.getGroupName());
+
+                ImageView image = (ImageView)dialog.findViewById(R.id.org_info_pic);
+                Picasso.with(MapActivity.this)
+                        .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=99999")
+                        .placeholder(R.drawable.default_pic)
+                        .into(image);
+
+                TextView issue = (TextView)dialog.findViewById(R.id.org_issue);
+                issue.append(currOrg.getSocialIssues());
+
+                TextView mission = (TextView)dialog.findViewById(R.id.org_mission);
+                mission.append(currOrg.getMission());
+
+                TextView subscribed = (TextView)dialog.findViewById(R.id.org_subscribed);
+                if (currOrg.getSubscribed()) {
+                    subscribed.append("Yes");
+                } else {
+                    subscribed.append("No");
+                }
+
+                TextView address = (TextView)dialog.findViewById(R.id.org_address);
+                address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
+
+                TextView distance = (TextView)dialog.findViewById(R.id.my_distance);
+                //float myDist = intent.getFloatExtra("OrgDist", (float)-1.0);
+                if (myDist == (float)-1.0){
+                    distance.append("Currently Unknown");
+                }
+                else{
+                    float p = Math.round(myDist * 10) / 10;
+                    distance.setText(Float.toString(p) + " miles from current location");
+                }
+
+                Button closeButton = (Button) dialog.findViewById(R.id.closeButton);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                final int number = currOrg.getId();
+
+                final Button subButton = (Button) dialog.findViewById(R.id.subButton);
+                if (currOrg.getSubscribed()) {
+                    subButton.setText("Unsubscribe");
+                } else {
+                    subButton.setText("Subscribe");
+                }
+                subButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyDatabase db = new MyDatabase(getApplicationContext());
+                        if (subButton.getText() == "Subscribe") {
+                            db.insertSubYes(number);
+                        } else {
+                            db.insertSubNo(number);
+                        }
+                        // setUpMap(); // TODO: This breaks it, and as it is, to see sub changes, you have to leave activity and come back
+                        //db.close();
+                        dialog.dismiss();
+                    }
+                });
+
                 dialog.show();
+
             }
 
         });

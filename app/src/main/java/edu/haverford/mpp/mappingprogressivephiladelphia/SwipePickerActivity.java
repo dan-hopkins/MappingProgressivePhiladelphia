@@ -2,6 +2,7 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
@@ -30,6 +34,7 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.Geometry;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -203,8 +208,7 @@ public class SwipePickerActivity extends Activity implements
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 new AlertDialog.Builder(SwipePickerActivity.this)
                         .setTitle("We're running out of organizations to show you!")
-                        .setMessage("Go to the map to see all of your organizations and get some more information about them!"
-                        + "\n" + "\n" + "Or you can head over to your list of organizations and manage them in a more conventional way.")
+                        .setMessage("Go to the map to see all of your organizations and get some more information about them!\n\nOr you can head over to your list of organizations and manage them in a more conventional way.")
                         .setPositiveButton("Organization List", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
@@ -248,10 +252,81 @@ public class SwipePickerActivity extends Activity implements
                 else
                     myDist = (float)-1.0;
 
-                Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
+                /*Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", currOrg.getId());
                 intent.putExtra("OrgDist", myDist);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                // custom dialog
+                final Dialog dialog = new Dialog(SwipePickerActivity.this);
+                dialog.setContentView(R.layout.organization_info);
+                dialog.setTitle(currOrg.getGroupName());
+
+                ImageView image = (ImageView)dialog.findViewById(R.id.org_info_pic);
+                Picasso.with(SwipePickerActivity.this)
+                        .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=99999")
+                        .placeholder(R.drawable.default_pic)
+                        .into(image);
+
+                TextView issue = (TextView)dialog.findViewById(R.id.org_issue);
+                issue.append(currOrg.getSocialIssues());
+
+                TextView mission = (TextView)dialog.findViewById(R.id.org_mission);
+                mission.append(currOrg.getMission());
+
+                TextView subscribed = (TextView)dialog.findViewById(R.id.org_subscribed);
+                if (currOrg.getSubscribed()) {
+                    subscribed.append("Yes");
+                } else {
+                    subscribed.append("No");
+                }
+
+                TextView address = (TextView)dialog.findViewById(R.id.org_address);
+                address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
+
+                TextView distance = (TextView)dialog.findViewById(R.id.my_distance);
+                //float myDist = intent.getFloatExtra("OrgDist", (float)-1.0);
+                if (myDist == (float)-1.0){
+                    distance.append("Currently Unknown");
+                }
+                else{
+                    float p = Math.round(myDist * 10) / 10;
+                    distance.setText(Float.toString(p) + " miles from current location");
+                }
+
+                Button closeButton = (Button) dialog.findViewById(R.id.closeButton);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                final int number = currOrg.getId();
+
+                final Button subButton = (Button) dialog.findViewById(R.id.subButton);
+                if (currOrg.getSubscribed()) {
+                    subButton.setText("Unsubscribe");
+                } else {
+                    subButton.setText("Subscribe");
+                }
+                subButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyDatabase db = new MyDatabase(getApplicationContext());
+                        if (subButton.getText() == "Subscribe") {
+                            db.insertSubYes(number);
+                            // TODO: this should auto-swipe the organization to the right
+                        } else {
+                            db.insertSubNo(number);
+                        }
+                        // setUpMap(); // TODO: This breaks it, and as it is, to see sub changes, you have to leave activity and come back
+                        //db.close();
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
