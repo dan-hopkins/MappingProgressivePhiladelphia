@@ -16,6 +16,9 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
@@ -156,10 +159,21 @@ public class MapActivity extends FragmentActivity implements
                 else
                     myDist = (float)-1.0;
 
-                Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
+                /*Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
                 intent.putExtra("OrgID", currOrg.getId());
                 intent.putExtra("OrgDist", myDist);
-                startActivity(intent);
+                startActivity(intent);*/
+                // custom dialog
+                final Dialog dialog = new Dialog(getApplicationContext());
+                dialog.setContentView(R.layout.organization_info);
+                dialog.setTitle("Title...");
+
+                // set the custom dialog components - text, image and button
+                TextView text = (TextView) dialog.findViewById(R.id.orgname);
+                text.setText("OrgActivity");
+                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+                image.setImageResource(R.drawable.ic_launcher);
+                dialog.show();
             }
 
         });
