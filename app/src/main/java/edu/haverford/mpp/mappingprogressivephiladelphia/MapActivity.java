@@ -153,8 +153,10 @@ public class MapActivity extends FragmentActivity implements
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                PhillyOrg currOrg = OrgMarkerHash.get(marker);
+                final PhillyOrg currOrg = OrgMarkerHash.get(marker);
                 float myDist;
+                Log.w("ProblemWithNullPointers", "mLastLocation = " + mLastLocation.toString());
+
                 if (!mLastLocation.equals(null)) { // TODO: I keep getting null pointer exceptions every once in a while here
                     myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371; // convert between meters and miles
                 }
@@ -209,6 +211,7 @@ public class MapActivity extends FragmentActivity implements
                 closeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        setUpMap();
                         dialog.dismiss();
                     }
                 });
@@ -227,10 +230,13 @@ public class MapActivity extends FragmentActivity implements
                         MyDatabase db = new MyDatabase(getApplicationContext());
                         if (subButton.getText() == "Subscribe") {
                             db.insertSubYes(number);
+                            currOrg.setSubscribed(true);
+                            subButton.setText("Unsubscribe");
                         } else {
                             db.insertSubNo(number);
+                            currOrg.setSubscribed(false);
+                            subButton.setText("Subscribe");
                         }
-                        // setUpMap(); // TODO: This breaks it, and as it is, to see sub changes, you have to leave activity and come back
                         //db.close();
                         dialog.dismiss();
                     }

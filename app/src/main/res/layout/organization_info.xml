@@ -1,93 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:background="#B0C4DE"
-    android:layout_height="match_parent" >
-<LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:background="#B0C4DE"
     android:weightSum="1">
-
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:id="@+id/org_info_pic"
-        android:src="@drawable/default_pic"
-        android:scaleType="fitStart"
-        android:layout_gravity="center_horizontal"
-        android:adjustViewBounds="true"
-        android:layout_marginBottom="15dp"
-        android:cropToPadding="false"
-        android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large" />
-
-    <!--<com.facebook.widget.ProfilePictureView
-        android:id="@+id/selection_profile_pic"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:visibility="invisible"
-        />-->
-
-    <!-- the Name textview had layout_width="192dp" for some reason -->
-    <!-- android:layout_marginTop="10dp" is what padding used to be -->
-
-    <!--<TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Name: "
-        android:id="@+id/org_group_name"
-        android:layout_marginTop="10dp"
-     />-->
+        android:layout_height="match_parent"
+        android:layout_weight=".95">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:weightSum="1">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Relevant Issues: "
-        android:id="@+id/org_issue"
-        android:layout_marginTop="10dp"
-   />
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:id="@+id/org_info_pic"
+                android:src="@drawable/default_pic"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:layout_marginBottom="15dp"
+                android:cropToPadding="false"
+                android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mission: "
-        android:id="@+id/org_mission"
-        android:layout_marginTop="10dp"
-     />
+            <!--<com.facebook.widget.ProfilePictureView
+                android:id="@+id/selection_profile_pic"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:visibility="invisible"
+                />-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Subscribed: "
-        android:id="@+id/org_subscribed"
-        android:layout_marginTop="10dp"
-    />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Relevant Issues: "
+                android:id="@+id/org_issue"
+                android:layout_marginTop="10dp"
+                />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Address: "
-        android:id="@+id/org_address"
-        android:layout_marginTop="10dp"
-        />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mission: "
+                android:id="@+id/org_mission"
+                android:layout_marginTop="10dp"
+                />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Distance from me: "
-        android:id="@+id/my_distance"
-        android:layout_marginTop="10dp"
-    />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subscribed: "
+                android:id="@+id/org_subscribed"
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address: "
+                android:id="@+id/org_address"
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distance from me: "
+                android:id="@+id/my_distance"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_weight=".05"
+        android:padding="5dp"
         android:weightSum="2">
 
         <Button
@@ -108,8 +107,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="5dp"
             />
-        </LinearLayout>
-
-
+    </LinearLayout>
 </LinearLayout>
-</ScrollView>
+
