@@ -6,17 +6,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmQuery;
 
 
 public class FacebookLogin extends Activity {
@@ -24,12 +33,22 @@ public class FacebookLogin extends Activity {
 
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+    private Realm realm;
+    public String event_name = "name";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        realm = Realm.getInstance(this);
+
+
+        //FacebookSdk.sdkInitialize(this.getApplicationContext());
+
+        if(!FacebookSdk.isInitialized()) {
+            FacebookSdk.sdkInitialize(this.getApplicationContext());
+        }
+
         setContentView(R.layout.activity_facebook_login);
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -38,14 +57,51 @@ public class FacebookLogin extends Activity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                System.out.println("onSuccess");
-                Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_SHORT).show();
+
+                String gp = "/61159665895/events";
+                Bundle parameter = new Bundle();
+                parameter.putString("fields", "id,name,link");
+                realm.beginTransaction();
+                GraphRequest r = GraphRequest.newGraphPathRequest(loginResult.getAccessToken(), gp, new GraphRequest.Callback() {
+                            @Override
+                            public void onCompleted(GraphResponse graphResponse) {
+                                    System.out.println("InsideGraphResponse");
+                                    JSONObject obj = graphResponse.getJSONObject();
+                                    TextView view = (TextView)findViewById(R.id.login_text);
+                                try {
+                                    JSONArray a = obj.getJSONArray("data");
+                                    event_name = a.get(0).toString();
+                                    view.setText(event_name);
+
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                                System.out.println(graphResponse.getJSONObject().names());
+                                OrgEvent event = realm.createObject(OrgEvent.class);
+                                event.setName(event_name);
+                                realm.commitTransaction();
+                            }
+                        }
+                );
+                r.executeAsync();
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,link,picture");
+                RealmQuery<OrgEvent> event = realm.where(OrgEvent.class);
+                OrgEvent x = event.findFirst();
+                //TextView view = (TextView)findViewById(R.id.login_text);
+                //view.setText(x.getName());
+                //Toast.makeText(getApplicationContext(), x.getName(), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onCancel() {
                 System.out.println("onCancel");
             }
+
+
 
             @Override
             public void onError(FacebookException exception) {

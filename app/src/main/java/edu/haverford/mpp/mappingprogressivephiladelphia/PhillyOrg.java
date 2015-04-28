@@ -3,14 +3,6 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.Geometry;
-
-import org.w3c.dom.Text;
-
-import java.security.acl.Group;
 
 /**
  * Created by BrianG on 3/3/2015.
@@ -31,6 +23,7 @@ public class PhillyOrg {
     double Longitude;
     double Latitude;
     String FacebookID;
+    String Event;
 
     public String getFacebookID() {
         return FacebookID;

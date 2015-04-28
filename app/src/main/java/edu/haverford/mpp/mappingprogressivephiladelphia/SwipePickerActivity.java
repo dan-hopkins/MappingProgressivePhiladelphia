@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -42,6 +41,7 @@ import java.util.Collections;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import io.realm.Realm;
 
 public class SwipePickerActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -59,6 +59,9 @@ public class SwipePickerActivity extends Activity implements
     private Location mLastLocation;
 
     public int facebookCardCount = 0;
+
+    private Realm realm;
+
 
     @InjectView(R.id.frame) SwipeFlingAdapterView flingContainer;
 
@@ -283,6 +286,11 @@ public class SwipePickerActivity extends Activity implements
 
                 TextView address = (TextView)dialog.findViewById(R.id.org_address);
                 address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
+
+                TextView event = (TextView)dialog.findViewById(R.id.event);
+                //OrgEvent event_info = realm.createObject(OrgEvent.class);
+                //event_info.setName("name");
+                event.setText("name");//event_info.getName().toString());
 
                 TextView distance = (TextView)dialog.findViewById(R.id.my_distance);
                 //float myDist = intent.getFloatExtra("OrgDist", (float)-1.0);
