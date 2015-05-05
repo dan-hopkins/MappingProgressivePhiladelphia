@@ -26,6 +26,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 
 public class FacebookLogin extends Activity {
@@ -34,7 +35,7 @@ public class FacebookLogin extends Activity {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private Realm realm;
-    public String event_name = "name";
+    public String event = "name";
 
 
     @Override
@@ -65,35 +66,43 @@ public class FacebookLogin extends Activity {
                 GraphRequest r = GraphRequest.newGraphPathRequest(loginResult.getAccessToken(), gp, new GraphRequest.Callback() {
                             @Override
                             public void onCompleted(GraphResponse graphResponse) {
-                                    System.out.println("InsideGraphResponse");
-                                    JSONObject obj = graphResponse.getJSONObject();
-                                    TextView view = (TextView)findViewById(R.id.login_text);
+                                //GraphResponse contains the data we asked for from Facebook, as well as a response code
+                                JSONObject query_result = graphResponse.getJSONObject();
+                                TextView view = (TextView) findViewById(R.id.login_text);
                                 try {
-                                    JSONArray a = obj.getJSONArray("data");
-                                    event_name = a.get(0).toString();
-                                    view.setText(event_name);
+                                    //Taking the JSONArray that contains the response code + raw data,
+                                    // and getting an array of just the data
+                                    JSONArray query_data = query_result.getJSONArray("data");
+                                    //Querying for the first (which is the most recent) event
+                                    JSONObject event = query_data.getJSONObject(0);
+                                    //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
+                                    //This ID is a separate event_ID that must be queried to get event description
+                                    view.setText(event.get("name").toString());
+                                    OrgEvent realm_event = realm.createObject(OrgEvent.class);
+                                    realm_event.setName((String) event.get("name"));
+                                    realm_event.setStartTime("start");
+                                    realm.commitTransaction();
 
 
                                 } catch (JSONException e) {
+                                    view.setText(graphResponse.toString());
+                                    view.setText("error");
                                     e.printStackTrace();
                                 }
 
-
                                 System.out.println(graphResponse.getJSONObject().names());
-                                OrgEvent event = realm.createObject(OrgEvent.class);
-                                event.setName(event_name);
-                                realm.commitTransaction();
+
                             }
                         }
                 );
                 r.executeAsync();
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,link,picture");
-                RealmQuery<OrgEvent> event = realm.where(OrgEvent.class);
-                OrgEvent x = event.findFirst();
-                //TextView view = (TextView)findViewById(R.id.login_text);
-                //view.setText(x.getName());
-                //Toast.makeText(getApplicationContext(), x.getName(), Toast.LENGTH_LONG).show();
+
+                RealmQuery<OrgEvent> test_query = realm.where(OrgEvent.class);
+                test_query.equalTo("StartTime", "Start");
+                RealmResults<OrgEvent> result1 = test_query.findAll();
+                //TextView view = (TextView) findViewById(R.id.login_text);
+                //view.setText(result1.toString());
+
             }
 
             @Override
@@ -110,6 +119,45 @@ public class FacebookLogin extends Activity {
         });
     }
 
+    public void queryFacebookEvent(String facebookid, LoginResult login){
+
+
+        String graphpath = facebookid+"/events";
+        Bundle parameter = new Bundle();
+        parameter.putString("fields", "id,name,link");
+        realm.beginTransaction();
+        GraphRequest r = GraphRequest.newGraphPathRequest(login.getAccessToken(), graphpath, new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        JSONObject query_result = graphResponse.getJSONObject();
+                        TextView view = (TextView)findViewById(R.id.login_text);
+                        try {
+                            //Taking the JSONArray that contains the response code + raw data,
+                            // and getting an array of just the data
+                            JSONArray query_data = query_result.getJSONArray("data");
+                            //Querying for the first (which is the most recent) event
+                            JSONObject event = query_data.getJSONObject(0);
+                            //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
+                            //This ID is a separate event_ID that must be queried to get event description
+                            view.setText(event.get("name").toString());
+
+
+                        } catch (JSONException e) {
+                            view.setText(graphResponse.toString());
+                            view.setText("error");
+                            e.printStackTrace();
+                        }
+
+                        OrgEvent event = realm.createObject(OrgEvent.class);
+                        event.setName(FacebookLogin.this.event);
+                        realm.commitTransaction();
+                    }
+                }
+        );
+        r.executeAsync();
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -118,49 +166,6 @@ public class FacebookLogin extends Activity {
     }
 
 
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_facebook_login);
-
-
-    }
-
-    @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.splash, container, false);
-
-        loginButton = (LoginButton) view.findViewById(R.id.facebook_login);
-        loginButton.setReadPermissions("user_friends");
-        // If using in a fragment
-        loginButton.setFragment(this);
-        // Other app specific specialization
-
-        // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // App code
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
-    }
-
-    */
 
 
     @Override
