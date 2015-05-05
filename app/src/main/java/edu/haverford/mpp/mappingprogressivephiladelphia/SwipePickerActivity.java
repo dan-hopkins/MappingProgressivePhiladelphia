@@ -124,6 +124,7 @@ public class SwipePickerActivity extends Activity implements
                                 public void onClick(DialogInterface dialog, int which) { }
                             })
                             .setIcon(R.drawable.ic_launcher)
+                            .setCancelable(false)
                             .show();
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLeft", false).apply();
                 }
@@ -147,6 +148,7 @@ public class SwipePickerActivity extends Activity implements
                                     return;
                                 }
                             })
+                            .setCancelable(false)
                             .show();
 
                 }
@@ -171,7 +173,7 @@ public class SwipePickerActivity extends Activity implements
                                 public void onClick(DialogInterface dialog, int which) { }
                             })
                             .setIcon(R.drawable.ic_launcher)
-
+                            .setCancelable(false)
                             .show();
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
                 }
@@ -195,6 +197,7 @@ public class SwipePickerActivity extends Activity implements
                                     return;
                                 }
                             })
+                            .setCancelable(false)
                             .show();
 
                 }
@@ -206,32 +209,37 @@ public class SwipePickerActivity extends Activity implements
             }
 
 
-
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                new AlertDialog.Builder(SwipePickerActivity.this)
-                        .setTitle("We're running out of organizations to show you!")
-                        .setMessage("Go to the map to see all of your organizations and get some more information about them!\n\nOr you can head over to your list of organizations and manage them in a more conventional way.")
-                        .setPositiveButton("Organization List", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
-                                startActivity(intent);
+                int outOfOrgs = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getInt("outOfOrgs", 3);
+                if (outOfOrgs > 0) {
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putInt("outOfOrgs", outOfOrgs-1).apply();
+                } else {
+                    new AlertDialog.Builder(SwipePickerActivity.this)
+                            .setTitle("You've looked through all of the organizations!")
+                            .setMessage("Go to the map to see all of your organizations and get some more information about them!\n\nOr you can head over to your list of organizations and manage them in a more conventional way.")
+                            .setPositiveButton("Organization List", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                                    startActivity(intent);
                                 /*MyDatabase db = new MyDatabase(SwipePickerActivity.this);
                                 allOrgs = db.getAllOrganizations();
                                 Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
                                 myCardAdapter = new ArrayAdapter<PhillyOrg> (SwipePickerActivity.this, R.layout.item, R.id.orgname, allOrgs);
                                 flingContainer.setAdapter(myCardAdapter);
                                 myCardAdapter.notifyDataSetChanged();*/
-                            }
-                        })
-                        .setNegativeButton("Map", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                                }
+                            })
+                            .setNegativeButton("Map", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setCancelable(false)
+                            .show();
+                }
             }
 
             @Override
@@ -342,54 +350,13 @@ public class SwipePickerActivity extends Activity implements
 
     @OnClick(R.id.right)
     public void right() {
-        boolean isFirstRight = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRight", true);
-        if (isFirstRight) {
-            new AlertDialog.Builder(this, R.style.DialogTheme)
-                    .setTitle("Are you sure")
-                    .setMessage("really?")
-                    .setPositiveButton("Yeah I'm sure", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            flingContainer.getTopCardListener().selectRight();
-                        }
-                    })
-                    .setNegativeButton("No actually wait", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) { }
-                    })
-                    .setIcon(R.drawable.ic_launcher)
-                    .show();
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
-        } else {
-            flingContainer.getTopCardListener().selectRight();
-        }
+        flingContainer.getTopCardListener().selectRight();
     }
 
     @OnClick(R.id.left)
     public void left() {
-        boolean isFirstLeft = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstLeft", true);
-        if (isFirstLeft) {
-            new AlertDialog.Builder(this, R.style.DialogTheme)
-                    .setTitle("Are you sure L")
-                    .setMessage("really L")
-                    .setPositiveButton("Yeah I'm sure", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            flingContainer.getTopCardListener().selectLeft();
-                        }
-                    })
-                    .setNegativeButton("No actually wait", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) { }
-                    })
-                    .setIcon(R.drawable.ic_launcher)
-                    .show();
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLeft", false).apply();
-        } else {
-            flingContainer.getTopCardListener().selectLeft();
-        }
-    }
-
-/*    @OnClick(R.id.left)
-    public void left() {
         flingContainer.getTopCardListener().selectLeft();
-    }*/
+    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {

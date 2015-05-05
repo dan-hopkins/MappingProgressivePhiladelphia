@@ -81,7 +81,7 @@ public class MapActivity extends FragmentActivity implements
         setUpMapIfNeeded();
         getActionBar().setDisplayHomeAsUpEnabled(false); // necessary to declare false
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595,-75.163736), 12)); // Town Center Philadelphia, zoom = 12
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595, -75.163736), 12)); // Town Center Philadelphia, zoom = 12
     }
 
     @Override
@@ -129,46 +129,51 @@ public class MapActivity extends FragmentActivity implements
         PhillyOrg currentOrg = new PhillyOrg();
         ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
         Marker currMarker;
-        OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
 
-        for (int i = 0; i < allOrgs.size(); i++) {
-            currentOrg = allOrgs.get(i);
-            if (currentOrg.getSubscribed()){
-                currMarker = mMap.addMarker(new MarkerOptions()
-                        .position(currentOrg.getLatLng())
-                        .title(currentOrg.getGroupName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // color for subscribed markers
-            } else {
-                currMarker = mMap.addMarker(new MarkerOptions()
-                        .position(currentOrg.getLatLng())
-                        .title(currentOrg.getGroupName())
-                        .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers (
-            } // hue picker: http://www.color-blindness.com/color-name-hue/
+        boolean isFirstHash = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstHash", true);
+        if (isFirstHash) { // TODO: Get rid of isFirstHash
+            OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
 
-            OrgMarkerHash.put(currMarker, currentOrg);
+            for (int i = 0; i < allOrgs.size(); i++) {
+                currentOrg = allOrgs.get(i);
+                if (currentOrg.getSubscribed()) {
+                    currMarker = mMap.addMarker(new MarkerOptions()
+                            .position(currentOrg.getLatLng())
+                            .title(currentOrg.getGroupName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // color for subscribed markers
+                } else {
+                    currMarker = mMap.addMarker(new MarkerOptions()
+                            .position(currentOrg.getLatLng())
+                            .title(currentOrg.getGroupName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers (
+                } // hue picker: http://www.color-blindness.com/color-name-hue/
+                //System.out.println(currMarker.toString());
+                // System.out.println(currentOrg.toString());
+                OrgMarkerHash.put(currMarker, currentOrg);
+            }
         }
+
+        // OrgMarkerHash is not null at this point, but it does refill every time we set up the map
 
         mMap.setMyLocationEnabled(true);
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                final PhillyOrg currOrg = OrgMarkerHash.get(marker);
+                System.out.println(OrgMarkerHash.get(marker) == null);
+                // TODO: THE MARKER IS CORRECT, AND AT THE MOMENT WE ONLY MAKE THE HASH ONCE BUT APPARENTLY THE GET IS STILL NULL
+                System.out.println(marker.getTitle()); // correct marker
+                final PhillyOrg currOrg = OrgMarkerHash.get(marker); // TODO: This is null after the first banner
+
                 float myDist;
-                Log.w("ProblemWithNullPointers", "mLastLocation = " + mLastLocation.toString());
 
-                if (!mLastLocation.equals(null)) { // TODO: I keep getting null pointer exceptions every once in a while here
-                    myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371; // convert between meters and miles
-                }
-                else
+                if (mLastLocation == null) {
                     myDist = (float)-1.0;
-
-                /*Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
-                intent.putExtra("OrgID", currOrg.getId());
-                intent.putExtra("OrgDist", myDist);
-                startActivity(intent);*/
-                // originally for organizationinfoactivity
-
+                } else {
+                    //System.out.println(currOrg == null); // After we click on banner, then go to new org, currOrg is null
+                    //System.out.println(currOrg.getLocation());
+                    myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371;
+                }
 
                 // custom dialog
                 final Dialog dialog = new Dialog(MapActivity.this);
