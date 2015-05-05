@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 
 
 public class FacebookLogin extends Activity {
@@ -35,8 +33,8 @@ public class FacebookLogin extends Activity {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private Realm realm;
-    public String event = "name";
-
+    private String eventDescription;
+    public String eventInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,105 +55,33 @@ public class FacebookLogin extends Activity {
         loginButton.setReadPermissions(permissionNeeds);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(final LoginResult loginResult) {
 
                 String gp = "/61159665895/events";
+                String test = "579972348728258";
                 Bundle parameter = new Bundle();
                 parameter.putString("fields", "id,name,link");
-                realm.beginTransaction();
-                GraphRequest r = GraphRequest.newGraphPathRequest(loginResult.getAccessToken(), gp, new GraphRequest.Callback() {
-                            @Override
-                            public void onCompleted(GraphResponse graphResponse) {
-                                //GraphResponse contains the data we asked for from Facebook, as well as a response code
-                                JSONObject query_result = graphResponse.getJSONObject();
-                                TextView view = (TextView) findViewById(R.id.login_text);
-                                try {
-                                    //Taking the JSONArray that contains the response code + raw data,
-                                    // and getting an array of just the data
-                                    JSONArray query_data = query_result.getJSONArray("data");
-                                    //Querying for the first (which is the most recent) event
-                                    JSONObject event = query_data.getJSONObject(0);
-                                    //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
-                                    //This ID is a separate event_ID that must be queried to get event description
-                                    view.setText(event.get("name").toString());
-                                    OrgEvent realm_event = realm.createObject(OrgEvent.class);
-                                    realm_event.setName((String) event.get("name"));
-                                    realm_event.setStartTime("start");
-                                    realm.commitTransaction();
-
-
-                                } catch (JSONException e) {
-                                    view.setText(graphResponse.toString());
-                                    view.setText("error");
-                                    e.printStackTrace();
-                                }
-
-                                System.out.println(graphResponse.getJSONObject().names());
-
-                            }
-                        }
-                );
-                r.executeAsync();
-
-                RealmQuery<OrgEvent> test_query = realm.where(OrgEvent.class);
-                test_query.equalTo("StartTime", "Start");
-                RealmResults<OrgEvent> result1 = test_query.findAll();
+                queryFacebookEvent(gp, loginResult);
+                //RealmQuery<OrgEvent> test_query = realm.where(OrgEvent.class);
+                //test_query.equalTo("StartTime", "Start");
+                //RealmResults<OrgEvent> result1 = test_query.findAll();
                 //TextView view = (TextView) findViewById(R.id.login_text);
                 //view.setText(result1.toString());
 
             }
-
             @Override
             public void onCancel() {
                 System.out.println("onCancel");
+                TextView view = (TextView) findViewById(R.id.login_text);
+                view.setText("You canceled the login");
             }
-
-
-
             @Override
             public void onError(FacebookException exception) {
                 Log.v("LoginActivity", exception.getCause().toString());
+                TextView view = (TextView) findViewById(R.id.login_text);
+                view.setText("Error logging in");
             }
         });
-    }
-
-    public void queryFacebookEvent(String facebookid, LoginResult login){
-
-
-        String graphpath = facebookid+"/events";
-        Bundle parameter = new Bundle();
-        parameter.putString("fields", "id,name,link");
-        realm.beginTransaction();
-        GraphRequest r = GraphRequest.newGraphPathRequest(login.getAccessToken(), graphpath, new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse graphResponse) {
-                        JSONObject query_result = graphResponse.getJSONObject();
-                        TextView view = (TextView)findViewById(R.id.login_text);
-                        try {
-                            //Taking the JSONArray that contains the response code + raw data,
-                            // and getting an array of just the data
-                            JSONArray query_data = query_result.getJSONArray("data");
-                            //Querying for the first (which is the most recent) event
-                            JSONObject event = query_data.getJSONObject(0);
-                            //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
-                            //This ID is a separate event_ID that must be queried to get event description
-                            view.setText(event.get("name").toString());
-
-
-                        } catch (JSONException e) {
-                            view.setText(graphResponse.toString());
-                            view.setText("error");
-                            e.printStackTrace();
-                        }
-
-                        OrgEvent event = realm.createObject(OrgEvent.class);
-                        event.setName(FacebookLogin.this.event);
-                        realm.commitTransaction();
-                    }
-                }
-        );
-        r.executeAsync();
-
     }
 
     @Override
@@ -164,8 +90,6 @@ public class FacebookLogin extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-
 
 
     @Override
@@ -188,5 +112,65 @@ public class FacebookLogin extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void queryFacebookEvent(String facebookid, final LoginResult login){
+
+
+        String graphpath = facebookid+"/events";
+        Bundle parameter = new Bundle();
+        parameter.putString("fields", "id,name,link");
+        GraphRequest r = GraphRequest.newGraphPathRequest(login.getAccessToken(), graphpath, new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        realm.beginTransaction();
+                        //GraphResponse contains the data we asked for from Facebook, as well as a response code
+                        final OrgEvent realm_event = realm.createObject(OrgEvent.class);
+
+                        JSONObject query_result = graphResponse.getJSONObject();
+                        TextView view = (TextView) findViewById(R.id.login_text);
+                        try {
+                            //Taking the JSONArray that contains the response code + raw data,
+                            // and getting an array of just the data
+                            JSONArray query_data = query_result.getJSONArray("data");
+                            //Querying for the first (which is the most recent) event
+                            JSONObject event = query_data.getJSONObject(0);
+                            //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
+                            //This ID is a separate event_ID that must be queried to get event description
+
+                            //Querying again using the eventid to get an event description
+                            //Cannot spin off into a separate method, caused problems with nested classes
+                            realm_event.setEventName(event.get("name").toString());
+                            GraphRequest getDescription = GraphRequest.newGraphPathRequest(login.getAccessToken(), event.get("id").toString(), new GraphRequest.Callback() {
+                                JSONObject query_result;
+
+                                @Override
+                                public void onCompleted(GraphResponse graphResponse) {
+                                    query_result = graphResponse.getJSONObject();
+                                    try {
+                                        String description = query_result.get("description").toString();
+                                        //realm_event.setEventDescription(description);
+                                        TextView view = (TextView) findViewById(R.id.login_text);
+                                        view.setText(description);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        TextView view = (TextView) findViewById(R.id.login_text);
+                                        view.setText("Error in event description call");
+                                    }
+                                }
+                            });
+                            getDescription.executeAsync();
+
+
+                            //realm_event.setEventName((String) event.get("name"));
+                            //realm_event.setStartTime("start");
+                            realm.commitTransaction();
+
+                        } catch (JSONException e) {
+                            view.setText(graphResponse.toString());
+                            view.setText("Error in list of event call");
+                            e.printStackTrace();
+                        }}});
+        r.executeAsync();
     }
 }
