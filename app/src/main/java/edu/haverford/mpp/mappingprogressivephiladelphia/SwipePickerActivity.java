@@ -222,12 +222,6 @@ public class SwipePickerActivity extends Activity implements
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
                                     startActivity(intent);
-                                /*MyDatabase db = new MyDatabase(SwipePickerActivity.this);
-                                allOrgs = db.getAllOrganizations();
-                                Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
-                                myCardAdapter = new ArrayAdapter<PhillyOrg> (SwipePickerActivity.this, R.layout.item, R.id.orgname, allOrgs);
-                                flingContainer.setAdapter(myCardAdapter);
-                                myCardAdapter.notifyDataSetChanged();*/
                                 }
                             })
                             .setNegativeButton("Map", new DialogInterface.OnClickListener() {
@@ -431,7 +425,7 @@ public class SwipePickerActivity extends Activity implements
         if (!isNetworkConnected()) {
             Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Fetching updates, one moment...", Toast.LENGTH_SHORT).show();
             Firebase.setAndroidContext(this);
             Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
             myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -480,6 +474,7 @@ public class SwipePickerActivity extends Activity implements
                 }
 
             });
+
             Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
             MyDatabase db = new MyDatabase(SwipePickerActivity.this); // TODO remove this stuff that refills the swiper
             allOrgs = db.getAllOrganizations();
@@ -551,4 +546,3 @@ public class SwipePickerActivity extends Activity implements
         super.onStop();
     }
 }
-
