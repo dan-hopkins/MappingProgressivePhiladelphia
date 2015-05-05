@@ -94,6 +94,23 @@ public class MyDatabase extends SQLiteAssetHelper {
         return allOrgs;
     }
 
+    public ArrayList<String> getFacebookIds(){
+        ArrayList<String> allIds = new ArrayList<String>();
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String sqlTables = "mppdata"; // this is the table in the database that you want to work with
+
+        qb.setTables(sqlTables);
+        Cursor c = qb.query(db, null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            do {
+               String FBId = c.getString(14);
+               allIds.add(FBId);
+            } while (c.moveToNext());
+        }
+        return allIds;
+    }
+
     public PhillyOrg getOrganizationById(int id){
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
