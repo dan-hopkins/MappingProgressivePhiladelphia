@@ -4,8 +4,10 @@
     android:layout_gravity="center_horizontal"
     android:paddingTop="30dp"
     android:layout_width="600dp"
-    android:layout_height="800dp"
-    android:background="#82a3de8b">
+    android:layout_height="match_parent"
+    android:background="#99B2FF">
+    <!-- #82a3de8b-->
+    <!--600dp width, 800dp height-->
 
     <!--
     android:layout_marginLeft="30dp"
@@ -18,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="30dp"
-        android:background="#82a3de8b"
+        android:background="#99B2FF"
         android:orientation="vertical">
 
         <ImageView
@@ -29,10 +31,12 @@
             android:layout_weight=".9"
             android:scaleType="fitXY"
             android:src="@drawable/default_pic"
-            android:background="#108c8c8c"
+            android:background="#FFC599"
             android:maxWidth="@dimen/com_facebook_profilepictureview_preset_size_large"
             android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large"
             android:layout_gravity="center" />
+        <!--#108c8c8c-->
+
 
         <ImageView
             android:id="@+id/item_swipe_right_indicator"
@@ -59,7 +63,7 @@
             android:layout_width="match_parent"
             android:id="@+id/orgname"
             android:textSize="30sp"
-            android:background= "#7fc9cfc6"
+            android:background= "#FFC599"
             android:layout_marginTop="0dp"
             android:textAlignment="center"
             android:includeFontPadding="false"
@@ -67,9 +71,10 @@
             android:layout_weight=".2"
             android:padding="0dp"
             android:singleLine="false"
-            android:layout_marginBottom="130dp"
+            android:layout_marginBottom="200dp"
             android:maxLines="4"
             />
+        <!--7fc9cfc6-->
 
 
     </LinearLayout>
