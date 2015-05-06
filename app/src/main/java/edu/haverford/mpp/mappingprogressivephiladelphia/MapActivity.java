@@ -48,6 +48,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
 public class MapActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -59,6 +63,8 @@ public class MapActivity extends FragmentActivity implements
     private Location mLastLocation;
     int x = 1;
     boolean y = (x==1) ? true : false;
+    private Realm realm;
+
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Marker, PhillyOrg> OrgMarkerHash;
@@ -66,6 +72,8 @@ public class MapActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         //Updated Facebook SDK from 3.7 to 4.1
         checkFirstRun();
@@ -88,6 +96,36 @@ public class MapActivity extends FragmentActivity implements
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+        RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
+        RealmResults<OrgEvent> result1 = query.findAll();
+        if (result1.size() > 0){
+            Toast.makeText(getApplicationContext(), result1.toString(),
+                    Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+    //Setting up default data for FacebookEvents so Realm queries don't throw errors
+    public void instantiateRealm(){
+        MyDatabase db = new MyDatabase(this);
+        ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
+        for (PhillyOrg org : allOrgs){
+            realm.beginTransaction();
+            OrgEvent event = realm.createObject(OrgEvent.class);
+            event.setorgName(org.getGroupName());
+            if (org.getFacebookID()!= null){
+                event.setFacebookID(org.getFacebookID());
+            }
+            else{
+                event.setFacebookID("0");
+            }
+            realm.commitTransaction();
+
+        }
+
+
+
+
     }
 
     /**
@@ -335,6 +373,9 @@ public class MapActivity extends FragmentActivity implements
                         .show();
             } else {
                 updateDatabase();
+                realm = Realm.getInstance(this);
+                //Setting up the RealmDB
+                instantiateRealm();
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
                         .setMessage(R.string.dialogMessage)

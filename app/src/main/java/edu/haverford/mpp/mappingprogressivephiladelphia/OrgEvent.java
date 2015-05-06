@@ -11,22 +11,24 @@ public class OrgEvent extends RealmObject {
     private String eventName;
     private String orgName;
     private String eventDescription;
-    private int eventID;
+    private String eventID;
     private String startTime;
-
+    private String facebookID;
 
 
     public String getEventName(){ return eventName; }
 
     public String getOrgName() {return orgName;}
 
-    public int getEventID() { return eventID;}
+    public String getEventID() { return eventID;}
 
     public String getStartTime() { return startTime;}
 
     public String getEventDescription() {return eventDescription; }
 
+    public String getFacebookID() {return facebookID;}
 
+    public void setFacebookID(String facebookID) {this.facebookID = facebookID;}
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
@@ -36,7 +38,7 @@ public class OrgEvent extends RealmObject {
 
     public void setorgName(String orgName) {this.orgName = orgName; }
 
-    public void setEventID(int eventID) {this.eventID = eventID;}
+    public void setEventID(String eventID) {this.eventID = eventID;}
 
     public void setStartTime(String startTime) {this.startTime = startTime;}
 

@@ -33,8 +33,7 @@ public class FacebookLogin extends Activity {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private Realm realm;
-    private String eventDescription;
-    public String eventInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +61,7 @@ public class FacebookLogin extends Activity {
                 Bundle parameter = new Bundle();
                 parameter.putString("fields", "id,name,link");
                 queryFacebookEvent(gp, loginResult);
-                //RealmQuery<OrgEvent> test_query = realm.where(OrgEvent.class);
-                //test_query.equalTo("StartTime", "Start");
-                //RealmResults<OrgEvent> result1 = test_query.findAll();
-                //TextView view = (TextView) findViewById(R.id.login_text);
-                //view.setText(result1.toString());
+
 
             }
             @Override
@@ -123,9 +118,7 @@ public class FacebookLogin extends Activity {
         GraphRequest r = GraphRequest.newGraphPathRequest(login.getAccessToken(), graphpath, new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse graphResponse) {
-                        realm.beginTransaction();
                         //GraphResponse contains the data we asked for from Facebook, as well as a response code
-                        final OrgEvent realm_event = realm.createObject(OrgEvent.class);
 
                         JSONObject query_result = graphResponse.getJSONObject();
                         TextView view = (TextView) findViewById(R.id.login_text);
@@ -138,9 +131,9 @@ public class FacebookLogin extends Activity {
                             //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
                             //This ID is a separate event_ID that must be queried to get event description
 
+
                             //Querying again using the eventid to get an event description
                             //Cannot spin off into a separate method, caused problems with nested classes
-                            realm_event.setEventName(event.get("name").toString());
                             GraphRequest getDescription = GraphRequest.newGraphPathRequest(login.getAccessToken(), event.get("id").toString(), new GraphRequest.Callback() {
                                 JSONObject query_result;
 
@@ -149,7 +142,12 @@ public class FacebookLogin extends Activity {
                                     query_result = graphResponse.getJSONObject();
                                     try {
                                         String description = query_result.get("description").toString();
-                                        //realm_event.setEventDescription(description);
+                                        /*
+                                        realm.beginTransaction();
+
+                                        realm_event.setEventDescription(description);
+                                        realm.commitTransaction();
+                                        */
                                         TextView view = (TextView) findViewById(R.id.login_text);
                                         view.setText(description);
                                     } catch (JSONException e) {
@@ -164,7 +162,7 @@ public class FacebookLogin extends Activity {
 
                             //realm_event.setEventName((String) event.get("name"));
                             //realm_event.setStartTime("start");
-                            realm.commitTransaction();
+
 
                         } catch (JSONException e) {
                             view.setText(graphResponse.toString());
