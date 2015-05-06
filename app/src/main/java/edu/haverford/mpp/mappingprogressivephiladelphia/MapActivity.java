@@ -168,6 +168,26 @@ public class MapActivity extends FragmentActivity implements
      */
 
     private void setUpMap() {
+
+        final Button toggle = (Button) findViewById(R.id.toggle);
+        toggle.setText("Show Subscribed");
+        toggle.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (toggle.getText() == "Show Subscribed") {
+                    toggle.setText("Show Unsubscribed");
+                    // TODO: show subscribed only
+                } else if (toggle.getText() == "Show Unsubscribed") {
+                    toggle.setText("Show All");
+                    // TODO: show unsubscribed only
+                } else { // "Show All"
+                    toggle.setText("Show Subscribed");
+                    // TODO: show all
+                }
+            }
+        });
+
         final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
 
         MyDatabase db = new MyDatabase(getApplicationContext());
