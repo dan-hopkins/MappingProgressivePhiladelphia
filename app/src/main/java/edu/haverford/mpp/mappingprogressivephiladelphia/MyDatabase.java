@@ -86,7 +86,8 @@ public class MyDatabase extends SQLiteAssetHelper {
                 PhillyOrg org = new PhillyOrg(
                                 c.getInt(0), c.getString(1),c.getString(2),
                                 c.getString(3),c.getString(4),c.getString(5),
-                                c.getString(6),c.getString(7),c.getString(8), c.getString(9), c.getDouble(10), c.getDouble(11), subbed, c.getString(14));
+                                c.getString(6),c.getString(7),c.getString(8), c.getString(9), c.getDouble(10), c.getDouble(11), subbed, c.getString(13));
+                                //Last entry used to be c(14) testing to see if that wrong
 
                 allOrgs.add(org);
             } while (c.moveToNext());
@@ -104,7 +105,7 @@ public class MyDatabase extends SQLiteAssetHelper {
         Cursor c = qb.query(db, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             do {
-               String FBId = c.getString(14);
+               String FBId = c.getString(13);
                allIds.add(FBId);
             } while (c.moveToNext());
         }

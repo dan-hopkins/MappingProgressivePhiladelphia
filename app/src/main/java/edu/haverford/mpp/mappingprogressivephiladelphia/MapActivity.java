@@ -96,38 +96,46 @@ public class MapActivity extends FragmentActivity implements
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+        realm = Realm.getInstance(this);
         RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
         RealmResults<OrgEvent> result1 = query.findAll();
         if (result1.size() > 0){
-            Toast.makeText(getApplicationContext(), result1.toString(),
-                    Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), result1.toString(),
+              //      Toast.LENGTH_LONG).show();
         }
 
 
     }
     //Setting up default data for FacebookEvents so Realm queries don't throw errors
+    /*
     public void instantiateRealm(){
         MyDatabase db = new MyDatabase(this);
         ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
+        ArrayList<String> fbid = db.getFacebookIds();
+        System.out.println(fbid);
         for (PhillyOrg org : allOrgs){
+            realm = Realm.getInstance(this);
             realm.beginTransaction();
             OrgEvent event = realm.createObject(OrgEvent.class);
             event.setorgName(org.getGroupName());
             if (org.getFacebookID()!= null){
                 event.setFacebookID(org.getFacebookID());
+                System.out.println("not null");
+                System.out.println(org.getSubscribed());
+
+
             }
             else{
                 event.setFacebookID("0");
+                System.out.println(org.getSubscribed());
+                System.out.println(org.getWebsite());
+
             }
             realm.commitTransaction();
 
         }
-
-
-
-
     }
-
+    */
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
@@ -373,9 +381,7 @@ public class MapActivity extends FragmentActivity implements
                         .show();
             } else {
                 updateDatabase();
-                realm = Realm.getInstance(this);
-                //Setting up the RealmDB
-                instantiateRealm();
+                System.out.println("Instantiated");
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
                         .setMessage(R.string.dialogMessage)
@@ -436,6 +442,7 @@ public class MapActivity extends FragmentActivity implements
                         String updated = org.child("Updated").getValue().toString();
                         String name = org.child("Name").getValue().toString();
                         String facebookID = org.child("FacebookID").getValue().toString();
+                        //System.out.println(org.child("FacebookID").getValue().toString()+"FBID");
                         String isDeleted = org.child("Is Deleted").getValue().toString();
                         String website = org.child("Website").getValue().toString();
                         String socialIssues = org.child("Social-Issues").getValue().toString();
@@ -450,6 +457,13 @@ public class MapActivity extends FragmentActivity implements
                         double lat = Double.parseDouble(latitude);
                         double lng =  Double.parseDouble(longitude);*/
 
+                        realm = Realm.getInstance(getApplicationContext());
+                        realm.beginTransaction();
+                        OrgEvent event = realm.createObject(OrgEvent.class);
+                        event.setorgName(name);
+                        event.setFacebookID(facebookID);
+                        realm.commitTransaction();
+
                         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE"); // TODO This is slowing down the app
                         try {
                             GeocodingResult[] results = GeocodingApi.geocode(context,
@@ -457,6 +471,7 @@ public class MapActivity extends FragmentActivity implements
                             Geometry myGeo = results[0].geometry;
                             double lat = myGeo.location.lat;
                             double lng = myGeo.location.lng;
+                            //We are calling update here
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
                         } catch (Exception e) {e.printStackTrace();
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);

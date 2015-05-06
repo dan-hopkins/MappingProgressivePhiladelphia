@@ -23,11 +23,8 @@ public class PhillyOrg {
     double Longitude;
     double Latitude;
     String FacebookID;
-    String Event;
 
-    public String getFacebookID() {
-        return FacebookID;
-    }
+
 
     /**
      * @param id
@@ -43,6 +40,7 @@ public class PhillyOrg {
      * @param Longitude
      * @param Latitude
      * @param Subscribed
+     * @param FacebookID
      */
 
     public PhillyOrg(int id, String Timestamp, String GroupName, String Website, String Facebook, String Address, String ZipCode,
@@ -105,6 +103,11 @@ public class PhillyOrg {
     }
 
     public String getFacebook() { return Facebook; }
+
+    public String getFacebookID() {
+        return FacebookID;
+    }
+
 
     public String getAddress() {
         return Address;
