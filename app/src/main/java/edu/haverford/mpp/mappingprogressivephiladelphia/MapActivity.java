@@ -161,9 +161,9 @@ public class MapActivity extends FragmentActivity implements
             @Override
             public void onInfoWindowClick(Marker marker) {
                 System.out.println(OrgMarkerHash.get(marker) == null);
-                // TODO: THE MARKER IS CORRECT, AND AT THE MOMENT WE ONLY MAKE THE HASH ONCE BUT APPARENTLY THE GET IS STILL NULL
+                // TODO: THE MARKER IS CORRECT, AND AT THE MOMENT WE ONLY MAKE THE HASH ONCE BUT APPARENTLY OrgMarkerHash.get(marker) IS NULL
                 System.out.println(marker.getTitle()); // correct marker
-                final PhillyOrg currOrg = OrgMarkerHash.get(marker); // TODO: This is null after the first banner
+                final PhillyOrg currOrg = OrgMarkerHash.get(marker);
 
                 float myDist;
 
@@ -208,8 +208,8 @@ public class MapActivity extends FragmentActivity implements
                     distance.append("Currently Unknown");
                 }
                 else{
-                    float p = Math.round(myDist * 10) / 10;
-                    distance.setText(Float.toString(p) + " miles from current location");
+                    String sigDist = String.format("%.1f", myDist);
+                    distance.setText(sigDist + " miles from current location");
                 }
 
                 Button closeButton = (Button) dialog.findViewById(R.id.closeButton);

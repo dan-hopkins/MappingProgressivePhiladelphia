@@ -108,13 +108,8 @@ public class SwipePickerActivity extends Activity implements
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
 
-
-
-
-
                 boolean isFirstLeft = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstLeft", true);
                 boolean checkedForFB = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("checkedForFB", false);
-
 
                 if (isFirstLeft) {
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
@@ -199,9 +194,7 @@ public class SwipePickerActivity extends Activity implements
                             })
                             .setCancelable(false)
                             .show();
-
                 }
-
 
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
@@ -257,11 +250,6 @@ public class SwipePickerActivity extends Activity implements
                 else
                     myDist = (float)-1.0;
 
-                /*Intent intent = new Intent(getApplicationContext(), OrganizationInfoActivity.class);
-                intent.putExtra("OrgID", currOrg.getId());
-                intent.putExtra("OrgDist", myDist);
-                startActivity(intent);*/
-
                 // custom dialog
                 final Dialog dialog = new Dialog(SwipePickerActivity.this);
                 dialog.setContentView(R.layout.organization_info);
@@ -295,13 +283,12 @@ public class SwipePickerActivity extends Activity implements
                 event.setText("name");//event_info.getName().toString());
 
                 TextView distance = (TextView)dialog.findViewById(R.id.my_distance);
-                //float myDist = intent.getFloatExtra("OrgDist", (float)-1.0);
-                if (myDist == (float)-1.0){
+                if (myDist == (float)-1.0) {
                     distance.append("Currently Unknown");
                 }
-                else{
-                    float p = Math.round(myDist * 10) / 10;
-                    distance.setText(Float.toString(p) + " miles from current location");
+                else {
+                    String sigDist = String.format("%.1f", myDist);
+                    distance.setText(sigDist + " miles from current location");
                 }
 
                 Button closeButton = (Button) dialog.findViewById(R.id.closeButton);
@@ -330,12 +317,10 @@ public class SwipePickerActivity extends Activity implements
                         } else {
                             db.insertSubNo(number);
                         }
-                        // setUpMap(); // TODO: This breaks it, and as it is, to see sub changes, you have to leave activity and come back
-                        //db.close();
+                        // TODO: This breaks it, and as it is, to see sub changes, you have to leave activity and come back
                         dialog.dismiss();
                     }
                 });
-
                 dialog.show();
             }
         });
