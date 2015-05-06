@@ -170,20 +170,23 @@ public class MapActivity extends FragmentActivity implements
     private void setUpMap() {
 
         final Button toggle = (Button) findViewById(R.id.toggle);
-        toggle.setText("Show Subscribed");
+        //toggle.setText("Show Subscribed");
         toggle.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (toggle.getText() == "Show Subscribed") {
+                if (toggle.getText().equals("Show Subscribed")) {
                     toggle.setText("Show Unsubscribed");
-                    // TODO: show subscribed only
-                } else if (toggle.getText() == "Show Unsubscribed") {
+                    mMap.clear();
+                    setUpMap();
+                } else if (toggle.getText().equals("Show Unsubscribed")) {
                     toggle.setText("Show All");
-                    // TODO: show unsubscribed only
+                    mMap.clear();
+                    setUpMap();
                 } else { // "Show All"
                     toggle.setText("Show Subscribed");
-                    // TODO: show all
+                    mMap.clear();
+                    setUpMap();
                 }
             }
         });
@@ -196,12 +199,12 @@ public class MapActivity extends FragmentActivity implements
         ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
         Marker currMarker;
 
-        boolean isFirstHash = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstHash", true);
-        if (isFirstHash) { // TODO: Get rid of isFirstHash
-            OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
+        OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
 
-            for (int i = 0; i < allOrgs.size(); i++) {
-                currentOrg = allOrgs.get(i);
+        for (int i = 0; i < allOrgs.size(); i++) {
+            currentOrg = allOrgs.get(i);
+
+            if (toggle.getText().equals("Show Subscribed")) { // this is at Show All
                 if (currentOrg.getSubscribed()) {
                     currMarker = mMap.addMarker(new MarkerOptions()
                             .position(currentOrg.getLatLng())
@@ -211,15 +214,25 @@ public class MapActivity extends FragmentActivity implements
                     currMarker = mMap.addMarker(new MarkerOptions()
                             .position(currentOrg.getLatLng())
                             .title(currentOrg.getGroupName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers (
-                } // hue picker: http://www.color-blindness.com/color-name-hue/
-                //System.out.println(currMarker.toString());
-                // System.out.println(currentOrg.toString());
-                OrgMarkerHash.put(currMarker, currentOrg);
+                            .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers
+                }
+                OrgMarkerHash.put(currMarker, currentOrg); // OrgMarkerHash is not null at this point, but it does refill every time we set up the map
+            } else if (toggle.getText().equals("Show Unsubscribed")) { // this is show subscribed
+                if (currentOrg.getSubscribed()) {
+                    currMarker = mMap.addMarker(new MarkerOptions()
+                            .position(currentOrg.getLatLng())
+                            .title(currentOrg.getGroupName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // color for subscribed markers
+                }
+            } else { // this is show unsubscribed
+                if (!currentOrg.getSubscribed()) {
+                    currMarker = mMap.addMarker(new MarkerOptions()
+                            .position(currentOrg.getLatLng())
+                            .title(currentOrg.getGroupName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers
+                }
             }
         }
-
-        // OrgMarkerHash is not null at this point, but it does refill every time we set up the map
 
         mMap.setMyLocationEnabled(true);
 
