@@ -49,6 +49,9 @@ public class FacebookLogin extends Activity {
             FacebookSdk.sdkInitialize(this.getApplicationContext());
         }
 
+
+
+
         setContentView(R.layout.activity_facebook_login);
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);

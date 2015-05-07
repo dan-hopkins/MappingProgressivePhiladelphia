@@ -75,6 +75,9 @@ public class MapActivity extends FragmentActivity implements
 
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+
+
         //Updated Facebook SDK from 3.7 to 4.1
         checkFirstRun();
         setContentView(R.layout.activity_map);

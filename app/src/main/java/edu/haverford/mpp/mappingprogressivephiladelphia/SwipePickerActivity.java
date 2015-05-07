@@ -286,7 +286,6 @@ public class SwipePickerActivity extends Activity implements
                 query.equalTo("orgName", currOrg.getGroupName());
                 RealmResults<OrgEvent> results = query.findAll();
                 boolean checkLoggedIntoFB = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isLoggedIntoFB", false);
-
                 if (checkLoggedIntoFB) {
                     if (results.get(0).getEventDescription().isEmpty()){
                         event.setText("There are no upcoming events, check back later.");
