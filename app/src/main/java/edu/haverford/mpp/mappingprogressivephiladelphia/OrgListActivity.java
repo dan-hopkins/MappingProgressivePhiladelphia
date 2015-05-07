@@ -51,9 +51,17 @@ public class OrgListActivity extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         issue_spinner.setAdapter(adapter);
 
-        /*issue_spinner.setOnItemSelectedListener(AdapterView<?> getParent(), View view, int position, long id) {
-            Log.v("item", (String) getParent().getItemAtPosition(position));
-        };*/
+        issue_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                loadActivity();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // do nothing?
+            }
+        });
 
     }
 
@@ -63,13 +71,32 @@ public class OrgListActivity extends Activity {
     }
 
     protected void loadActivity() {
-        MyDatabase db = new MyDatabase(this);
-        ArrayList<PhillyOrg> orgList = db.getAllOrganizations(); // Array list of organizations
+        if (issue_spinner.getSelectedItem().toString().equals("Show All")) {
+            MyDatabase db = new MyDatabase(this);
+            ArrayList<PhillyOrg> orgList = db.getAllOrganizations(); // Array list of organizations
 
-        mAdapter = new OrgListAdapter(this, //create an ArrayAdapter from the String Array
-                R.layout.org_list_item, orgList);
-        ListView listView = (ListView) findViewById(R.id.listView1);
-        listView.setAdapter(mAdapter); // Assign adapter to ListView
+            mAdapter = new OrgListAdapter(this, //create an ArrayAdapter from the String Array
+                    R.layout.org_list_item, orgList);
+            ListView listView = (ListView) findViewById(R.id.listView1);
+            listView.setAdapter(mAdapter); // Assign adapter to ListView
+        } else {
+            MyDatabase db = new MyDatabase(this);
+            ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
+            ArrayList<PhillyOrg> newOrgList = new ArrayList<PhillyOrg>();
+
+            for (PhillyOrg org: orgList) {
+                System.out.println(org);
+                String issues = org.getSocialIssues();
+                if (issues.contains(issue_spinner.getSelectedItem().toString())) {
+                    newOrgList.add(org);
+                }
+            }
+
+            mAdapter = new OrgListAdapter(this, R.layout.org_list_item, newOrgList);
+            ListView listView = (ListView) findViewById(R.id.listView1);
+            listView.setAdapter(mAdapter);
+
+        }
     }
 
     @Override
