@@ -53,13 +53,15 @@ public class FacebookLogin extends Activity {
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         List<String> permissionNeeds = Arrays.asList("user_photos", "email", "user_birthday", "public_profile");
+        Boolean isLoggedIntoFB = getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("isLoggedIntoFB", false);
+
         loginButton.setReadPermissions(permissionNeeds);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(final LoginResult loginResult) {
-
-                String gp = "/61159665895";
-                String test = "579972348728258";
+                getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putBoolean("isLoggedIntoFB", true).apply();
+                //String gp = "/61159665895";
+                //String test = "579972348728258";
                 Bundle parameter = new Bundle();
                 RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
                 RealmResults<OrgEvent> result = query.findAll();
