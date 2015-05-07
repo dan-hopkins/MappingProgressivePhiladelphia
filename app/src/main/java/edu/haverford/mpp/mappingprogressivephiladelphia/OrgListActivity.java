@@ -71,17 +71,15 @@ public class OrgListActivity extends Activity {
     }
 
     protected void loadActivity() {
-        if (issue_spinner.getSelectedItem().toString().equals("Show All")) {
-            MyDatabase db = new MyDatabase(this);
-            ArrayList<PhillyOrg> orgList = db.getAllOrganizations(); // Array list of organizations
+        MyDatabase db = new MyDatabase(this);
+        ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
 
+        if (issue_spinner.getSelectedItem().toString().equals("Show All")) {
             mAdapter = new OrgListAdapter(this, //create an ArrayAdapter from the String Array
                     R.layout.org_list_item, orgList);
             ListView listView = (ListView) findViewById(R.id.listView1);
             listView.setAdapter(mAdapter); // Assign adapter to ListView
         } else {
-            MyDatabase db = new MyDatabase(this);
-            ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
             ArrayList<PhillyOrg> newOrgList = new ArrayList<PhillyOrg>();
 
             for (PhillyOrg org: orgList) {
