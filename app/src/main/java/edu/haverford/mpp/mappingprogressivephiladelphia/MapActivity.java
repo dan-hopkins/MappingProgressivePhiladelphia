@@ -197,7 +197,6 @@ public class MapActivity extends FragmentActivity implements
         final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
 
         MyDatabase db = new MyDatabase(getApplicationContext());
-        //ArrayList<Integer> subbedOrgIDs = db.getAllSubscribedOrgIDs();
         PhillyOrg currentOrg = new PhillyOrg();
         ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
         Marker currMarker;
@@ -243,6 +242,7 @@ public class MapActivity extends FragmentActivity implements
             @Override
             public void onInfoWindowClick(Marker marker) {
                 System.out.println(OrgMarkerHash.get(marker) == null);
+                // vvv This thing may not be an issue anymore vvv //
                 // TODO: THE MARKER IS CORRECT, AND AT THE MOMENT WE ONLY MAKE THE HASH ONCE BUT APPARENTLY OrgMarkerHash.get(marker) IS NULL
                 System.out.println(marker.getTitle()); // correct marker
                 final PhillyOrg currOrg = OrgMarkerHash.get(marker);
@@ -255,6 +255,8 @@ public class MapActivity extends FragmentActivity implements
                     //System.out.println(currOrg == null); // After we click on banner, then go to new org, currOrg is null
                     //System.out.println(currOrg.getLocation());
                     myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371;
+                    // vvv This thing may not be an issue anymore vvv //
+                    // TODO NullPointerException here sometimes
                 }
 
                 // custom dialog
@@ -298,7 +300,6 @@ public class MapActivity extends FragmentActivity implements
                 closeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setUpMap();
                         dialog.dismiss();
                     }
                 });
@@ -324,8 +325,9 @@ public class MapActivity extends FragmentActivity implements
                             currOrg.setSubscribed(false);
                             subButton.setText("Subscribe");
                         }
-                        //db.close();
                         dialog.dismiss();
+                        mMap.clear();
+                        setUpMap();
                     }
                 });
 
@@ -500,7 +502,7 @@ public class MapActivity extends FragmentActivity implements
                         event.setFacebookID(facebookID);
                         realm.commitTransaction();
 
-                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE"); // TODO This is slowing down the app
+                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE"); // TODO This is slowing down the app, should be in worker thread (100ms per org, which is not cool)
                         try {
                             GeocodingResult[] results = GeocodingApi.geocode(context,
                                     address + " Philadelphia, PA " + zipcode).await();
