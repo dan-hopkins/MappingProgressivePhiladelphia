@@ -81,24 +81,23 @@ public class MyDatabase extends SQLiteAssetHelper {
         Cursor c = qb.query(db, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             do {
-                boolean subbed = (c.getInt(12) == 1) ? true : false;
+                boolean subbed = (c.getInt(12) == 1) ? true : false; //Subscribed
 
                 PhillyOrg org = new PhillyOrg(
-                                c.getInt(0),
-                                c.getString(1),
-                                c.getString(2),
-                                c.getString(3),
-                                c.getString(4),
-                                c.getString(5),
-                                c.getString(6),
-                                c.getString(7),
-                                c.getString(8),
-                                c.getString(9),
-                                c.getDouble(10),
-                                c.getDouble(11),
-                                subbed,
-                                c.getString(14));
-
+                                c.getInt(0), // _id
+                                c.getString(1), //Timestamp
+                                c.getString(2), //GroupName
+                                c.getString(3), //Website
+                                c.getString(4), //Facebook
+                                c.getString(5), //Address
+                                c.getString(6), //ZipCode
+                                c.getString(7), //SocialIssues
+                                c.getString(8), //Mission
+                                c.getString(9), //Twitter
+                                c.getDouble(10), //Longitude
+                                c.getDouble(11), //Latitude
+                                subbed, //Subscribed
+                                c.getString(14)); //FacebookID
                 allOrgs.add(org);
             } while (c.moveToNext());
         }
