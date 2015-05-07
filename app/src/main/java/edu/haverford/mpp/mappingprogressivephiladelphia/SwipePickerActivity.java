@@ -262,7 +262,7 @@ public class SwipePickerActivity extends Activity implements
                         .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=99999")
                         .placeholder(R.drawable.default_pic)
                         .into(image);
-
+                System.out.println(currOrg.getFacebookID()+"FacebookID");
                 TextView issue = (TextView)dialog.findViewById(R.id.org_issue);
                 issue.append(currOrg.getSocialIssues());
 

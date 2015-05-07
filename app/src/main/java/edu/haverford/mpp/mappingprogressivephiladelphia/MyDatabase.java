@@ -84,10 +84,20 @@ public class MyDatabase extends SQLiteAssetHelper {
                 boolean subbed = (c.getInt(12) == 1) ? true : false;
 
                 PhillyOrg org = new PhillyOrg(
-                                c.getInt(0), c.getString(1),c.getString(2),
-                                c.getString(3),c.getString(4),c.getString(5),
-                                c.getString(6),c.getString(7),c.getString(8), c.getString(9), c.getDouble(10), c.getDouble(11), subbed, c.getString(13));
-                                //Last entry used to be c(14) testing to see if that wrong
+                                c.getInt(0),
+                                c.getString(1),
+                                c.getString(2),
+                                c.getString(3),
+                                c.getString(4),
+                                c.getString(5),
+                                c.getString(6),
+                                c.getString(7),
+                                c.getString(8),
+                                c.getString(9),
+                                c.getDouble(10),
+                                c.getDouble(11),
+                                subbed,
+                                c.getString(14));
 
                 allOrgs.add(org);
             } while (c.moveToNext());
