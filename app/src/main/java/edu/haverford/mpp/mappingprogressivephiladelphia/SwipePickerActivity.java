@@ -287,7 +287,7 @@ public class SwipePickerActivity extends Activity implements
                 RealmResults<OrgEvent> results = query.findAll();
                 if (results.size() > 0) {
                     if (results.get(0).getEventDescription().isEmpty()){
-                        event.setText("There are no upcoming events, check back later");
+                        event.setText("There are no upcoming events, check back later.");
                     }
                     else{
                         event.setText("Upcoming Event: " + results.get(0).getEventDescription());
@@ -295,7 +295,7 @@ public class SwipePickerActivity extends Activity implements
                     }
                 }
                 else{
-                    event.setText("Log into Facebook to see upcoming events");
+                    event.setText("Log into Facebook to see upcoming events.");
                 }
 
                 TextView distance = (TextView)dialog.findViewById(R.id.my_distance);
