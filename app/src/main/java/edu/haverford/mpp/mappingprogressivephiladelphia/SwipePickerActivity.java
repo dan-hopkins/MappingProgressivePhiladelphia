@@ -280,11 +280,23 @@ public class SwipePickerActivity extends Activity implements
                 address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
 
                 TextView event = (TextView)dialog.findViewById(R.id.event);
+                event.append("Log into Facebook to see upcoming events");
                 Realm realm = Realm.getInstance(getApplicationContext());
                 RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
                 query.equalTo("orgName", currOrg.getGroupName());
                 RealmResults<OrgEvent> results = query.findAll();
-                event.setText("Upcoming Event: "+ results.get(0).getEventDescription());
+                if (results.size() > 0) {
+                    if (results.get(0).getEventDescription().isEmpty()){
+                        event.setText("There are no upcoming events, check back later");
+                    }
+                    else{
+                        event.setText("Upcoming Event: " + results.get(0).getEventDescription());
+
+                    }
+                }
+                else{
+                    event.setText("Log into Facebook to see upcoming events");
+                }
 
                 TextView distance = (TextView)dialog.findViewById(R.id.my_distance);
                 if (myDist == (float)-1.0) {
