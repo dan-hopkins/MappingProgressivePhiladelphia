@@ -16,4 +16,29 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="issue_prompt">Choose an issue</string>
+    <string-array name="issue_items">
+        <item>Show All</item>
+        <item>Disability</item>
+        <item>Racial Justice</item>
+        <item>Gender</item>
+        <item>Immigration / Immigrant Rights</item>
+        <item>LGBTQ</item>
+        <item>Poverty</item>
+        <item>Incarceration</item>
+        <item>Funding / Grantwriting</item>
+        <item>Education</item>
+        <item>Housing</item>
+        <item>Youth</item>
+        <item>Fun things to Do!</item>
+        <item>Health</item>
+        <item>Women</item>
+        <item>Arts and Culture</item>
+        <item>Public Safety</item>
+        <item>Recreation</item>
+        <item>Food Justice</item>
+        <item>Civil Rights</item>
+        <item>Animal Rights</item>
+    </string-array>
+
 </resources>
