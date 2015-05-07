@@ -63,14 +63,11 @@ public class FacebookLogin extends Activity {
             @Override
             public void onSuccess(final LoginResult loginResult) {
                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putBoolean("isLoggedIntoFB", true).apply();
-                //String gp = "/61159665895";
-                //String test = "579972348728258";
                 Bundle parameter = new Bundle();
                 RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
                 RealmResults<OrgEvent> result = query.findAll();
                 if (result.size() > 0){
                     parameter.putString("fields", "id,name,link");
-                    System.out.println(result.size()+"SIZESIZESIZE");
                     for (int i = 0; i< result.size()-2; i++){
                         //I can't figure out why this should be -2, not -1, but it works
                         if (Long.parseLong(result.get(i).getFacebookID()) != 0) {
