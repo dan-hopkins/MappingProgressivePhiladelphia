@@ -42,6 +42,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class SwipePickerActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -278,9 +280,11 @@ public class SwipePickerActivity extends Activity implements
                 address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
 
                 TextView event = (TextView)dialog.findViewById(R.id.event);
-                //OrgEvent event_info = realm.createObject(OrgEvent.class);
-                //event_info.setName("name");
-                event.setText("name");//event_info.getName().toString());
+                Realm realm = Realm.getInstance(getApplicationContext());
+                RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
+                query.equalTo("orgName", currOrg.getGroupName());
+                RealmResults<OrgEvent> results = query.findAll();
+                event.setText("Upcoming Event: "+ results.get(0).getEventDescription());
 
                 TextView distance = (TextView)dialog.findViewById(R.id.my_distance);
                 if (myDist == (float)-1.0) {
