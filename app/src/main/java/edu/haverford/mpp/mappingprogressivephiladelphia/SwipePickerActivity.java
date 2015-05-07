@@ -83,14 +83,10 @@ public class SwipePickerActivity extends Activity implements
 
         ButterKnife.inject(this);
 
-        // TODO: figure out how to prevent cards from getting reshuffled for SwipePickerActivity onCreate AND down in updateDatabase
-
         MyDatabase db = new MyDatabase(this);
 
-        //al = db.getAllOrganizationNames();
-        //al = new ArrayList<>();
         allOrgs = db.getAllOrganizations();
-        Collections.shuffle(allOrgs);
+        Collections.shuffle(allOrgs); // TODO: cards are shuffled
 
 
         //myCardAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
@@ -329,13 +325,13 @@ public class SwipePickerActivity extends Activity implements
                     @Override
                     public void onClick(View v) {
                         MyDatabase db = new MyDatabase(getApplicationContext());
-                        if (subButton.getText() == "Subscribe") {
+                        if (subButton.getText().equals("Subscribe")) {
                             db.insertSubYes(number);
-                            // TODO: this should auto-swipe the organization to the right
+                            flingContainer.getTopCardListener().selectRight();
                         } else {
                             db.insertSubNo(number);
+                            flingContainer.getTopCardListener().selectLeft();
                         }
-                        // TODO: This breaks it, and as it is, to see sub changes, you have to leave activity and come back
                         dialog.dismiss();
                     }
                 });

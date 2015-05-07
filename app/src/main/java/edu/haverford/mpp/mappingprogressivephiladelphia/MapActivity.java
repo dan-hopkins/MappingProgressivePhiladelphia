@@ -315,7 +315,7 @@ public class MapActivity extends FragmentActivity implements
                     @Override
                     public void onClick(View v) {
                         MyDatabase db = new MyDatabase(getApplicationContext());
-                        if (subButton.getText() == "Subscribe") {
+                        if (subButton.getText().equals("Subscribe")) {
                             db.insertSubYes(number);
                             currOrg.setSubscribed(true);
                             subButton.setText("Unsubscribe");
