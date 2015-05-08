@@ -179,9 +179,6 @@ public class FacebookLogin extends Activity {
                                             realm.beginTransaction();
                                             currentOrg.setEventDescription(description);
                                             realm.commitTransaction();
-                                            //System.out.println(currentOrg);
-                                            TextView view = (TextView) findViewById(R.id.login_text);
-                                            view.setText(description);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                             TextView view = (TextView) findViewById(R.id.login_text);
@@ -199,7 +196,6 @@ public class FacebookLogin extends Activity {
                         } catch (JSONException e) {
                             TextView view = (TextView) findViewById(R.id.login_text);
                             view.setText(graphResponse.toString());
-                            //view.setText("Error in list of event call");
                             e.printStackTrace();
                         }}});
         r.executeAsync();
