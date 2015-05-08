@@ -15,10 +15,10 @@
     </item>
 
     <item
-        android:id="@+id/list"
+        android:id="@+id/slider"
+        android:title="Slider"
         android:icon="@drawable/ic_action_view_as_list"
-        android:title="@string/map"
-        android:showAsAction="always">
+        android:showAsAction="never">
     </item>
 
     <item
@@ -37,12 +37,6 @@
     <item
         android:id="@+id/Facebook"
         android:title="Facebook Login"
-        android:showAsAction="never">
-    </item>
-
-    <item
-        android:id="@+id/slider"
-        android:title="Slider"
         android:showAsAction="never">
     </item>
 

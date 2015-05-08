@@ -212,7 +212,7 @@ public class SwipePickerActivity extends Activity implements
                             .setMessage("Go to the map to see all of your organizations and get some more information about them!\n\nOr you can head over to your list of organizations and manage them in a more conventional way.")
                             .setPositiveButton("Organization List", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), ScreenSlideActivity.class);
                                     startActivity(intent);
                                 }
                             })
@@ -385,10 +385,10 @@ public class SwipePickerActivity extends Activity implements
         swipe.setEnabled(false);
         swipe.getIcon().setAlpha(100);
 
-        //list
-        MenuItem list = menu.findItem(R.id.list);
-        list.setEnabled(true);
-        list.getIcon().setAlpha(255);
+        //slider
+        MenuItem slider = menu.findItem(R.id.slider);
+        slider.setEnabled(true);
+        slider.getIcon().setAlpha(255);
 
         return true;
     }
@@ -406,8 +406,8 @@ public class SwipePickerActivity extends Activity implements
 
             case android.R.id.home:
                 return (true);
-            case R.id.list:
-                Intent intent = new Intent(getApplicationContext(), OrgListActivity.class);
+            case R.id.slider:
+                Intent intent = new Intent(getApplicationContext(), ScreenSlideActivity.class);
                 startActivity(intent);
                 break;
             case R.id.map:

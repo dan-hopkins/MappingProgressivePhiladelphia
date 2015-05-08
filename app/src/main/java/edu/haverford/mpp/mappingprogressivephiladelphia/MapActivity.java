@@ -337,10 +337,6 @@ public class MapActivity extends FragmentActivity implements
                 Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.list:
-                intent = new Intent(getApplicationContext(), OrgListActivity.class);
-                startActivity(intent);
-                break;
             case R.id.help:
                 getMapHelp();
                 break;
