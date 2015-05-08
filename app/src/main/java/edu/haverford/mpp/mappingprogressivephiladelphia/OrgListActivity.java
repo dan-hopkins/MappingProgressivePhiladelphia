@@ -64,6 +64,7 @@ public class OrgListActivity extends Activity {
 
     protected void onResume() {
         super.onResume();
+        invalidateOptionsMenu();
         loadActivity();
     }
 
