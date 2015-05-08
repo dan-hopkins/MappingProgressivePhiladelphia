@@ -165,8 +165,7 @@ public class OrgListActivity extends Activity {
                 })
                 .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        startActivity(intent);
+                       dialog.dismiss();
                     }
                 })
                 .setIcon(R.drawable.ic_launcher)

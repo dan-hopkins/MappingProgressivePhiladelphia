@@ -118,6 +118,9 @@ public class FacebookLogin extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) { // handle action bar selections
         switch (item.getItemId()) {
             case android.R.id.home:
+                finish();
+                return (true);
+            case R.id.map:
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                 startActivity(intent);
                 break;

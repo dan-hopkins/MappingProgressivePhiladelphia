@@ -449,12 +449,13 @@ public class SwipePickerActivity extends Activity implements
                 .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
                 .setMessage(R.string.dialogMessage)
                 .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {}
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
                 })
                 .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        startActivity(intent);
+                        dialog.dismiss();
                     }
                 })
                 .setIcon(R.drawable.ic_launcher)
