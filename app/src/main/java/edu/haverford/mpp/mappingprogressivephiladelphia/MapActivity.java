@@ -351,7 +351,11 @@ public class MapActivity extends FragmentActivity implements
             case R.id.Facebook:
                 intent = new Intent(getApplicationContext(), FacebookLogin.class);
                 startActivity(intent);
-
+                break;
+            case R.id.slider:
+                intent = new Intent(getApplicationContext(), ScreenSlideActivity.class);
+                startActivity(intent);
+                break;
         }
 
         return(super.onOptionsItemSelected(item));
