@@ -314,10 +314,10 @@ public class MapActivity extends FragmentActivity implements
         swipe.setEnabled(true);
         swipe.getIcon().setAlpha(255);
 
-        // list
-        MenuItem list = menu.findItem(R.id.list);
-        list.setEnabled(true);
-        list.getIcon().setAlpha(255);
+        // slider
+        MenuItem slider = menu.findItem(R.id.slider);
+        slider.setEnabled(true);
+        slider.getIcon().setAlpha(255);
 
         return true;
     }
