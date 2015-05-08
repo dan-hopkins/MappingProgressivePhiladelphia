@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +64,6 @@ public class MapActivity extends FragmentActivity implements
     boolean y = (x==1) ? true : false;
     private Realm realm;
 
-
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Marker, PhillyOrg> OrgMarkerHash;
 
@@ -73,10 +71,7 @@ public class MapActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         FacebookSdk.sdkInitialize(getApplicationContext());
-
-
 
         //Updated Facebook SDK from 3.7 to 4.1
         checkFirstRun();
@@ -92,7 +87,7 @@ public class MapActivity extends FragmentActivity implements
         setUpMapIfNeeded();
         getActionBar().setDisplayHomeAsUpEnabled(false); // necessary to declare false
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595, -75.163736), 12)); // Town Center Philadelphia, zoom = 12
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595, -75.163736), 13)); // Town Center Philadelphia, zoom = 12
     }
 
     @Override
@@ -109,36 +104,6 @@ public class MapActivity extends FragmentActivity implements
 
 
     }
-    //Setting up default data for FacebookEvents so Realm queries don't throw errors
-    /*
-    public void instantiateRealm(){
-        MyDatabase db = new MyDatabase(this);
-        ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
-        ArrayList<String> fbid = db.getFacebookIds();
-        System.out.println(fbid);
-        for (PhillyOrg org : allOrgs){
-            realm = Realm.getInstance(this);
-            realm.beginTransaction();
-            OrgEvent event = realm.createObject(OrgEvent.class);
-            event.setorgName(org.getGroupName());
-            if (org.getFacebookID()!= null){
-                event.setFacebookID(org.getFacebookID());
-                System.out.println("not null");
-                System.out.println(org.getSubscribed());
-
-
-            }
-            else{
-                event.setFacebookID("0");
-                System.out.println(org.getSubscribed());
-                System.out.println(org.getWebsite());
-
-            }
-            realm.commitTransaction();
-
-        }
-    }
-    */
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
@@ -195,13 +160,11 @@ public class MapActivity extends FragmentActivity implements
         });
 
         final SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(MapActivity.this);
-
         MyDatabase db = new MyDatabase(getApplicationContext());
         PhillyOrg currentOrg = new PhillyOrg();
         ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
         Marker currMarker;
         db.close(); // TODO check closes
-
         OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
 
         for (int i = 0; i < allOrgs.size(); i++) {
@@ -212,12 +175,13 @@ public class MapActivity extends FragmentActivity implements
                     currMarker = mMap.addMarker(new MarkerOptions()
                             .position(currentOrg.getLatLng())
                             .title(currentOrg.getGroupName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // color for subscribed markers
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.subscribed)));
+                            //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // color for subscribed markers
                 } else {
                     currMarker = mMap.addMarker(new MarkerOptions()
                             .position(currentOrg.getLatLng())
                             .title(currentOrg.getGroupName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.not_subscribed))); // color for unsubscribed markers
                 }
                 OrgMarkerHash.put(currMarker, currentOrg); // OrgMarkerHash is not null at this point, but it does refill every time we set up the map
             } else if (toggle.getText().equals("Show Unsubscribed")) { // this is show subscribed
@@ -225,14 +189,14 @@ public class MapActivity extends FragmentActivity implements
                     currMarker = mMap.addMarker(new MarkerOptions()
                             .position(currentOrg.getLatLng())
                             .title(currentOrg.getGroupName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))); // color for subscribed markers
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.subscribed))); // color for subscribed markers
                 }
             } else { // this is show unsubscribed
                 if (!currentOrg.getSubscribed()) {
                     currMarker = mMap.addMarker(new MarkerOptions()
                             .position(currentOrg.getLatLng())
                             .title(currentOrg.getGroupName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(192.0f))); // color for unsubscribed markers
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.not_subscribed))); // color for unsubscribed markers
                 }
             }
         }
