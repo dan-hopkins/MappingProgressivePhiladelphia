@@ -52,9 +52,7 @@ public class SwipePickerActivity extends Activity implements
     private static final String DIALOG_ERROR = "dialog_error"; // Unique tag for the error dialog fragment
     private boolean mResolvingError = false; // Bool to track whether the app is already resolving an error
 
-    private ArrayList<String> al;
     private ArrayList<PhillyOrg> allOrgs;
-    // private ArrayAdapter<String> myCardAdapter;
     private myArrayAdapter myCardAdapter;
 
     private GoogleApiClient mGoogleApiClient;
@@ -74,7 +72,6 @@ public class SwipePickerActivity extends Activity implements
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-
         mGoogleApiClient = new GoogleApiClient.Builder(this) // set up google api for location
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -89,7 +86,6 @@ public class SwipePickerActivity extends Activity implements
         Collections.shuffle(allOrgs); // TODO: cards are shuffled
 
 
-        //myCardAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
         myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
         flingContainer.setAdapter(myCardAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -449,10 +445,6 @@ public class SwipePickerActivity extends Activity implements
                         String zipcode = org.child("Zipcode").getValue().toString();
                         String timestamp = org.child("Timestamp").getValue().toString();
                         String twitter = org.child("Twitter").getValue().toString();
-                        /*String latitude = org.child("Latitude").getValue().toString();
-                        String longitude = org.child("Longitude").getValue().toString();*//*
-                        double lat = Double.parseDouble(latitude);
-                        double lng =  Double.parseDouble(longitude);*/
 
                         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE");
                         try {
@@ -475,12 +467,12 @@ public class SwipePickerActivity extends Activity implements
             });
 
             Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
-            MyDatabase db = new MyDatabase(SwipePickerActivity.this); // TODO remove this stuff that refills the swiper
+            /*MyDatabase db = new MyDatabase(SwipePickerActivity.this); // this stuff has been commented out in order to prevent the cards from being reshuffled
             allOrgs = db.getAllOrganizations();
-            Collections.shuffle(allOrgs); //We can have a better sort order later, but for now random seems good.
+            Collections.shuffle(allOrgs);
             myCardAdapter = new myArrayAdapter(SwipePickerActivity.this, R.layout.item, allOrgs);
             flingContainer.setAdapter(myCardAdapter);
-            myCardAdapter.notifyDataSetChanged();
+            myCardAdapter.notifyDataSetChanged();*/
         }
     }
 
