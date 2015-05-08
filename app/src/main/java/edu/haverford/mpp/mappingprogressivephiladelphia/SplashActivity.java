@@ -100,7 +100,7 @@ public class SplashActivity extends Activity implements
                 public void onDataChange(DataSnapshot snapshot) {
                     Iterable orgs = snapshot.getChildren();
                     MyDatabase db = new MyDatabase(SplashActivity.this);
-                    GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyBDfoc1GGXv7ZYv4vCzH1cAZJxVGkmT1n0"); // TODO This is slowing down the app, should be in worker thread (100ms per org, which is not cool) //was AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE
+                    GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyBDfoc1GGXv7ZYv4vCzH1cAZJxVGkmT1n0"); // TODO was AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE
                     for (int i = 0; i < snapshot.getChildrenCount(); i++) {
                         Object o = orgs.iterator().next();
                         DataSnapshot org = (DataSnapshot) o;
@@ -132,9 +132,13 @@ public class SplashActivity extends Activity implements
                                 Geometry myGeo = results[0].geometry;
                                 lat = myGeo.location.lat;
                                 lng = myGeo.location.lng;
-                            }
-                            else{
-                                System.out.println("In the else of " + name);
+
+                                if (address.equals("4722 Baltimore Ave")) {
+                                    lat = lat + Math.random()*.0005;
+                                    lng = lng + Math.random()*.0005;
+                                }
+
+                            } else {
                                 lat = 39.952595 + Math.random()*.001; //slight perturbation to be in the center of Philly... but kinda the wrong place.
                                 lng = -75.163736 + Math.random()*.001;
                             }
