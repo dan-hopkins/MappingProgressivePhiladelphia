@@ -87,6 +87,12 @@ public class SwipePickerActivity extends Activity implements
         db.close(); // TODO check closes
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // TODO: This is Dan's work on making the cards ordered by distance from you
+
+        ArrayList<PhillyOrg> sortOrgs = new ArrayList<>(); // copy of allOrgs (may be unnecessary)
+        for (PhillyOrg org: allOrgs) {
+            sortOrgs.add(org);
+        }
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
@@ -102,11 +108,13 @@ public class SwipePickerActivity extends Activity implements
             floaties.add(siggy);
         } // at this point, all organizations' distances have been multiplied by 10 and rounded, null location = -1
 
+        Collections.sort(floaties); // floaties will now be sorted, but that doesn't really help I guess
+        // Collections.sort(sortOrgs, org.getLocation());
         // TODO: Sort floaties
 
-        System.out.println(floaties); // returns all -1, so mLastLocation must be null
+        // System.out.println(floaties); // returns all -1, so mLastLocation must be null
 
-        // TODO: ALL THIS STUFF IS JUST CODE TAKEN FROM BELOW FOR REFERENCE
+        // ALL THIS STUFF IS JUST CODE TAKEN FROM BELOW FOR REFERENCE
         /*MyDatabase db = new MyDatabase(SwipePickerActivity.this); // this stuff has been commented out in order to prevent the cards from being reshuffled
             allOrgs = db.getAllOrganizations();
             Collections.shuffle(allOrgs);
