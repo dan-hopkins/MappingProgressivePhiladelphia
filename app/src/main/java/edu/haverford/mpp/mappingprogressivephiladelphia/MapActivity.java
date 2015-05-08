@@ -72,12 +72,7 @@ public class MapActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         FacebookSdk.sdkInitialize(getApplicationContext());
-
-
-
         //Updated Facebook SDK from 3.7 to 4.1
         checkFirstRun();
         setContentView(R.layout.activity_map);
@@ -88,10 +83,8 @@ public class MapActivity extends FragmentActivity implements
         } catch (Exception e) {
             //Log.e("TAG", "Failed to initialize map");
         }
-
         setUpMapIfNeeded();
         getActionBar().setDisplayHomeAsUpEnabled(false); // necessary to declare false
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(39.952595, -75.163736), 12)); // Town Center Philadelphia, zoom = 12
     }
 
@@ -383,7 +376,8 @@ public class MapActivity extends FragmentActivity implements
                 getMapHelp();
                 break;
             case R.id.update_db:
-                updateDatabase();
+                intent = new Intent(getApplicationContext(), SplashActivity.class);
+                startActivity(intent);
                 break;
             case R.id.Facebook:
                 intent = new Intent(getApplicationContext(), FacebookLogin.class);
@@ -420,7 +414,7 @@ public class MapActivity extends FragmentActivity implements
                         })
                         .show();
             } else {
-                updateDatabase();
+                //updateDatabase();
                 System.out.println("Instantiated");
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
@@ -464,9 +458,9 @@ public class MapActivity extends FragmentActivity implements
 
     public void updateDatabase() {
         if (!isNetworkConnected()) {
-            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
             Firebase.setAndroidContext(this);
             Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
             myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -525,7 +519,7 @@ public class MapActivity extends FragmentActivity implements
                 }
 
             });
-            Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
         }
     }
 
