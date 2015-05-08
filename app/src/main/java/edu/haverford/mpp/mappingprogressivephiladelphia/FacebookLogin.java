@@ -100,10 +100,10 @@ public class FacebookLogin extends Activity {
         swipe.setEnabled(true);
         swipe.getIcon().setAlpha(255);
 
-        // list
-        MenuItem list = menu.findItem(R.id.list);
-        list.setEnabled(true);
-        list.getIcon().setAlpha(255);
+        // slider
+        MenuItem slider = menu.findItem(R.id.slider);
+        slider.setEnabled(true);
+        slider.getIcon().setAlpha(255);
 
         return true;
     }
@@ -128,8 +128,8 @@ public class FacebookLogin extends Activity {
                 intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.list:
-                intent = new Intent(getApplicationContext(), OrgListActivity.class);
+            case R.id.slider:
+                intent = new Intent(getApplicationContext(), ScreenSlideActivity.class);
                 startActivity(intent);
                 break;
             case R.id.help:
