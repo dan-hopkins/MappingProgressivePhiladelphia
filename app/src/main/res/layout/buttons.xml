@@ -10,7 +10,7 @@
     <ImageButton
         android:id="@+id/left"
         android:layout_margin="20dp"
-        android:src="@drawable/circleno"
+        android:src="@drawable/red_arrow"
         android:text="Left"
         android:scaleType="centerInside"
         android:layout_width="100dp"
@@ -20,7 +20,7 @@
     <ImageButton
         android:id="@+id/right"
         android:layout_margin="20dp"
-        android:src="@drawable/circleyes"
+        android:src="@drawable/green_arrow"
         android:scaleType="fitCenter"
         android:text="Right"
         android:layout_width="100dp"
