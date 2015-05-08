@@ -40,4 +40,10 @@
         android:showAsAction="never">
     </item>
 
+    <item
+        android:id="@+id/slider"
+        android:title="Slider"
+        android:showAsAction="never">
+    </item>
+
 </menu>
