@@ -180,7 +180,7 @@ public class SwipePickerActivity extends Activity implements
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
                             .setTitle("Want Events?")
                             .setMessage("If you log into Facebook, PAVE will automatically include event data from your subscribed organizations. Don't worry though, we won't post anything to Facebook!")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
                                     Intent intent = new Intent(getApplicationContext(), FacebookLogin.class);
@@ -188,7 +188,7 @@ public class SwipePickerActivity extends Activity implements
                                 }
                             })
                             .setIcon(R.drawable.ic_launcher)
-                            .setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("Later", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     return;
                                 }
