@@ -3,14 +3,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_gravity="center_horizontal|bottom"
-    android:layout_marginBottom="15dp"
+    android:layout_marginBottom="5dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <ImageButton
         android:id="@+id/left"
-        android:layout_margin="20dp"
-        android:src="@drawable/green_arrow"
+        android:layout_margin="10dp"
+        android:src="@drawable/red_arrow"
         android:text="Left"
         android:scaleType="centerInside"
         android:layout_width="100dp"
@@ -19,8 +19,8 @@
 
     <ImageButton
         android:id="@+id/right"
-        android:layout_margin="20dp"
-        android:src="@drawable/red_arrow"
+        android:layout_margin="10dp"
+        android:src="@drawable/green_arrow"
         android:scaleType="fitCenter"
         android:text="Right"
         android:layout_width="100dp"

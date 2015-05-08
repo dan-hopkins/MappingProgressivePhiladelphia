@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center_horizontal"
     android:paddingTop="30dp"
-    android:layout_width="600dp"
-    android:layout_height="match_parent"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
     android:background="#37474F">
     <!-- #82a3de8b-->
     <!--600dp width, 800dp height-->
@@ -26,9 +26,9 @@
         <ImageView
             android:layout_width="400dp"
             android:id="@+id/org_pic"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:paddingTop="0dp"
-            android:layout_weight=".9"
+            android:layout_weight=".8"
             android:scaleType="fitXY"
             android:src="@drawable/default_pic"
             android:background="#FFC599"
@@ -37,26 +37,6 @@
             android:layout_gravity="center" />
         <!--#108c8c8c-->
 
-
-        <ImageView
-            android:id="@+id/item_swipe_right_indicator"
-            android:alpha="0"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_margin="30dp"
-            android:layout_gravity="right"
-            android:src="@drawable/nope"
-            />
-
-        <ImageView
-            android:id="@+id/item_swipe_left_indicator"
-            android:alpha="0"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_margin="30dp"
-            android:layout_gravity="left"
-            android:src="@drawable/yup"
-            />
 
         <TextView
             android:layout_height="wrap_content"
@@ -76,9 +56,28 @@
             />
         <!--7fc9cfc6-->
 
-
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/item_swipe_left_indicator"
+        android:alpha="0"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="30dp"
+        android:layout_gravity="left"
+        android:src="@drawable/yup"
+        />
+
+
+    <ImageView
+        android:id="@+id/item_swipe_right_indicator"
+        android:alpha="0"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="30dp"
+        android:layout_gravity="right"
+        android:src="@drawable/nope"
+        />
 
 
 </FrameLayout>
