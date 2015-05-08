@@ -53,13 +53,13 @@ public class ScreenSlideActivity extends FragmentActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.options, menu); //menu_screen_slide
 
-        menu.findItem(R.id.go_orgs).setEnabled(mPager.getCurrentItem() > 0);
+/*        menu.findItem(R.id.go_orgs).setEnabled(mPager.getCurrentItem() > 0);
 
         if (menu.findItem(R.id.go_orgs).isEnabled()) {
             menu.findItem(R.id.go_events).setEnabled(false);
         } else {
             menu.findItem(R.id.go_events).setEnabled(true);
-        }
+        }*/
 
         return true;
     }
@@ -87,13 +87,13 @@ public class ScreenSlideActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.go_orgs:
+/*            case R.id.go_orgs:
                 mPager.setCurrentItem(mPager.getCurrentItem() - 1);
                 return true;
 
             case R.id.go_events:
                 mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-                return true;
+                return true;*/
 
             case android.R.id.home:
                 return true;

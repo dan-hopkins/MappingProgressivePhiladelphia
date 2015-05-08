@@ -42,9 +42,9 @@ public class OrgFrag extends Fragment {
     public OrgFrag() {
     }
 
-    @Override // TODO: added
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState); // TODO maybe take this out
+        super.onActivityCreated(savedInstanceState);
 
         issue_spinner = (Spinner)getActivity().findViewById(R.id.issue_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.issue_items, android.R.layout.simple_spinner_item);
@@ -64,7 +64,7 @@ public class OrgFrag extends Fragment {
         });
     }
 
-    public void onResume() { // TODO: was protected
+    public void onResume() { // was protected
         super.onResume();
         getActivity().invalidateOptionsMenu();
         loadActivity();
@@ -103,7 +103,7 @@ public class OrgFrag extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-    } // TODO: used to be protected
+    } // used to be protected
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

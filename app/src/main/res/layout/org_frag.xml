@@ -36,7 +36,7 @@
         android:lineSpacingMultiplier="1.2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tap checkboxes to subscribe or unsubscribe." />
+        android:text="Tap checkboxes to subscribe or unsubscribe. Swipe left for event information!" />
 
     <Spinner
         android:id="@+id/issue_spinner"
