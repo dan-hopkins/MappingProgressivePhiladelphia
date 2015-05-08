@@ -3,32 +3,33 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 /**
  * Created by dan on 5/8/15.
  */
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by dan on 5/8/15.
  */
 public class OrgFrag extends Fragment {
-    /**
-     * The argument key for the page number this fragment represents.
-     */
+
+    private OrgListAdapter mAdapter;
+    private Spinner issue_spinner;
 
     public static final String ARG_PAGE = "page";
 
-    /**
-     * The fragment's page number, which is set to the argument value for {@link #ARG_PAGE}.
-     */
-
     private int mPageNumber;
-
-    /**
-     * Factory method for this fragment class. Constructs a new fragment for the given page number.
-     */
 
     public static OrgFrag create(int pageNumber) {
         OrgFrag fragment = new OrgFrag();
@@ -41,11 +42,68 @@ public class OrgFrag extends Fragment {
     public OrgFrag() {
     }
 
+    @Override // TODO: added
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState); // TODO maybe take this out
+
+        issue_spinner = (Spinner)getActivity().findViewById(R.id.issue_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.issue_items, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        issue_spinner.setAdapter(adapter);
+
+        issue_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                loadActivity();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // do nothing
+            }
+        });
+    }
+
+    public void onResume() { // TODO: was protected
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+        loadActivity();
+    }
+
+    protected void loadActivity() {
+        MyDatabase db = new MyDatabase(getActivity());
+        ArrayList<PhillyOrg> orgList = db.getAllOrganizations();
+
+        if (issue_spinner.getSelectedItem().toString().equals("Show All")) {
+            mAdapter = new OrgListAdapter(getActivity(), R.layout.org_list_item, orgList);
+            ListView listView = (ListView)getActivity().findViewById(R.id.listView1);
+            listView.setAdapter(mAdapter); // Assign adapter to ListView
+        } else {
+            ArrayList<PhillyOrg> newOrgList = new ArrayList<PhillyOrg>();
+
+            for (PhillyOrg org: orgList) {
+                String issues = org.getSocialIssues();
+                if (issues.contains(issue_spinner.getSelectedItem().toString())) {
+                    newOrgList.add(org);
+                }
+            }
+            mAdapter = new OrgListAdapter(getActivity(), R.layout.org_list_item, newOrgList);
+            ListView listView = (ListView)getActivity().findViewById(R.id.listView1);
+            listView.setAdapter(mAdapter);
+        }
+        db.close();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt(ARG_PAGE);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    } // TODO: used to be protected
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,9 +124,6 @@ public class OrgFrag extends Fragment {
         return rootView;
     }
 
-    /**
-     * Returns the page number represented by this fragment object.
-     */
     public int getPageNumber() {
         return mPageNumber;
     }
