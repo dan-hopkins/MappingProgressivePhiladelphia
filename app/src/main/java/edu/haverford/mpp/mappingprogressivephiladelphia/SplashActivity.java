@@ -12,6 +12,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.firebase.client.DataSnapshot;
@@ -47,80 +49,50 @@ public class SplashActivity extends Activity implements
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSharedPreferences("PREFERENCES",MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
         FacebookSdk.sdkInitialize(getApplicationContext());
         buildGoogleApiClient();
         setContentView(R.layout.splash);
+        progressDialog = ProgressDialog.show(SplashActivity.this, "Loading...",
+                "Loading PAVE database, please wait...", false, false);
         //Initialize a LoadViewTask object and call the execute() method
-        new LoadViewTask().execute();
-
+        //new LoadViewTask().execute();
+        if (isNetworkConnected()) {
+            updateDatabase();
+        } else {
+            AlertDialog alertDialog = new AlertDialog.Builder(SplashActivity.this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("No internet connection detected. Organization database may be out of date. Please connect to internet and try again or continue and manually sync later.");
+            alertDialog.setCancelable(false);
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continue",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Retry",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            updateDatabase();
+                        }
+                    });
+            alertDialog.show();
+        }
     }
 
-    //To use the AsyncTask, it must be subclassed
-    private class LoadViewTask extends AsyncTask<Void, Integer, Void>
-    {
-        //Before running code in separate thread
-        @Override
-        protected void onPreExecute()
-        {
-            progressDialog = ProgressDialog.show(SplashActivity.this,"Loading...",
-                    "Loading PAVE database, please wait...", false, false);
-        }
+    public void onResume(){
 
-        //The code to be executed in a background thread.
-        @Override
-        protected Void doInBackground(Void... params)
-        {
-            updateDatabase();
-            return null;
-        }
-
-        //Update the progress
-        @Override
-        protected void onProgressUpdate(Integer... values)
-        {
-            //set the current progress of the progress dialog
-            progressDialog.setProgress(values[0]);
-        }
-
-        //after executing the code in the thread
-        @Override
-        protected void onPostExecute(Void result)
-        {
-            //close the progress dialog
-            if (isNetworkConnected()) {
-                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                startActivity(intent);
-            }
-            else{
-                AlertDialog alertDialog = new AlertDialog.Builder(SplashActivity.this).create();
-                alertDialog.setTitle("Alert");
-                alertDialog.setMessage("No internet connection detected. Organization database may be out of date. Please connect to internet and try again or continue and manually sync later.");
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continue",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Retry",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                new LoadViewTask().execute();
-                            }
-                        });
-                alertDialog.show();
-            }
-        }
+        super.onResume();
     }
 
     public void updateDatabase() {
         if (isNetworkConnected()) {
-            //Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
+            Log.w("updateDatabase", "Beginning DB Update");
             Firebase.setAndroidContext(this);
             Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
             myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -128,7 +100,7 @@ public class SplashActivity extends Activity implements
                 public void onDataChange(DataSnapshot snapshot) {
                     Iterable orgs = snapshot.getChildren();
                     MyDatabase db = new MyDatabase(SplashActivity.this);
-
+                    GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyBDfoc1GGXv7ZYv4vCzH1cAZJxVGkmT1n0"); // TODO This is slowing down the app, should be in worker thread (100ms per org, which is not cool) //was AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE
                     for (int i = 0; i < snapshot.getChildrenCount(); i++) {
                         Object o = orgs.iterator().next();
                         DataSnapshot org = (DataSnapshot) o;
@@ -136,7 +108,6 @@ public class SplashActivity extends Activity implements
                         String updated = org.child("Updated").getValue().toString();
                         String name = org.child("Name").getValue().toString();
                         String facebookID = org.child("FacebookID").getValue().toString();
-                        //System.out.println(org.child("FacebookID").getValue().toString()+"FBID");
                         String isDeleted = org.child("Is Deleted").getValue().toString();
                         String website = org.child("Website").getValue().toString();
                         String socialIssues = org.child("Social-Issues").getValue().toString();
@@ -146,25 +117,27 @@ public class SplashActivity extends Activity implements
                         String zipcode = org.child("Zipcode").getValue().toString();
                         String timestamp = org.child("Timestamp").getValue().toString();
                         String twitter = org.child("Twitter").getValue().toString();
-                        /*String latitude = org.child("Latitude").getValue().toString();
-                        String longitude = org.child("Longitude").getValue().toString();
-                        double lat = Double.parseDouble(latitude);
-                        double lng =  Double.parseDouble(longitude);*/
-
                         realm = Realm.getInstance(getApplicationContext());
                         realm.beginTransaction();
                         OrgEvent event = realm.createObject(OrgEvent.class);
                         event.setorgName(name);
                         event.setFacebookID(facebookID);
                         realm.commitTransaction();
-
-                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE"); // TODO This is slowing down the app, should be in worker thread (100ms per org, which is not cool)
+                        double lat = 0;
+                        double lng = 0;
                         try {
-                            GeocodingResult[] results = GeocodingApi.geocode(context,
-                                    address + " Philadelphia, PA " + zipcode).await();
-                            Geometry myGeo = results[0].geometry;
-                            double lat = myGeo.location.lat;
-                            double lng = myGeo.location.lng;
+                            if (!zipcode.equals("0")) {
+                                GeocodingResult[] results = GeocodingApi.geocode(context,
+                                        address + " Philadelphia, PA " + zipcode).await();
+                                Geometry myGeo = results[0].geometry;
+                                lat = myGeo.location.lat;
+                                lng = myGeo.location.lng;
+                            }
+                            else{
+                                System.out.println("In the else of " + name);
+                                lat = 39.952595 + Math.random()*.001; //slight perturbation to be in the center of Philly... but kinda the wrong place.
+                                lng = -75.163736 + Math.random()*.001;
+                            }
                             //We are calling update here
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
                         } catch (Exception e) {e.printStackTrace();
@@ -172,14 +145,20 @@ public class SplashActivity extends Activity implements
                         }
                     }
                     db.close();
+                    Log.w("updateDatabase", "Completed DB Update");
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    startActivity(intent);
                 }
+
 
                 @Override
                 public void onCancelled(FirebaseError error) {
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(), "Sync failed...Try again later", Toast.LENGTH_SHORT).show();
                 }
 
             });
-            //Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -233,6 +212,7 @@ public class SplashActivity extends Activity implements
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+        progressDialog.dismiss();
     }
 
     protected synchronized void buildGoogleApiClient() {

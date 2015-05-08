@@ -72,7 +72,12 @@ public class MapActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         //Updated Facebook SDK from 3.7 to 4.1
+        boolean showSplash = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         checkFirstRun();
+        if (showSplash){
+            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+            startActivity(intent);
+        };
         setContentView(R.layout.activity_map);
         buildGoogleApiClient();
         //Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
