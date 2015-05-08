@@ -59,7 +59,7 @@ public class OrgListActivity extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // do nothing?
+                // do nothing
             }
         });
 
@@ -83,18 +83,16 @@ public class OrgListActivity extends Activity {
             ArrayList<PhillyOrg> newOrgList = new ArrayList<PhillyOrg>();
 
             for (PhillyOrg org: orgList) {
-                System.out.println(org);
                 String issues = org.getSocialIssues();
                 if (issues.contains(issue_spinner.getSelectedItem().toString())) {
                     newOrgList.add(org);
                 }
             }
-
             mAdapter = new OrgListAdapter(this, R.layout.org_list_item, newOrgList);
             ListView listView = (ListView) findViewById(R.id.listView1);
             listView.setAdapter(mAdapter);
-
         }
+        db.close(); // TODO check closes
     }
 
     @Override
@@ -188,7 +186,7 @@ public class OrgListActivity extends Activity {
         if (!isNetworkConnected()) {
             Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Fetching updates, one moment...", Toast.LENGTH_SHORT).show();
             Firebase.setAndroidContext(this);
             Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
             myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -231,6 +229,7 @@ public class OrgListActivity extends Activity {
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
                         }
                     }
+                    db.close();
                 }
 
                 @Override
@@ -270,7 +269,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder = null;
-        Log.v("ConvertView", String.valueOf(position));
+        //Log.v("ConvertView", String.valueOf(position));
         MyDatabase db = new MyDatabase(mContext);
         if (convertView == null) {
             LayoutInflater vi = (LayoutInflater)mContext.getSystemService(
@@ -278,14 +277,13 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
             convertView = vi.inflate(R.layout.org_list_item, null);
 
             holder = new ViewHolder();
-            holder.code = (TextView) convertView.findViewById(R.id.code);
+            // holder.code = (TextView) convertView.findViewById(R.id.code);
             holder.name = (CheckBox) convertView.findViewById(R.id.checkBox1);
             PhillyOrg currOrg = orgList.get(position);
             holder.CheckMeOrNot(db.isSubscribed(currOrg.getId()));
-            Log.w("TAG", "getSubbed of " + currOrg.toString() + ": " + Boolean.toString(db.isSubscribed(currOrg.getId())));
             convertView.setTag(holder);
 
-            holder.code.setOnClickListener(new View.OnClickListener() {
+            /*holder.code.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v){
                     TextView tv = (TextView) v ;
                     Intent intent = new Intent(mContext, OrganizationInfoActivity.class);
@@ -293,7 +291,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
                     intent.putExtra("OrgID", currOrg.getId());
                     mContext.startActivity(intent);
                 }
-            });
+            });*/
             holder.name.setOnClickListener( new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
@@ -307,12 +305,14 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        db.close();
+
         PhillyOrg currOrg = orgList.get(position);
-        holder.code.setText(" (" +  currOrg.getId() + ")");
+        // holder.code.setText(" (" +  currOrg.getId() + ")");
         holder.name.setText(currOrg.getGroupName());
         // holder.name.setChecked(currOrg.getSubscribed());
         holder.name.setTag(currOrg);
-        holder.code.setTag(currOrg);
+        // holder.code.setTag(currOrg);
         return convertView;
     }
 
@@ -335,6 +335,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
                 db.insertSubNo(currOrg.getId());
             }
         }
+        db.close();
         return counter;
     }
 }

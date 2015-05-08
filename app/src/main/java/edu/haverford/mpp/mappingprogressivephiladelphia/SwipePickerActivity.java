@@ -83,8 +83,38 @@ public class SwipePickerActivity extends Activity implements
         MyDatabase db = new MyDatabase(this);
 
         allOrgs = db.getAllOrganizations();
-        Collections.shuffle(allOrgs); // TODO: cards are shuffled
+        Collections.shuffle(allOrgs); // TODO: order cards by distance from you (see below)
+        db.close(); // TODO check closes
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        ArrayList<Integer> floaties = new ArrayList<>();
+        for (PhillyOrg org: allOrgs) {
+            float myDist;
+            if (mLastLocation != null) {
+                myDist = org.getLocation().distanceTo(mLastLocation) * (float) 0.00621371; //0.000621371 (took out a zero to multiply by 10)
+            } else {
+                myDist = (float) -1.0;
+            }
+            int siggy = Math.round(myDist);
+            floaties.add(siggy);
+        } // at this point, all organizations' distances have been multiplied by 10 and rounded, null location = -1
+
+        // TODO: Sort floaties
+
+        System.out.println(floaties); // returns all -1, so mLastLocation must be null
+
+        // TODO: ALL THIS STUFF IS JUST CODE TAKEN FROM BELOW FOR REFERENCE
+        /*MyDatabase db = new MyDatabase(SwipePickerActivity.this); // this stuff has been commented out in order to prevent the cards from being reshuffled
+            allOrgs = db.getAllOrganizations();
+            Collections.shuffle(allOrgs);
+            myCardAdapter = new myArrayAdapter(SwipePickerActivity.this, R.layout.item, allOrgs);
+            flingContainer.setAdapter(myCardAdapter);
+            myCardAdapter.notifyDataSetChanged();*/
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
         flingContainer.setAdapter(myCardAdapter);
@@ -145,6 +175,7 @@ public class SwipePickerActivity extends Activity implements
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 db.insertSubNo(currOrg.id);
+                db.close();
             }
 
             @Override
@@ -193,6 +224,7 @@ public class SwipePickerActivity extends Activity implements
                 MyDatabase db = new MyDatabase(getApplicationContext());
                 PhillyOrg currOrg = (PhillyOrg) dataObject;
                 db.insertSubYes(currOrg.id);
+                db.close();
             }
 
 
@@ -254,7 +286,7 @@ public class SwipePickerActivity extends Activity implements
                         .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=99999")
                         .placeholder(R.drawable.default_pic)
                         .into(image);
-                System.out.println(currOrg.getFacebookID()+"FacebookID");
+                //System.out.println(currOrg.getFacebookID()+"FacebookID");
                 TextView issue = (TextView)dialog.findViewById(R.id.org_issue);
                 issue.append(currOrg.getSocialIssues());
 
@@ -323,9 +355,11 @@ public class SwipePickerActivity extends Activity implements
                         MyDatabase db = new MyDatabase(getApplicationContext());
                         if (subButton.getText().equals("Subscribe")) {
                             db.insertSubYes(number);
+                            db.close();
                             flingContainer.getTopCardListener().selectRight();
                         } else {
                             db.insertSubNo(number);
+                            db.close();
                             flingContainer.getTopCardListener().selectLeft();
                         }
                         dialog.dismiss();
@@ -458,6 +492,7 @@ public class SwipePickerActivity extends Activity implements
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
                         }
                     }
+                    db.close();
                 }
 
                 @Override

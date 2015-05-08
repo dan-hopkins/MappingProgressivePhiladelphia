@@ -15,6 +15,7 @@
         android:focusableInTouchMode="false"
         android:text="CheckBox" />
 
+    <!--
     <TextView
         android:id="@+id/code"
         android:layout_width="wrap_content"
@@ -22,6 +23,6 @@
         android:layout_alignBaseline="@+id/checkBox1"
         android:layout_alignBottom="@+id/checkBox1"
         android:layout_toRightOf="@+id/checkBox1"
-        android:text="TextView" />
+        android:text="TextView" /> -->
 
 </RelativeLayout>

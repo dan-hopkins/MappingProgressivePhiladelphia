@@ -82,11 +82,11 @@ public class MapActivity extends FragmentActivity implements
         checkFirstRun();
         setContentView(R.layout.activity_map);
         buildGoogleApiClient();
-        Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
+        //Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
         try {
             MapsInitializer.initialize(this);
         } catch (Exception e) {
-            Log.e("TAG", "Failed to initialize map");
+            //Log.e("TAG", "Failed to initialize map");
         }
 
         setUpMapIfNeeded();
@@ -200,6 +200,7 @@ public class MapActivity extends FragmentActivity implements
         PhillyOrg currentOrg = new PhillyOrg();
         ArrayList<PhillyOrg> allOrgs = db.getAllOrganizations();
         Marker currMarker;
+        db.close(); // TODO check closes
 
         OrgMarkerHash = new HashMap<Marker, PhillyOrg>();
 
@@ -325,6 +326,7 @@ public class MapActivity extends FragmentActivity implements
                             currOrg.setSubscribed(false);
                             subButton.setText("Subscribe");
                         }
+                        db.close();
                         dialog.dismiss();
                         mMap.clear();
                         setUpMap();
@@ -397,7 +399,7 @@ public class MapActivity extends FragmentActivity implements
         if(status == ConnectionResult.SUCCESS)
             return true;
         else {
-            Log.d("STATUS", "Error connecting with Google Play services. Code: " + String.valueOf(status));
+            //Log.d("STATUS", "Error connecting with Google Play services. Code: " + String.valueOf(status));
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, MapActivity.this, status);
             dialog.show();
             return false;
@@ -515,6 +517,7 @@ public class MapActivity extends FragmentActivity implements
                             db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
                         }
                     }
+                    db.close();
                 }
 
                 @Override
