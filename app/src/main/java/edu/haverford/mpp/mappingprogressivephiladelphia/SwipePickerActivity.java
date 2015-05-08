@@ -59,6 +59,7 @@ public class SwipePickerActivity extends Activity implements
     private Location mLastLocation;
 
     public int facebookCardCount = 0;
+    int numOrgs;
 
     private Realm realm;
 
@@ -69,9 +70,7 @@ public class SwipePickerActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-
         FacebookSdk.sdkInitialize(getApplicationContext());
-
         mGoogleApiClient = new GoogleApiClient.Builder(this) // set up google api for location
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -79,60 +78,29 @@ public class SwipePickerActivity extends Activity implements
                 .build();
 
         ButterKnife.inject(this);
-
         MyDatabase db = new MyDatabase(this);
-
-        allOrgs = db.getAllOrganizations();
+        allOrgs = db.getAllUnSubscribedOrgs();
+        numOrgs = allOrgs.size();
         Collections.shuffle(allOrgs); // TODO: order cards by distance from you (see below)
         db.close(); // TODO check closes
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // TODO: This is Dan's work on making the cards ordered by distance from you
+        /*
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // TODO: This is where to put Dan's work (found at bottom of class) on making the cards ordered by distance from you
 
-        ArrayList<PhillyOrg> sortOrgs = new ArrayList<>(); // copy of allOrgs (may be unnecessary)
-        for (PhillyOrg org: allOrgs) {
-            sortOrgs.add(org);
-        }
 
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+         */
+            myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
 
-        ArrayList<Integer> floaties = new ArrayList<>();
-        for (PhillyOrg org: allOrgs) {
-            float myDist;
-            if (mLastLocation != null) {
-                myDist = org.getLocation().distanceTo(mLastLocation) * (float) 0.00621371; //0.000621371 (took out a zero to multiply by 10)
-            } else {
-                myDist = (float) -1.0;
-            }
-            int siggy = Math.round(myDist);
-            floaties.add(siggy);
-        } // at this point, all organizations' distances have been multiplied by 10 and rounded, null location = -1
-
-        Collections.sort(floaties); // floaties will now be sorted, but that doesn't really help I guess
-        // Collections.sort(sortOrgs, org.getLocation());
-        // TODO: Sort floaties
-
-        // System.out.println(floaties); // returns all -1, so mLastLocation must be null
-
-        // ALL THIS STUFF IS JUST CODE TAKEN FROM BELOW FOR REFERENCE
-        /*MyDatabase db = new MyDatabase(SwipePickerActivity.this); // this stuff has been commented out in order to prevent the cards from being reshuffled
-            allOrgs = db.getAllOrganizations();
-            Collections.shuffle(allOrgs);
-            myCardAdapter = new myArrayAdapter(SwipePickerActivity.this, R.layout.item, allOrgs);
             flingContainer.setAdapter(myCardAdapter);
-            myCardAdapter.notifyDataSetChanged();*/
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
-        flingContainer.setAdapter(myCardAdapter);
-        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-            @Override
-            public void removeFirstObjectInAdapter() {
-                // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                allOrgs.remove(0);
-                myCardAdapter.notifyDataSetChanged();
-            }
+            flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+                @Override
+                public void removeFirstObjectInAdapter() {
+                    // this is the simplest way to delete an object from the Adapter (/AdapterView)
+                    allOrgs.remove(0);
+                    numOrgs--;
+                    myCardAdapter.notifyDataSetChanged();
+                }
 
             @Override
             public void onLeftCardExit(Object dataObject) {
@@ -206,7 +174,7 @@ public class SwipePickerActivity extends Activity implements
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
                 }
 
-                if (facebookCardCount ==5 & !checkedForFB ){
+                if (facebookCardCount == 5 & !checkedForFB ){
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("checkedForFB", true).apply();
 
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
@@ -238,10 +206,7 @@ public class SwipePickerActivity extends Activity implements
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                int outOfOrgs = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getInt("outOfOrgs", 3);
-                if (outOfOrgs > 0) {
-                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putInt("outOfOrgs", outOfOrgs-1).apply();
-                } else {
+                if (numOrgs == 0){
                     new AlertDialog.Builder(SwipePickerActivity.this)
                             .setTitle("You've looked through all of the organizations!")
                             .setMessage("Go to the map to see all of your organizations and get some more information about them!\n\nOr you can head over to your list of organizations and manage them in a more conventional way.")
@@ -379,14 +344,31 @@ public class SwipePickerActivity extends Activity implements
 
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (numOrgs == 0) {
+            MyDatabase db = new MyDatabase(this);
+            allOrgs = db.getAllUnSubscribedOrgs();
+            numOrgs = allOrgs.size();
+            myCardAdapter.notifyDataSetChanged();
+            Collections.shuffle(allOrgs); // TODO: order cards by distance from you (see below)
+            db.close();
+        }
+    }
+
     @OnClick(R.id.right)
     public void right() {
-        flingContainer.getTopCardListener().selectRight();
+        if (numOrgs > 0) {
+            flingContainer.getTopCardListener().selectRight();
+        }
     }
 
     @OnClick(R.id.left)
     public void left() {
-        flingContainer.getTopCardListener().selectLeft();
+        if (numOrgs > 0) {
+            flingContainer.getTopCardListener().selectLeft();
+        }
     }
 
     @Override
@@ -583,4 +565,6 @@ public class SwipePickerActivity extends Activity implements
         mGoogleApiClient.disconnect();
         super.onStop();
     }
+
+
 }

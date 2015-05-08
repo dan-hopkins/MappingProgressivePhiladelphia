@@ -154,26 +154,40 @@ public class MyDatabase extends SQLiteAssetHelper {
             } while (c.moveToNext());
         }
         return orgNames;
-    }
+    }*/
 
-    public ArrayList<Integer> getAllSubscribedOrgIDs() {
-        ArrayList<Integer> subbedOrgs = new ArrayList<Integer>();
+    public ArrayList<PhillyOrg> getAllUnSubscribedOrgs() {
+        ArrayList<PhillyOrg> unSubbedOrgs = new ArrayList<PhillyOrg>();
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-
-        String[] sqlSelect = {"_id", "Subscribed"}; // the 0 _id thing is necessary for some reason
         String sqlTables = "mppdata"; // this the table in the database that you want to work with
 
         qb.setTables(sqlTables);
-        Cursor c = qb.query(db, sqlSelect, "Subscribed = 1", null, null, null, null);
+        Cursor c = qb.query(db, null, "Subscribed <> 1", null, null, null, null);
         Log.i("SubCursor", DatabaseUtils.dumpCursorToString(c));
         if (c.moveToFirst()) {
             do {
-                subbedOrgs.add(c.getInt(0));
+                boolean subbed = (c.getInt(12) == 1) ? true : false; //Subscribed
+                PhillyOrg org = new PhillyOrg(
+                        c.getInt(0), // _id
+                        c.getString(1), //Timestamp
+                        c.getString(2), //GroupName
+                        c.getString(3), //Website
+                        c.getString(4), //Facebook
+                        c.getString(5), //Address
+                        c.getString(6), //ZipCode
+                        c.getString(7), //SocialIssues
+                        c.getString(8), //Mission
+                        c.getString(9), //Twitter
+                        c.getDouble(10), //Longitude
+                        c.getDouble(11), //Latitude
+                        subbed, //Subscribed
+                        c.getString(14)); //FacebookID
+                unSubbedOrgs.add(org);
             } while (c.moveToNext());
         }
-        return subbedOrgs;
-    }*/
+        return unSubbedOrgs;
+    }
 
     /*int id = Integer.parseInt(org.getKey());
                     String updated = org.child("Updated").getValue().toString();

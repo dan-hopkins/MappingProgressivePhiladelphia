@@ -101,9 +101,9 @@ public class SplashActivity extends Activity implements
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continue",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
                                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                                 startActivity(intent);
-                                dialog.dismiss();
                             }
                         });
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Retry",
