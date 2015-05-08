@@ -390,6 +390,14 @@ public class SwipePickerActivity extends Activity implements
         slider.setEnabled(true);
         slider.getIcon().setAlpha(255);
 
+        // orgs
+        MenuItem orgs = menu.findItem(R.id.go_orgs);
+        orgs.setVisible(false);
+
+        // events
+        MenuItem events = menu.findItem(R.id.go_events);
+        events.setVisible(false);
+
         return true;
     }
 

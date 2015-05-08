@@ -1,5 +1,8 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
@@ -48,7 +51,7 @@ public class ScreenSlideActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_screen_slide, menu);
+        getMenuInflater().inflate(R.menu.options, menu); //menu_screen_slide
 
         menu.findItem(R.id.go_orgs).setEnabled(mPager.getCurrentItem() > 0);
 
@@ -57,6 +60,26 @@ public class ScreenSlideActivity extends FragmentActivity {
         } else {
             menu.findItem(R.id.go_events).setEnabled(true);
         }
+
+        return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        // map
+        MenuItem map = menu.findItem(R.id.map);
+        map.setEnabled(true);
+        map.getIcon().setAlpha(255);
+
+        // swipe
+        MenuItem swipe = menu.findItem(R.id.swipe);
+        swipe.setEnabled(true);
+        swipe.getIcon().setAlpha(255);
+
+        // slider
+        MenuItem slider = menu.findItem(R.id.slider);
+        slider.setEnabled(false);
+        slider.getIcon().setAlpha(100);
 
         return true;
     }
@@ -71,6 +94,24 @@ public class ScreenSlideActivity extends FragmentActivity {
             case R.id.go_events:
                 mPager.setCurrentItem(mPager.getCurrentItem() + 1);
                 return true;
+
+            case android.R.id.home:
+                return true;
+            case R.id.swipe:
+                Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.help:
+                getSlideHelp();
+                break;
+            case R.id.update_db:
+                intent = new Intent(getApplicationContext(), SplashActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.Facebook:
+                intent = new Intent(getApplicationContext(), FacebookLogin.class);
+                startActivity(intent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -92,5 +133,24 @@ public class ScreenSlideActivity extends FragmentActivity {
         public int getCount() {
             return NUM_PAGES;
         }
+    }
+
+    public void getSlideHelp() {
+        new AlertDialog.Builder(this, R.style.DialogTheme)
+                .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
+                .setMessage(R.string.dialogMessage)
+                .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(R.drawable.ic_launcher)
+                .show();
     }
 }

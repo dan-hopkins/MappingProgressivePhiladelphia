@@ -1,5 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/go_orgs"
+        android:title="Organizations"
+        android:showAsAction="ifRoom|withText"
+        android:visible="true"/>
+
+    <item android:id="@+id/go_events"
+        android:title="Events"
+        android:showAsAction="ifRoom|withText"
+        android:visible="true" />
+
     <item
         android:id="@+id/swipe"
         android:icon="@drawable/ic_action_view_as_grid"
