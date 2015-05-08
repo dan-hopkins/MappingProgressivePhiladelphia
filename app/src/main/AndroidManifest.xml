@@ -30,7 +30,8 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".SwipePickerActivity" >
+            android:parentActivityName=".SwipePickerActivity"
+            android:launchMode="singleInstance">
 
         </activity>
 
@@ -38,12 +39,14 @@
             android:name=".SwipePickerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance">
         </activity>
         <activity
             android:name=".OrganizationInfoActivity"
             android:label="@string/title_activity_organization_info"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance">
 
         </activity>
         <activity
@@ -52,11 +55,13 @@
         </activity>
         <activity
             android:name=".OrgListActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleInstance">
         </activity>
         <activity
             android:name=".SplashActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
