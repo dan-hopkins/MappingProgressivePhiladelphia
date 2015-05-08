@@ -437,6 +437,9 @@ public class SwipePickerActivity extends Activity implements
             case R.id.update_db:
                 updateDatabase();
                 break;
+            case R.id.Facebook:
+                intent = new Intent(getApplicationContext(), FacebookLogin.class);
+                startActivity(intent);
         }
         return (super.onOptionsItemSelected(item));
     }
