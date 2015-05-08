@@ -2,6 +2,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="edu.haverford.mpp.mappingprogressivephiladelphia.FacebookLogin">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/swipe"
+        android:icon="@drawable/ic_action_view_as_grid"
+        android:title="@string/map"
+        android:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/map"
+        android:icon="@drawable/ic_action_map"
+        android:title="@string/map"
+        android:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/list"
+        android:icon="@drawable/ic_action_view_as_list"
+        android:title="@string/map"
+        android:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/help"
+        android:icon="@drawable/ic_action_help"
+        android:title="@string/help"
+        android:showAsAction="never">
+    </item>
+
+
+
+
 </menu>

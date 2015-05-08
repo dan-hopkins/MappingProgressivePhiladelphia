@@ -1,6 +1,8 @@
 package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,23 +43,15 @@ public class FacebookLogin extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         realm = Realm.getInstance(this);
-
-
-        //FacebookSdk.sdkInitialize(this.getApplicationContext());
-
         if(!FacebookSdk.isInitialized()) {
             FacebookSdk.sdkInitialize(this.getApplicationContext());
         }
-
-
-
 
         setContentView(R.layout.activity_facebook_login);
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         List<String> permissionNeeds = Arrays.asList("user_photos", "email", "user_birthday", "public_profile");
         Boolean isLoggedIntoFB = getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("isLoggedIntoFB", false);
-
         loginButton.setReadPermissions(permissionNeeds);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -72,9 +66,7 @@ public class FacebookLogin extends Activity {
                         //I can't figure out why this should be -2, not -1, but it works
                         if (Long.parseLong(result.get(i).getFacebookID()) != 0) {
                             queryFacebookEvent(result.get(i).getFacebookID(), loginResult);
-                        }
-                    }
-                }
+                        }}}
             }
             @Override
             public void onCancel() {
@@ -87,8 +79,7 @@ public class FacebookLogin extends Activity {
                 Log.v("LoginActivity", exception.getCause().toString());
                 TextView view = (TextView) findViewById(R.id.login_text);
                 view.setText("Error logging in");
-            }
-        });
+            }});
     }
 
     @Override
@@ -98,27 +89,69 @@ public class FacebookLogin extends Activity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // map
+        MenuItem map = menu.findItem(R.id.map);
+        map.setEnabled(true);
+        map.getIcon().setAlpha(255);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_facebook_login, menu);
+        // swipe
+        MenuItem swipe = menu.findItem(R.id.swipe);
+        swipe.setEnabled(true);
+        swipe.getIcon().setAlpha(255);
+
+        // list
+        MenuItem list = menu.findItem(R.id.list);
+        list.setEnabled(true);
+        list.getIcon().setAlpha(255);
+
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_facebook_login, menu); // Inflate the menu; this adds items to the action bar if it is present
+        return (super.onCreateOptionsMenu(menu));
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { // handle action bar selections
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                return true;
+            case R.id.swipe:
+                Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.list:
+                intent = new Intent(getApplicationContext(), OrgListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.help:
+                getMapHelp();
+
         }
 
-        return super.onOptionsItemSelected(item);
+        return(super.onOptionsItemSelected(item));
+    }
+
+    public void getMapHelp() {
+        new AlertDialog.Builder(this, R.style.DialogTheme)
+                .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
+                .setMessage(R.string.dialogMessage)
+                .setPositiveButton("Subscribe Now", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Subscribe Later", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(R.drawable.ic_launcher)
+                .show();
     }
 
     public void queryFacebookEvent(String facebookid, final LoginResult login){
