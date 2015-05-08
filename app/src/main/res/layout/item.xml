@@ -15,69 +15,77 @@
     android:layout_marginRight="30dp"
     android:layout_marginBottom="100dp"
     android:background="#ff616161"> -->
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="30dp"
-        android:background="#B0BEC5"
-        android:orientation="vertical">
+        android:clipChildren="false"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp"
+            android:background="#37474F"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/orgname"
+                android:textSize="30sp"
+                android:background="#ECEFF1"
+                android:layout_marginTop="0dp"
+                android:textAlignment="center"
+                android:includeFontPadding="false"
+                android:gravity="center"
+                android:padding="10dp"
+                android:singleLine="false"
+                android:maxLines="6"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:id="@+id/org_pic"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_pic"
+                android:background="#ECEFF1"
+                android:maxWidth="@dimen/com_facebook_profilepictureview_preset_size_large"
+                android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large"
+                android:layout_gravity="center_horizontal" />
+            <!--#108c8c8c-->
+
+
+
+            <!--7fc9cfc6-->
+
+        </LinearLayout>
 
         <ImageView
-            android:layout_width="400dp"
-            android:id="@+id/org_pic"
-            android:layout_height="wrap_content"
-            android:paddingTop="0dp"
-            android:layout_weight=".8"
-            android:scaleType="fitXY"
-            android:src="@drawable/default_pic"
-            android:background="#FFC599"
-            android:maxWidth="@dimen/com_facebook_profilepictureview_preset_size_large"
-            android:maxHeight="@dimen/com_facebook_profilepictureview_preset_size_large"
-            android:layout_gravity="center" />
-        <!--#108c8c8c-->
-
-
-        <TextView
-            android:layout_height="wrap_content"
+            android:id="@+id/item_swipe_left_indicator"
+            android:alpha="0"
             android:layout_width="match_parent"
-            android:id="@+id/orgname"
-            android:textSize="30sp"
-            android:background= "#ECEFF1"
-            android:layout_marginTop="0dp"
-            android:textAlignment="center"
-            android:includeFontPadding="false"
-            android:gravity="center"
-            android:layout_weight=".2"
-            android:padding="0dp"
-            android:singleLine="false"
-            android:layout_marginBottom="200dp"
-            android:maxLines="4"
+            android:layout_height="70dp"
+            android:layout_margin="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/yup"
             />
-        <!--7fc9cfc6-->
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/item_swipe_left_indicator"
-        android:alpha="0"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_margin="30dp"
-        android:layout_gravity="left"
-        android:src="@drawable/yup"
-        />
 
 
-    <ImageView
-        android:id="@+id/item_swipe_right_indicator"
-        android:alpha="0"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_margin="30dp"
-        android:layout_gravity="right"
-        android:src="@drawable/nope"
-        />
+        <ImageView
+            android:id="@+id/item_swipe_right_indicator"
+            android:alpha="0"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/nope"
+            />
 
+    </RelativeLayout>
 
 </FrameLayout>
