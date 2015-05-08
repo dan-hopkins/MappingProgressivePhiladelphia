@@ -16,39 +16,40 @@
 
 
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#ECEFF1" >
+
+    <TextView android:id="@android:id/title"
+        style="?android:textAppearanceLarge"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginBottom="16dp" />
+
+    <TextView style="?android:textAppearanceMedium"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tap checkboxes to subscribe or unsubscribe." />
+
+    <Spinner
+        android:id="@+id/issue_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_gravity="top|center"
+        android:entries="@array/issue_items"
+        android:prompt="@string/issue_prompt" >
+    </Spinner>
+
+    <ListView
+        android:id="@+id/listView1"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:background="#ECEFF1" >
+        android:layout_height="fill_parent" />
 
-        <TextView android:id="@android:id/title"
-            style="?android:textAppearanceLarge"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:layout_marginBottom="16dp" />
-
-        <TextView style="?android:textAppearanceMedium"
-            android:lineSpacingMultiplier="1.2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tap checkboxes to subscribe or unsubscribe" />
-
-        <Spinner
-            android:id="@+id/issue_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="55dp"
-            android:layout_gravity="top|center"
-            android:entries="@array/issue_items"
-            android:prompt="@string/issue_prompt" >
-        </Spinner>
-
-        <ListView
-            android:id="@+id/listView1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-
-    </LinearLayout>
+</LinearLayout>
