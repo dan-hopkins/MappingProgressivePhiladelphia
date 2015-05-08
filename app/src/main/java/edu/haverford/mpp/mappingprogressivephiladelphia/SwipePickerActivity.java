@@ -90,17 +90,17 @@ public class SwipePickerActivity extends Activity implements
 
 
          */
-            myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
+        myCardAdapter = new myArrayAdapter (this, R.layout.item, allOrgs);
 
-            flingContainer.setAdapter(myCardAdapter);
-            flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-                @Override
-                public void removeFirstObjectInAdapter() {
-                    // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                    allOrgs.remove(0);
-                    numOrgs--;
-                    myCardAdapter.notifyDataSetChanged();
-                }
+        flingContainer.setAdapter(myCardAdapter);
+        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+            @Override
+            public void removeFirstObjectInAdapter() {
+                // this is the simplest way to delete an object from the Adapter (/AdapterView)
+                allOrgs.remove(0);
+                numOrgs--;
+                myCardAdapter.notifyDataSetChanged();
+            }
 
             @Override
             public void onLeftCardExit(Object dataObject) {
@@ -347,6 +347,7 @@ public class SwipePickerActivity extends Activity implements
     @Override
     public void onResume(){
         super.onResume();
+        invalidateOptionsMenu();
         if (numOrgs == 0) {
             MyDatabase db = new MyDatabase(this);
             allOrgs = db.getAllUnSubscribedOrgs();

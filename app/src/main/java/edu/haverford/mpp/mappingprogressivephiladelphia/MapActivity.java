@@ -89,6 +89,7 @@ public class MapActivity extends FragmentActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        invalidateOptionsMenu();
         setUpMapIfNeeded();
         realm = Realm.getInstance(this);
         RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
