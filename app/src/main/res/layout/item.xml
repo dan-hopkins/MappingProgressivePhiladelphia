@@ -5,7 +5,7 @@
     android:paddingTop="30dp"
     android:layout_width="600dp"
     android:layout_height="match_parent"
-    android:background="#757575">
+    android:background="#37474F">
     <!-- #82a3de8b-->
     <!--600dp width, 800dp height-->
 
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="30dp"
-        android:background="#E0E0E0"
+        android:background="#B0BEC5"
         android:orientation="vertical">
 
         <ImageView
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:id="@+id/orgname"
             android:textSize="30sp"
-            android:background= "#FFC599"
+            android:background= "#ECEFF1"
             android:layout_marginTop="0dp"
             android:textAlignment="center"
             android:includeFontPadding="false"
