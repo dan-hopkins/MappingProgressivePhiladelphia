@@ -101,6 +101,10 @@ public class ScreenSlideActivity extends FragmentActivity {
                 Intent intent = new Intent(getApplicationContext(), SwipePickerActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.map:
+                intent = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(intent);
+                break;
             case R.id.help:
                 getSlideHelp();
                 break;
