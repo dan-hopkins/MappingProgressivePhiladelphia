@@ -418,7 +418,8 @@ public class SwipePickerActivity extends Activity implements
                 getSwipeHelp();
                 break;
             case R.id.update_db:
-                updateDatabase();
+                intent = new Intent(getApplicationContext(), SplashActivity.class);
+                startActivity(intent);
                 break;
             case R.id.Facebook:
                 intent = new Intent(getApplicationContext(), FacebookLogin.class);
@@ -443,76 +444,6 @@ public class SwipePickerActivity extends Activity implements
                 })
                 .setIcon(R.drawable.ic_launcher)
                 .show();
-    }
-
-    public void updateDatabase() {
-        if (!isNetworkConnected()) {
-            Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "Fetching updates, one moment...", Toast.LENGTH_SHORT).show();
-            Firebase.setAndroidContext(this);
-            Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
-            myFirebaseRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    Iterable orgs = snapshot.getChildren();
-                    MyDatabase db = new MyDatabase(SwipePickerActivity.this);
-
-                    for (int i = 0; i < snapshot.getChildrenCount(); i++) {
-                        Object o = orgs.iterator().next();
-                        DataSnapshot org = (DataSnapshot) o;
-                        int id = Integer.parseInt(org.getKey());
-                        String updated = org.child("Updated").getValue().toString();
-                        String name = org.child("Name").getValue().toString();
-                        String facebookID = org.child("FacebookID").getValue().toString();
-                        String isDeleted = org.child("Is Deleted").getValue().toString();
-                        String website = org.child("Website").getValue().toString();
-                        String socialIssues = org.child("Social-Issues").getValue().toString();
-                        String address = org.child("Address").getValue().toString();
-                        String mission = org.child("Mission").getValue().toString();
-                        String facebook = org.child("Facebook").getValue().toString();
-                        String zipcode = org.child("Zipcode").getValue().toString();
-                        String timestamp = org.child("Timestamp").getValue().toString();
-                        String twitter = org.child("Twitter").getValue().toString();
-
-                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE");
-                        try {
-                            GeocodingResult[] results = GeocodingApi.geocode(context,
-                                    address + " Philadelphia, PA " + zipcode).await();
-                            Geometry myGeo = results[0].geometry;
-                            double lat = myGeo.location.lat;
-                            double lng = myGeo.location.lng;
-                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
-                        } catch (Exception e){e.printStackTrace();
-                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
-                        }
-                    }
-                    db.close();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError error) {
-                }
-
-            });
-
-            Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
-            /*MyDatabase db = new MyDatabase(SwipePickerActivity.this); // this stuff has been commented out in order to prevent the cards from being reshuffled
-            allOrgs = db.getAllOrganizations();
-            Collections.shuffle(allOrgs);
-            myCardAdapter = new myArrayAdapter(SwipePickerActivity.this, R.layout.item, allOrgs);
-            flingContainer.setAdapter(myCardAdapter);
-            myCardAdapter.notifyDataSetChanged();*/
-        }
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (ni == null) { // There are no active networks
-            return false;
-        } else
-            return true;
     }
 
     protected synchronized void buildGoogleApiClient() {

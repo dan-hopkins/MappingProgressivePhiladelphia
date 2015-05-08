@@ -387,7 +387,6 @@ public class MapActivity extends FragmentActivity implements
                         })
                         .show();
             } else {
-                //updateDatabase();
                 System.out.println("Instantiated");
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("Welcome to Philly Activists and Volunteers Exchange (PAVE)!")
@@ -427,73 +426,6 @@ public class MapActivity extends FragmentActivity implements
                 })
                 .setIcon(R.drawable.ic_launcher)
                 .show();
-    }
-
-    public void updateDatabase() {
-        if (!isNetworkConnected()) {
-            //Toast.makeText(getApplicationContext(), "No internet connection detected. Please reconnect and try again.", Toast.LENGTH_SHORT).show();
-        } else {
-            //Toast.makeText(getApplicationContext(), "Fetching updated database...", Toast.LENGTH_SHORT).show();
-            Firebase.setAndroidContext(this);
-            Firebase myFirebaseRef = new Firebase("https://mappp.firebaseio.com/");
-            myFirebaseRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    Iterable orgs = snapshot.getChildren();
-                    MyDatabase db = new MyDatabase(MapActivity.this);
-
-                    for (int i = 0; i < snapshot.getChildrenCount(); i++) {
-                        Object o = orgs.iterator().next();
-                        DataSnapshot org = (DataSnapshot) o;
-                        int id = Integer.parseInt(org.getKey());
-                        String updated = org.child("Updated").getValue().toString();
-                        String name = org.child("Name").getValue().toString();
-                        String facebookID = org.child("FacebookID").getValue().toString();
-                        //System.out.println(org.child("FacebookID").getValue().toString()+"FBID");
-                        String isDeleted = org.child("Is Deleted").getValue().toString();
-                        String website = org.child("Website").getValue().toString();
-                        String socialIssues = org.child("Social-Issues").getValue().toString();
-                        String address = org.child("Address").getValue().toString();
-                        String mission = org.child("Mission").getValue().toString();
-                        String facebook = org.child("Facebook").getValue().toString();
-                        String zipcode = org.child("Zipcode").getValue().toString();
-                        String timestamp = org.child("Timestamp").getValue().toString();
-                        String twitter = org.child("Twitter").getValue().toString();
-                        /*String latitude = org.child("Latitude").getValue().toString();
-                        String longitude = org.child("Longitude").getValue().toString();
-                        double lat = Double.parseDouble(latitude);
-                        double lng =  Double.parseDouble(longitude);*/
-
-                        realm = Realm.getInstance(getApplicationContext());
-                        realm.beginTransaction();
-                        OrgEvent event = realm.createObject(OrgEvent.class);
-                        event.setorgName(name);
-                        event.setFacebookID(facebookID);
-                        realm.commitTransaction();
-
-                        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE"); // TODO This is slowing down the app, should be in worker thread (100ms per org, which is not cool)
-                        try {
-                            GeocodingResult[] results = GeocodingApi.geocode(context,
-                                    address + " Philadelphia, PA " + zipcode).await();
-                            Geometry myGeo = results[0].geometry;
-                            double lat = myGeo.location.lat;
-                            double lng = myGeo.location.lng;
-                            //We are calling update here
-                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter, lat, lng);
-                        } catch (Exception e) {e.printStackTrace();
-                            db.updateEntry(id, updated, name, facebookID, isDeleted, website, socialIssues, address, mission, facebook, zipcode, timestamp, twitter);
-                        }
-                    }
-                    db.close();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError error) {
-                }
-
-            });
-            //Toast.makeText(getApplicationContext(), "Sync complete", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
