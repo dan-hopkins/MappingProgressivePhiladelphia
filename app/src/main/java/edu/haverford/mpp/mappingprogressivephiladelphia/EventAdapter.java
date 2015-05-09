@@ -26,7 +26,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-
+        // TODO
     }
 
     public int getCount() {
