@@ -26,9 +26,8 @@ public class EventAdapter extends BaseAdapter {
     private ArrayList<OrgEvent> eventList;
     private Context mContext;
 
-    public EventAdapter(Context context, int textViewResourceId, ArrayList<OrgEvent> myEventList) {
-        this.eventList = new ArrayList<OrgEvent>();
-        this.eventList.addAll(myEventList);
+    public EventAdapter(Context context, ArrayList<OrgEvent> myEventList) {
+        this.eventList = myEventList;
         this.mContext = context;
     }
 
