@@ -3,13 +3,10 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,21 +14,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.Geometry;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.squareup.picasso.Picasso;
 
@@ -123,8 +111,9 @@ public class SwipePickerActivity extends Activity implements
                             .show();
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstLeft", false).apply();
                 }
+                boolean checkLoggedIntoFB = getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("isLoggedIntoFB", false);
 
-                if (facebookCardCount ==5 & !checkedForFB){
+                if (facebookCardCount ==5 & !checkedForFB & !checkLoggedIntoFB){
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("checkedForFB", true).apply();
 
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)
@@ -173,8 +162,9 @@ public class SwipePickerActivity extends Activity implements
                             .show();
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRight", false).apply();
                 }
+                boolean checkLoggedIntoFB = getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("isLoggedIntoFB", false);
 
-                if (facebookCardCount == 5 & !checkedForFB ){
+                if (facebookCardCount == 5 & !checkedForFB & !checkLoggedIntoFB){
                     getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("checkedForFB", true).apply();
 
                     new AlertDialog.Builder(SwipePickerActivity.this, R.style.DialogTheme)

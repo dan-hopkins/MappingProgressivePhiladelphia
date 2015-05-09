@@ -25,7 +25,6 @@
     </item>
 
     -->
-
     <item
         android:id="@+id/help"
         android:icon="@drawable/ic_action_help"
@@ -39,8 +38,5 @@
         android:icon="@drawable/ic_action_view_as_list"
         android:showAsAction="always">
     </item>
-
-
-
 
 </menu>

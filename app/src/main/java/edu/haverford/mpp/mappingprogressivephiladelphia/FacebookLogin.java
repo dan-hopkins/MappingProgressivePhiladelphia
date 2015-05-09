@@ -24,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -37,11 +39,19 @@ public class FacebookLogin extends Activity {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private Realm realm;
+    int i = 0;
+
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         realm = Realm.getInstance(this);
         if(!FacebookSdk.isInitialized()) {
             FacebookSdk.sdkInitialize(this.getApplicationContext());
@@ -58,6 +68,14 @@ public class FacebookLogin extends Activity {
             public void onSuccess(final LoginResult loginResult) {
                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putBoolean("isLoggedIntoFB", true).apply();
                 Bundle parameter = new Bundle();
+
+                Date currentDate = new Date();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                int currentMonth = cal.get(Calendar.MONTH);
+                int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+                int currentYear = cal.get(Calendar.YEAR);
+
                 RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
                 RealmResults<OrgEvent> result = query.findAll();
                 if (result.size() > 0){
@@ -65,14 +83,14 @@ public class FacebookLogin extends Activity {
                     for (int i = 0; i< result.size()-2; i++){
                         //I can't figure out why this should be -2, not -1, but it works
                         if (Long.parseLong(result.get(i).getFacebookID()) != 0) {
-                            queryFacebookEvent(result.get(i).getFacebookID(), loginResult);
+                            queryFacebookEvent(result.get(i).getFacebookID(), loginResult, currentMonth, currentYear, currentDay);
                         }}}
             }
             @Override
             public void onCancel() {
                 System.out.println("onCancel");
                 TextView view = (TextView) findViewById(R.id.login_text);
-                view.setText("You canceled the login");
+                view.setText("You canceled the login, please try again.");
             }
             @Override
             public void onError(FacebookException exception) {
@@ -167,83 +185,100 @@ public class FacebookLogin extends Activity {
                 .show();
     }
 
-    public void queryFacebookEvent(String facebookid, final LoginResult login){
+    public void queryFacebookEvent(String facebookid, final LoginResult login, int month, int year, int day){
+
+        final int CurrentMonth = month;
+        final int CurrentYear = year;
+        final int CurrentDay = day;
 
         final String fbid = facebookid;
         String graphpath = facebookid+"/events";
         Bundle parameter = new Bundle();
         parameter.putString("fields", "id,name,link");
         GraphRequest r = GraphRequest.newGraphPathRequest(login.getAccessToken(), graphpath, new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse graphResponse) {
-                        //GraphResponse contains the data we asked for from Facebook, as well as a response code
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                //GraphResponse contains the data we asked for from Facebook, as well as a response code
 
-                        JSONObject query_result = graphResponse.getJSONObject();
-                        try {
-                            //Taking the JSONArray that contains the response code + raw data,
-                            // and getting an array of just the data
-                            System.out.println(query_result.getJSONArray("data"));
-                            if (query_result.getJSONArray("data") != null){
-                            JSONArray query_data = query_result.getJSONArray("data");
-                            System.out.println(query_result);
+                JSONObject query_result = graphResponse.getJSONObject();
+                try {
+                    //Taking the JSONArray that contains the response code + raw data,
+                    // and getting an array of just the data
+                    if (query_result.getJSONArray("data") != null){
+                        JSONArray query_data = query_result.getJSONArray("data");
+                        //Querying for the first (which is the most recent) event
+                        final JSONObject event = query_data.getJSONObject(0);
+                        //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
+                        //This ID is a separate event_ID that must be queried to get event description
 
-                            //Querying for the first (which is the most recent) event
-                            final JSONObject event = query_data.getJSONObject(0);
-                            //event is a JSON object containing (in order) name, start_time, end_time, timezone, location, id.
-                            //This ID is a separate event_ID that must be queried to get event description
-                            realm = Realm.getInstance(getApplicationContext());
+                        realm = Realm.getInstance(getApplicationContext());
+                        RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
+                        query.equalTo("facebookID", fbid);
+                        RealmResults<OrgEvent> result = query.findAll();
+                        System.out.println("i"+i);
+                        if (result.size() > 0 & event != null) {
+                            i++;
+                            System.out.println("i "+i);
+                            OrgEvent currentOrg = result.first();
+                            System.out.println("currOrg"+currentOrg.toString());
+                            String date = event.get("start_time").toString();
+                            System.out.println("date"+ date);
 
+                            int event_year = Integer.valueOf(date.substring(0, 4));
+                            int event_month = Integer.valueOf(date.substring(5, 7));
+                            int event_day = Integer.valueOf(date.substring(8, 10));
 
-                            RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
-                            query.equalTo("facebookID", fbid);
-                            RealmResults<OrgEvent> result = query.findAll();
-                            if (result.size() > 0 && event != null) {
-                                OrgEvent currentOrg = result.first();
+                            //Wow this code is ugly
+                            //But should only add UPCOMING FB events.
 
-
+                            if (event_year>=CurrentYear & event_month>CurrentMonth || event_year>=CurrentYear & event_month>=CurrentMonth& event_day>=CurrentDay) {
                                 realm.beginTransaction();
                                 currentOrg.setEventName(event.get("name").toString());
+                                System.out.println(date + "DATE");
                                 currentOrg.setEventID(event.get("id").toString());
                                 currentOrg.setStartTime(event.get("start_time").toString());
                                 realm.commitTransaction();
 
 
-                                //Querying again using the eventid to get an event description
-                                //Cannot spin off into a separate method, caused problems with nested classes
-                                GraphRequest getDescription = GraphRequest.newGraphPathRequest(login.getAccessToken(), event.get("id").toString(), new GraphRequest.Callback() {
-                                    JSONObject query_result;
+                            //Querying again using the eventid to get an event description
+                            //Cannot spin off into a separate method, caused problems with nested classes
+                            GraphRequest getDescription = GraphRequest.newGraphPathRequest(login.getAccessToken(), event.get("id").toString(), new GraphRequest.Callback() {
+                                JSONObject query_result;
 
-                                    @Override
-                                    public void onCompleted(GraphResponse graphResponse) {
-                                        query_result = graphResponse.getJSONObject();
-                                        try {
-                                            String description = query_result.get("description").toString();
-                                            RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
-                                            query.equalTo("eventID", event.get("id").toString());
-                                            RealmResults<OrgEvent> result = query.findAll();
-                                            OrgEvent currentOrg = result.first();
-                                            realm.beginTransaction();
-                                            currentOrg.setEventDescription(description);
-                                            realm.commitTransaction();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                            TextView view = (TextView) findViewById(R.id.login_text);
-                                            view.setText("Error in event description call");
-                                        }
+                                @Override
+                                public void onCompleted(GraphResponse graphResponse) {
+                                    query_result = graphResponse.getJSONObject();
+                                    try {
+                                        String description = query_result.get("description").toString();
+                                        RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
+                                        query.equalTo("eventID", event.get("id").toString());
+                                        RealmResults<OrgEvent> result = query.findAll();
+                                        OrgEvent currentOrg = result.first();
+                                        realm.beginTransaction();
+                                        currentOrg.setEventDescription(description);
+                                        realm.commitTransaction();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        TextView view = (TextView) findViewById(R.id.login_text);
+                                        view.setText("Error in event description call, please try logging in again. ");
                                     }
-                                });
-                                getDescription.executeAsync();
-                            }
-                            }
+                                }
+                            });
+                            getDescription.executeAsync();
+                        }}
+                        else{
+                            return;
+                        }
+                    }
 
 
 
 
-                        } catch (JSONException e) {
-                            //TextView view = (TextView) findViewById(R.id.login_text);
-                            //view.setText(graphResponse.toString());
-                            e.printStackTrace();
-                        }}});
+                } catch (JSONException e) {
+                    //TextView view = (TextView) findViewById(R.id.login_text);
+                    //view.setText("Please check your internet connection and try logging in again.");
+                    e.printStackTrace();
+                }}});
         r.executeAsync();
     }
 }
