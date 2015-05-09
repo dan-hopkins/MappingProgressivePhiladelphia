@@ -65,6 +65,7 @@ public class MapActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         //Updated Facebook SDK from 3.7 to 4.1
+
         boolean showSplash = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         checkFirstRun();
         if (showSplash){
