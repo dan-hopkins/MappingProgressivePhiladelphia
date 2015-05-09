@@ -7,6 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
+
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
 /**
  * Created by dan on 5/8/15.
  */
@@ -42,6 +49,26 @@ public class EventFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt(ARG_PAGE);
+        Realm realm = Realm.getInstance(getActivity());
+        RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
+        RealmResults<OrgEvent> result1 = query.findAll();
+        System.out.println(result1.size()+"SIZE");
+        //System.out.println(result1);
+
+        ListIterator<OrgEvent> listOfUpComingEvents = result1.listIterator();
+        ArrayList<OrgEvent> arrayListOfUpComingEvents = new ArrayList<>();
+
+        while (listOfUpComingEvents.hasNext()){
+            OrgEvent thing = listOfUpComingEvents.next();
+            if (!thing.getStartTime().isEmpty()){
+                arrayListOfUpComingEvents.add(thing);
+            }
+        }
+
+        for (OrgEvent org:arrayListOfUpComingEvents){
+            //System.out.println(org.getStartTime()+" NAME "+ org.getOrgName());
+        }
+
     }
 
     @Override
