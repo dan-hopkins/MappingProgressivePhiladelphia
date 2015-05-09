@@ -253,6 +253,27 @@ public class MapActivity extends FragmentActivity implements
                     subscribed.append("No");
                 }
 
+                TextView event = (TextView)dialog.findViewById(R.id.event);
+                event.append("Log into Facebook to see upcoming events");
+                Realm realm = Realm.getInstance(getApplicationContext());
+                RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
+                query.equalTo("orgName", currOrg.getGroupName());
+                RealmResults<OrgEvent> results = query.findAll();
+                boolean checkLoggedIntoFB = getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("isLoggedIntoFB", false);
+
+                if (checkLoggedIntoFB == true) {
+                    if (results.get(0).getEventDescription().isEmpty()){
+                        event.setText("There are no upcoming events, check back later.");
+                    }
+                    else{
+                        event.setText("Upcoming Event: " + results.get(0).getEventDescription());
+
+                    }
+                }
+                else{
+                    event.setText("Log into Facebook to see upcoming events.");
+                }
+
                 TextView address = (TextView)dialog.findViewById(R.id.org_address);
                 address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
 

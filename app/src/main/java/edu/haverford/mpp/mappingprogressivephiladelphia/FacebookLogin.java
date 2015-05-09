@@ -66,6 +66,10 @@ public class FacebookLogin extends Activity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(final LoginResult loginResult) {
+
+                TextView view = (TextView) findViewById(R.id.login_text);
+                view.setText("You are logged into Facebook.");
+
                 getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit().putBoolean("isLoggedIntoFB", true).apply();
                 Bundle parameter = new Bundle();
 

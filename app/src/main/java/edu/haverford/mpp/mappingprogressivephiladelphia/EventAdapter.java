@@ -2,21 +2,15 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.Dialog;
 import android.content.Context;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import android.widget.ArrayAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import java.util.ArrayList;
 
 /**
  * Created by dan on 5/9/15.
@@ -42,7 +36,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     public long getItemId(int position) {
-        return Integer.parseInt(eventList.get(position).getEventID());
+        return Long.parseLong(eventList.get(position).getEventID());
     }
 
     private class ViewHolder {
