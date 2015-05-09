@@ -15,6 +15,17 @@ public class OrgEvent extends RealmObject {
     private String startTime;
     private String facebookID;
 
+    public OrgEvent(String eventName, String orgName, String eventDescription, String eventID, String startTime, String facebookID) {
+        this.eventName = eventName;
+        this.orgName = orgName;
+        this.eventDescription = eventDescription;
+        this.eventID = eventID;
+        this.startTime = startTime;
+        this.facebookID = facebookID;
+    }
+
+    public OrgEvent() {}
+
 
     public String getEventName(){ return eventName; }
 
