@@ -52,16 +52,6 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
             PhillyOrg currOrg = orgList.get(position);
             holder.CheckMeOrNot(db.isSubscribed(currOrg.getId()));
             convertView.setTag(holder);
-
-            /*holder.code.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v){
-                    TextView tv = (TextView) v ;
-                    Intent intent = new Intent(mContext, OrganizationInfoActivity.class);
-                    PhillyOrg currOrg = (PhillyOrg) tv.getTag();
-                    intent.putExtra("OrgID", currOrg.getId());
-                    mContext.startActivity(intent);
-                }
-            });*/
             holder.name.setOnClickListener( new View.OnClickListener() {
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v ;
@@ -80,7 +70,7 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
         PhillyOrg currOrg = orgList.get(position);
         // holder.code.setText(" (" +  currOrg.getId() + ")");
         holder.name.setText(currOrg.getGroupName());
-        // holder.name.setChecked(currOrg.getSubscribed());
+        //holder.name.setChecked(currOrg.getSubscribed());
         holder.name.setTag(currOrg);
         // holder.code.setTag(currOrg);
         return convertView;
@@ -108,4 +98,6 @@ class OrgListAdapter extends ArrayAdapter<PhillyOrg> {
         db.close();
         return counter;
     }
+
+
 }

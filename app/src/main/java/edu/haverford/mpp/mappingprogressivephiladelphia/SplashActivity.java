@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -60,6 +61,17 @@ public class SplashActivity extends Activity implements
         //Initialize a LoadViewTask object and call the execute() method
         //new LoadViewTask().execute();
         if (isNetworkConnected()) {
+            // 30 seconds coundowntimer
+            new CountDownTimer(10000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                public void onFinish() {
+                    finish(); // finish ActivityB
+                }
+            }.start();
             updateDatabase();
         } else {
             AlertDialog alertDialog = new AlertDialog.Builder(SplashActivity.this).create();
@@ -100,7 +112,7 @@ public class SplashActivity extends Activity implements
                 public void onDataChange(DataSnapshot snapshot) {
                     Iterable orgs = snapshot.getChildren();
                     MyDatabase db = new MyDatabase(SplashActivity.this);
-                    GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyBDfoc1GGXv7ZYv4vCzH1cAZJxVGkmT1n0"); // TODO was AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE
+                    GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAzZPMw_I4GNcfuT4PeDDkp16-PNqiB1YE"); // TODO could be AIzaSyBDfoc1GGXv7ZYv4vCzH1cAZJxVGkmT1n0
                     for (int i = 0; i < snapshot.getChildrenCount(); i++) {
                         Object o = orgs.iterator().next();
                         DataSnapshot org = (DataSnapshot) o;

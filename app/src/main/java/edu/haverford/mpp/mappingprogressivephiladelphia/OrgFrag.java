@@ -103,6 +103,7 @@ public class OrgFrag extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        mAdapter.saveSubscribed();
     } // used to be protected
 
     @Override
@@ -123,6 +124,7 @@ public class OrgFrag extends Fragment {
 
         return rootView;
     }
+
 
     public int getPageNumber() {
         return mPageNumber;
