@@ -67,7 +67,28 @@ public class EventAdapter extends BaseAdapter {
         final OrgEvent myEvent = eventList.get(position);
         holder.eventname.setText(myEvent.getEventName());
         holder.orgname.setText(myEvent.getOrgName());
-        holder.startTime.setText(myEvent.getStartTime());
+
+        String startTime = myEvent.getStartTime();
+        String year = startTime.substring(0, 4);
+        String month = startTime.substring(5, 7);
+        String day = startTime.substring(8, 10);
+        String fake_hour = startTime.substring(11,13);
+        String minute = startTime.substring(14, 16);
+        String amorpm;
+        int hour_int;
+        String hour;
+        if (Integer.parseInt(fake_hour) > 11) {
+            amorpm = "pm";
+            hour_int = Integer.parseInt(fake_hour)-12;
+            hour = Integer.toString(hour_int);
+        } else {
+            amorpm = "am";
+            hour = startTime.substring(12,13);
+        }
+
+        final String realStartTime = hour+":"+minute+amorpm+" "+month+"/"+day+"/"+year;
+
+        holder.startTime.setText(realStartTime);
 
         holder.wholeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +101,7 @@ public class EventAdapter extends BaseAdapter {
                 org_dialog.append(myEvent.getOrgName()); // name of organization
 
                 TextView start_dialog = (TextView)dialog.findViewById(R.id.start_dialog);
-                start_dialog.append(myEvent.getStartTime()); // start time of event
+                start_dialog.append(realStartTime); // start time of event
 
                 TextView event_description_dialog = (TextView)dialog.findViewById(R.id.event_description_dialog);
                 event_description_dialog.append(myEvent.getEventDescription()); // event description

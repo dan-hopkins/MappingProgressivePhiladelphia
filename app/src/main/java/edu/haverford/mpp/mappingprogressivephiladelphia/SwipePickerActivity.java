@@ -264,7 +264,11 @@ public class SwipePickerActivity extends Activity implements
                 }
 
                 TextView address = (TextView)dialog.findViewById(R.id.org_address);
-                address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
+                if (currOrg.getAddress().equals("TEMP")) {
+                    address.setText("Uknown");
+                } else {
+                    address.setText(currOrg.getAddress() + ", Philadelphia, PA " + currOrg.getZipCode());
+                }
 
                 TextView event = (TextView)dialog.findViewById(R.id.event);
                 event.append("Log into Facebook to see upcoming events");
