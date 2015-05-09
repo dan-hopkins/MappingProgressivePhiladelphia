@@ -248,8 +248,8 @@ public class SwipePickerActivity extends Activity implements
                 image.setImageResource(R.drawable.default_pic);
                 Picasso.with(getApplicationContext())
                         .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=9999")
+                        .placeholder(R.drawable.default_pic)
                         .into(image);
-                        //.placeholder(R.drawable.default_pic)
                 //System.out.println(currOrg.getFacebookID()+"FacebookID");
                 TextView issue = (TextView)dialog.findViewById(R.id.org_issue);
                 issue.append(currOrg.getSocialIssues());
