@@ -22,12 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -39,10 +34,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.Geometry;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -196,6 +187,8 @@ public class MapActivity extends FragmentActivity implements
                             .position(currentOrg.getLatLng())
                             .title(currentOrg.getGroupName())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.subscribed))); // color for subscribed markers
+                    OrgMarkerHash.put(currMarker, currentOrg); // OrgMarkerHash is not null at this point, but it does refill every time we set up the map
+
                 }
             } else { // this is show unsubscribed
                 if (!currentOrg.getSubscribed()) {
@@ -203,6 +196,7 @@ public class MapActivity extends FragmentActivity implements
                             .position(currentOrg.getLatLng())
                             .title(currentOrg.getGroupName())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.not_subscribed))); // color for unsubscribed markers
+                    OrgMarkerHash.put(currMarker, currentOrg); // OrgMarkerHash is not null at this point, but it does refill every time we set up the map
                 }
             }
         }
@@ -225,7 +219,11 @@ public class MapActivity extends FragmentActivity implements
                 } else {
                     //System.out.println(currOrg == null); // After we click on banner, then go to new org, currOrg is null
                     //System.out.println(currOrg.getLocation());
-                    myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371;
+                    if (currOrg != null) {
+                        myDist = currOrg.getLocation().distanceTo(mLastLocation) * (float) 0.000621371;
+                    }else{
+                        myDist = (float)-1.0;
+                    }
                     // vvv This thing may not be an issue anymore vvv //
                     // TODO NullPointerException here sometimes
                 }
