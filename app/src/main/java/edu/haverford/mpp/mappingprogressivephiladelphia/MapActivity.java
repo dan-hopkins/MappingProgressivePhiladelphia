@@ -90,7 +90,7 @@ public class MapActivity extends FragmentActivity implements
     protected void onResume() {
         super.onResume();
         invalidateOptionsMenu();
-        setUpMapIfNeeded();
+        setUpMap();
         realm = Realm.getInstance(this);
         RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
         RealmResults<OrgEvent> result1 = query.findAll();
