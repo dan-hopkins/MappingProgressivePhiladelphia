@@ -104,7 +104,7 @@ public class FacebookLogin extends Activity {
         MenuItem slider = menu.findItem(R.id.slider);
         slider.setEnabled(true);
         slider.getIcon().setAlpha(255);
-
+        /*
         // orgs
         MenuItem orgs = menu.findItem(R.id.go_orgs);
         orgs.setVisible(false);
@@ -112,8 +112,9 @@ public class FacebookLogin extends Activity {
         // events
         MenuItem events = menu.findItem(R.id.go_events);
         events.setVisible(false);
-
+        */
         return true;
+
     }
 
     @Override
@@ -142,7 +143,6 @@ public class FacebookLogin extends Activity {
                 break;
             case R.id.help:
                 getMapHelp();
-
         }
 
         return(super.onOptionsItemSelected(item));
@@ -240,8 +240,8 @@ public class FacebookLogin extends Activity {
 
 
                         } catch (JSONException e) {
-                            TextView view = (TextView) findViewById(R.id.login_text);
-                            view.setText(graphResponse.toString());
+                            //TextView view = (TextView) findViewById(R.id.login_text);
+                            //view.setText(graphResponse.toString());
                             e.printStackTrace();
                         }}});
         r.executeAsync();
