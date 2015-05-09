@@ -53,7 +53,6 @@ public class EventFrag extends Fragment {
         RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
         RealmResults<OrgEvent> result1 = query.findAll();
         System.out.println(result1.size()+"SIZE");
-        //System.out.println(result1);
 
         ListIterator<OrgEvent> listOfUpComingEvents = result1.listIterator();
         ArrayList<OrgEvent> arrayListOfUpComingEvents = new ArrayList<>();
@@ -66,7 +65,11 @@ public class EventFrag extends Fragment {
         }
 
         for (OrgEvent org:arrayListOfUpComingEvents){
-            //System.out.println(org.getStartTime()+" NAME "+ org.getOrgName());
+            String date = org.getStartTime();
+            int event_year = Integer.valueOf(date.substring(0, 4));
+            int event_month = Integer.valueOf(date.substring(5, 7));
+            int event_day = Integer.valueOf(date.substring(8, 10));
+            System.out.println(event_year+""+event_month+"eventday"+event_day);
         }
 
     }

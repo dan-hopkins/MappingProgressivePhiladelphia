@@ -72,7 +72,8 @@ public class FacebookLogin extends Activity {
                 Date currentDate = new Date();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(currentDate);
-                int currentMonth = cal.get(Calendar.MONTH);
+                //Months start at 0? Why is currentMonth = 4 by default
+                int currentMonth = cal.get(Calendar.MONTH)+1;
                 int currentDay = cal.get(Calendar.DAY_OF_MONTH);
                 int currentYear = cal.get(Calendar.YEAR);
 
@@ -215,30 +216,22 @@ public class FacebookLogin extends Activity {
                         RealmQuery<OrgEvent> query = realm.where(OrgEvent.class);
                         query.equalTo("facebookID", fbid);
                         RealmResults<OrgEvent> result = query.findAll();
-                        System.out.println("i"+i);
                         if (result.size() > 0 & event != null) {
-                            i++;
-                            System.out.println("i "+i);
                             OrgEvent currentOrg = result.first();
-                            System.out.println("currOrg"+currentOrg.toString());
                             String date = event.get("start_time").toString();
-                            System.out.println("date"+ date);
 
                             int event_year = Integer.valueOf(date.substring(0, 4));
                             int event_month = Integer.valueOf(date.substring(5, 7));
                             int event_day = Integer.valueOf(date.substring(8, 10));
-
                             //Wow this code is ugly
                             //But should only add UPCOMING FB events.
-
-                            if (event_year>=CurrentYear & event_month>CurrentMonth || event_year>=CurrentYear & event_month>=CurrentMonth& event_day>=CurrentDay) {
+                            if (event_year>=CurrentYear & event_month>CurrentMonth || event_year>=CurrentYear & event_month>=CurrentMonth & event_day>=CurrentDay) {
                                 realm.beginTransaction();
+
                                 currentOrg.setEventName(event.get("name").toString());
-                                System.out.println(date + "DATE");
                                 currentOrg.setEventID(event.get("id").toString());
                                 currentOrg.setStartTime(event.get("start_time").toString());
                                 realm.commitTransaction();
-
 
                             //Querying again using the eventid to get an event description
                             //Cannot spin off into a separate method, caused problems with nested classes
