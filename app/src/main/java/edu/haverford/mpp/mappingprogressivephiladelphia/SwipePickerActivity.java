@@ -245,8 +245,9 @@ public class SwipePickerActivity extends Activity implements
                 dialog.setTitle(currOrg.getGroupName());
 
                 ImageView image = (ImageView)dialog.findViewById(R.id.org_info_pic);
-                Picasso.with(SwipePickerActivity.this)
-                        .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=99999")
+                image.setImageResource(R.drawable.default_pic);
+                Picasso.with(getApplicationContext())
+                        .load("https://graph.facebook.com/" + currOrg.getFacebookID() + "/picture?width=9999")
                         .placeholder(R.drawable.default_pic)
                         .into(image);
                 //System.out.println(currOrg.getFacebookID()+"FacebookID");

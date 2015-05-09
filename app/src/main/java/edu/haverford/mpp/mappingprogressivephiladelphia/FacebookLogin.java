@@ -2,8 +2,11 @@ package edu.haverford.mpp.mappingprogressivephiladelphia;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -43,7 +46,14 @@ public class FacebookLogin extends Activity {
 
 
 
-
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) { // There are no active networks
+            return false;
+        } else
+            return true;
+    }
 
 
     @Override
@@ -101,9 +111,10 @@ public class FacebookLogin extends Activity {
             public void onError(FacebookException exception) {
                 Log.v("LoginActivity", exception.getCause().toString());
                 TextView view = (TextView) findViewById(R.id.login_text);
-                view.setText("Error logging in");
+                view.setText("Error logging in, please try again.");
             }});
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
