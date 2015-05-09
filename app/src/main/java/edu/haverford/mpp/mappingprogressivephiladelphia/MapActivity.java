@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.firebase.client.DataSnapshot;
@@ -26,6 +27,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -83,8 +85,9 @@ public class MapActivity extends FragmentActivity implements
         //Log.w("TAG", "Play services configured: " + Boolean.toString(isPlayServicesConfigured()));
         try {
             MapsInitializer.initialize(this);
-        } catch (Exception e) {
-            //Log.e("TAG", "Failed to initialize map");
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Ensure that Google Play Services is properly installed and updated, or this app will continue to crash.", Toast.LENGTH_LONG).show();
         }
         setUpMapIfNeeded();
         getActionBar().setDisplayHomeAsUpEnabled(false); // necessary to declare false
@@ -377,10 +380,25 @@ public class MapActivity extends FragmentActivity implements
     public void checkFirstRun() {
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun) {
+            int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getBaseContext());
+            if(status!=ConnectionResult.SUCCESS){
+                new AlertDialog.Builder(this, R.style.DialogTheme)
+                        .setTitle("Google Play Services not detected!")
+                        .setMessage("Please check to make sure that your Google Play Services are up to date before trying to run this app!")
+                        .setCancelable(false)
+                        .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                android.os.Process.killProcess(android.os.Process.myPid()); // close application
+                            }
+                        })
+                        .show();
+            }
+
             if (!isNetworkConnected()) {
                 new AlertDialog.Builder(this, R.style.DialogTheme)
                         .setTitle("No internet connection detected!")
                         .setMessage("Please check to make sure that your internet is turned on and try again!" + "\n" + "\n" + "Internet is needed for the app to get set up.")
+                        .setCancelable(false)
                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 android.os.Process.killProcess(android.os.Process.myPid()); // close application
